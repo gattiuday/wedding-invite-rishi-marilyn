@@ -57,7 +57,7 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    // --- ICONS (Inline SVGs to replace Lucide-React dependency) ---
+    // --- 1. ICONS (Inline SVGs to replace Lucide-React dependency) ---
     const Icon = ({ path, className, strokeWidth = 2, size = 24 }) => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +82,7 @@
       Clock: (props) => <Icon {...props} path={<><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></>} />,
       MapPin: (props) => <Icon {...props} path={<><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></>} />,
       ExternalLink: (props) => <Icon {...props} path={<><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></>} />,
-      Sparkles: (props) => <Icon {...props} path={<><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" /></>} />,
+      Sparkles: (props) => <Icon {...props} path={<><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L12 3Z" /></>} />,
       ChevronRight: (props) => <Icon {...props} path={<path d="m9 18 6-6-6-6" />} />,
       ShieldCheck: (props) => <Icon {...props} path={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" /><path d="m9 12 2 2 4-4" /></>} />,
       Phone: (props) => <Icon {...props} path={<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />} />,
@@ -91,39 +91,50 @@
       Minus: (props) => <Icon {...props} path={<path d="M5 12h14" />} />,
       Check: (props) => <Icon {...props} path={<path d="M20 6 9 17l-5-5" />} />,
       Loader2: (props) => <Icon {...props} path={<path d="M21 12a9 9 0 1 1-6.219-8.56" />} className={props.className + " animate-spin"} />,
+      AlertCircle: (props) => <Icon {...props} path={<><circle cx="12" cy="12" r="10" /><line x1="12" x2="12" y1="8" y2="12" /><line x1="12" x2="12.01" y1="16" y2="16" /></>} />,
+      Heart: (props) => <Icon {...props} path={<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />} />
     };
 
 
-    // --- FIREBASE CONFIG ---
-    // Replace "YOUR_..." with your actual config from console.firebase.google.com
+    // --- 2. FIREBASE CONFIG & GLOBALS ---
+    // React Globals
+    const { useState, useEffect, useMemo } = React;
+
+    // Firebase Setup using Compat (Global Window Object)
+    // PLACEHOLDER CONFIG: Replace with your actual details from console.firebase.google.com
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT.appspot.com",
+      apiKey: "AIzaSy_PLACEHOLDER_KEY",
+      authDomain: "wedding-placeholder.firebaseapp.com",
+      projectId: "wedding-placeholder",
+      storageBucket: "wedding-placeholder.appspot.com",
       messagingSenderId: "123456",
       appId: "1:123456:web:123456"
     };
 
-    // Use Global Compat Namespace
-    firebase.initializeApp(firebaseConfig);
+    // Configuration Injection Override (if present in environment)
+    const finalConfig = typeof window.__firebase_config !== 'undefined'
+      ? JSON.parse(window.__firebase_config)
+      : firebaseConfig;
+
+    firebase.initializeApp(finalConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
-    const appId = 'wedding-rishi-marilyn-royal-v4';
+    const appId = typeof window.__app_id !== 'undefined' ? window.__app_id : 'wedding-rishi-marilyn-royal-v4';
 
-    const { useState, useEffect } = React;
 
+    // --- 3. MAIN APPLICATION ---
     const App = () => {
       const [activeTab, setActiveTab] = useState('home');
       const [user, setUser] = useState(null);
+      const [loading, setLoading] = useState(true);
       const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       const [showAdminPanel, setShowAdminPanel] = useState(false);
       const [adminPassword, setAdminPassword] = useState('');
       const [allRsvps, setAllRsvps] = useState([]);
       const [isSubmitting, setIsSubmitting] = useState(false);
       const [isSubmitted, setIsSubmitted] = useState(false);
+      const [errorMessage, setErrorMessage] = useState(null);
 
-      // RSVP Form State
       const [rsvpData, setRsvpData] = useState({
         name: '',
         phone: '',
@@ -132,14 +143,20 @@
         message: ''
       });
 
-      // Auth Logic
+      // Authentication
       useEffect(() => {
         const initAuth = async () => {
           try {
-            await auth.signInAnonymously();
+            if (typeof window.__initial_auth_token !== 'undefined' && window.__initial_auth_token) {
+              await auth.signInWithCustomToken(window.__initial_auth_token);
+            } else {
+              await auth.signInAnonymously();
+            }
           } catch (e) {
-            console.warn("Auth failed (likely placeholder config). Using mock user.");
+            console.warn("Auth failed (likely placeholder config). Using mock user for UI.");
             setUser({ uid: 'guest-preview', isAnonymous: true });
+          } finally {
+            setLoading(false);
           }
         };
         initAuth();
@@ -147,36 +164,43 @@
         return () => unsubscribe();
       }, []);
 
-      // Admin Data Fetching
+      // Data Sync
       useEffect(() => {
-        if (!user || !showAdminPanel) return;
+        if (!user || !showAdminPanel || adminPassword !== 'rishi2026') return;
+
         try {
           const rsvpsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('rsvps');
-          const unsubscribe = rsvpsRef.onSnapshot((snapshot) => {
-            const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            setAllRsvps(data);
-          }, (err) => console.warn("Firestore error:", err));
+          const unsubscribe = rsvpsRef.onSnapshot(
+            (snapshot) => {
+              const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+              data.sort((a, b) => (b.submittedAt?.seconds || 0) - (a.submittedAt?.seconds || 0));
+              setAllRsvps(data);
+            },
+            (error) => console.error("Firestore sync error:", error)
+          );
           return () => unsubscribe();
-        } catch (e) { console.warn("Firestore init error:", e); }
-      }, [user, showAdminPanel]);
+        } catch (e) { console.warn("Firestore access error:", e); }
+      }, [user, showAdminPanel, adminPassword]);
 
-      // Countdown Logic
+      // Countdown
       useEffect(() => {
         const targetDate = new Date('August 22, 2026 16:00:00').getTime();
         const timer = setInterval(() => {
           const now = new Date().getTime();
           const distance = targetDate - now;
-          setTimeLeft({
-            days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-            hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-            minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-            seconds: Math.floor((distance % (1000 * 60)) / 1000),
-          });
+          if (distance < 0) {
+            setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+          } else {
+            setTimeLeft({
+              days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+              hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+              minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+              seconds: Math.floor((distance % (1000 * 60)) / 1000),
+            });
+          }
         }, 1000);
         return () => clearInterval(timer);
       }, []);
-
-      const handleExplore = () => setActiveTab('schedule');
 
       const events = [
         {
@@ -184,10 +208,10 @@
           title: 'Haldi & Mehandi',
           subtitle: 'The Saffron Celebration',
           date: 'August 22, 2026',
-          time: '4:00 PM — 10:00 PM',
-          venue: 'Blue House, Chennai',
+          time: '4:00 PM',
+          venue: 'Blue House, ECR, Chennai',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=Blue+House+Chennai',
-          icon: <Icons.Music className="text-[#9E7E44]" />,
+          icon: <Icons.Music className="text-[#9E7E44]" strokeWidth={1.5} />,
           theme: 'Traditional Silk'
         },
         {
@@ -195,10 +219,10 @@
           title: 'Wedding Ceremony',
           subtitle: 'The Auspicious Vows',
           date: 'August 23, 2026',
-          time: '9:30 AM — 2:00 PM',
+          time: '9:30 AM',
           venue: 'The Leela Palace, Chennai',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=The+Leela+Palace+Chennai',
-          icon: <Icons.Flower2 className="text-[#9E7E44]" />,
+          icon: <Icons.Flower2 className="text-[#9E7E44]" strokeWidth={1.5} />,
           theme: 'Royal Heritage'
         },
         {
@@ -206,37 +230,50 @@
           title: 'Sangeet & Cocktail',
           subtitle: 'Dance, Drinks & Celebration',
           date: 'August 24, 2026',
-          time: '6:00 PM — 12:00 AM',
+          time: '6:30 PM',
           venue: 'Pullman, Chennai',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=Pullman+Hotel+Chennai',
-          icon: <Icons.GlassWater className="text-[#9E7E44]" />,
+          icon: <Icons.GlassWater className="text-[#9E7E44]" strokeWidth={1.5} />,
           theme: 'Starlit Evening'
         }
       ];
 
       const handleSubmitRsvp = async (e) => {
         e.preventDefault();
-        if (!user || !rsvpData.name) return;
+        if (!user) {
+          setErrorMessage("Establishing secure connection...");
+          return;
+        }
         setIsSubmitting(true);
+        setErrorMessage(null);
+
         try {
           const rsvpsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('rsvps');
-          await rsvpsRef.add({ ...rsvpData, submittedAt: firebase.firestore.FieldValue.serverTimestamp(), uid: user.uid });
+          await rsvpsRef.add({
+            ...rsvpData,
+            submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            uid: user.uid
+          });
           setIsSubmitted(true);
         } catch (err) {
-          console.error(err);
+          setErrorMessage("Unable to save RSVP. Please check connection.");
+          console.error("RSVP error:", err);
+          // Mock success for dead runs
           setTimeout(() => { setIsSubmitted(true); setIsSubmitting(false); }, 1000);
-        } finally { setIsSubmitting(false); }
+        } finally {
+          setIsSubmitting(false);
+        }
       };
 
       const adjustGuests = (amount) => setRsvpData(prev => ({ ...prev, guests: Math.max(1, prev.guests + amount) }));
 
       const CoupleLogo = ({ className }) => (
         <div className={`relative flex items-center justify-center ${className}`}>
-          <svg viewBox="0 0 100 100" className="absolute w-full h-full text-[#9E7E44] opacity-30 animate-spin-slow">
+          <svg viewBox="0 0 100 100" className="absolute w-full h-full text-[#9E7E44] opacity-20 animate-[spin_60s_linear_infinite]">
             <path fill="none" stroke="currentColor" strokeWidth="0.3" d="M50 2 L52 48 L98 50 L52 52 L50 98 L48 52 L2 50 L48 48 Z" />
             <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" strokeWidth="0.2" strokeDasharray="2 4" />
           </svg>
-          <div className="relative z-10 flex flex-col items-center justify-center bg-white/40 backdrop-blur-md rounded-full w-[85%] h-[85%] border border-[#9E7E44]/10 shadow-sm">
+          <div className="relative z-10 flex flex-col items-center justify-center bg-white/60 backdrop-blur-md rounded-full w-[85%] h-[85%] border border-[#9E7E44]/10 shadow-lg">
             <span className="font-serif text-[#9E7E44] text-4xl md:text-5xl tracking-tighter leading-none select-none">
               R<span className="text-xl mx-[-3px] opacity-60 italic">&</span>M
             </span>
@@ -246,66 +283,81 @@
         </div>
       );
 
-      const MandalaDivider = ({ className }) => (
-        <svg viewBox="0 0 100 20" className={className}>
-          <path fill="none" stroke="currentColor" strokeWidth="0.3" d="M0 10 L42 10 M58 10 L100 10" />
-          <circle cx="50" cy="10" r="2.5" fill="none" stroke="currentColor" strokeWidth="0.5" />
-          <circle cx="50" cy="10" r="5" fill="none" stroke="currentColor" strokeWidth="0.2" strokeDasharray="1 1" />
-        </svg>
-      );
+      if (loading) {
+        return (
+          <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8F5F2] text-[#9E7E44]">
+            <Icons.Loader2 className="animate-spin mb-4" size={40} />
+            <p className="text-[10px] uppercase tracking-[0.4em] font-bold">Connecting</p>
+          </div>
+        );
+      }
 
       const renderContent = () => {
         if (activeTab === 'admin') {
           if (adminPassword !== 'rishi2026') {
             return (
-              <div className="animate-in fade-in max-w-sm mx-auto bg-white/40 backdrop-blur-md p-10 rounded-[2.5rem] border border-[#9E7E44]/20 shadow-2xl space-y-6">
+              <div className="animate-in max-w-sm mx-auto bg-white/60 backdrop-blur-md p-10 rounded-[2.5rem] border border-[#9E7E44]/20 shadow-2xl space-y-6">
                 <div className="text-center">
-                  <Icons.ShieldCheck className="mx-auto text-[#9E7E44] mb-3" size={32} strokeWidth={1} />
+                  <Icons.ShieldCheck className="mx-auto text-[#9E7E44] mb-3" size={32} />
                   <h2 className="text-xl font-serif text-[#333333] tracking-wide uppercase">Host Access</h2>
                 </div>
                 <input
                   type="password" autoFocus
-                  className="w-full p-4 bg-white/50 rounded-2xl border-none outline-none text-center text-xl tracking-widest placeholder:text-slate-300 shadow-inner"
+                  className="w-full p-4 bg-white/80 rounded-2xl border border-[#9E7E44]/10 outline-none text-center text-xl tracking-widest placeholder:text-slate-300"
                   placeholder="••••"
                   onChange={(e) => setAdminPassword(e.target.value)}
                 />
+                <p className="text-[10px] text-center text-slate-400 uppercase tracking-widest">Authorized hosts only</p>
               </div>
             );
           }
-          const totalGuests = allRsvps.reduce((acc, curr) => acc + (curr.guests || 0), 0);
+          const totalGuests = allRsvps.reduce((acc, curr) => acc + (Number(curr.guests) || 0), 0);
           return (
-            <div className="animate-in slide-in-from-bottom duration-500 space-y-6 pb-24 text-left">
-              <div className="bg-white/80 backdrop-blur-md rounded-[3rem] border border-[#9E7E44]/10 shadow-xl p-8 text-center">
-                <h3 className="font-serif text-2xl text-[#333333] mb-6">Attendance Overview</h3>
+            <div className="animate-in space-y-6 pb-24 text-left">
+              <div className="bg-white/90 p-8 rounded-[3rem] border border-[#9E7E44]/10 shadow-xl">
+                <h3 className="font-serif text-2xl text-[#333333] mb-6 text-center">RSVP Dashboard</h3>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/5">
-                    <p className="text-[10px] uppercase tracking-widest text-[#9E7E44] font-bold">Total Souls</p>
+                  <div className="bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/5 text-center">
+                    <p className="text-[10px] uppercase tracking-widest text-[#9E7E44] font-bold">Total Expected</p>
                     <p className="text-4xl font-serif text-[#333333] mt-2">{totalGuests}</p>
                   </div>
-                  <div className="bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/5">
-                    <p className="text-[10px] uppercase tracking-widest text-[#9E7E44] font-bold">Entries</p>
+                  <div className="bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/5 text-center">
+                    <p className="text-[10px] uppercase tracking-widest text-[#9E7E44] font-bold">Groups</p>
                     <p className="text-4xl font-serif text-[#333333] mt-2">{allRsvps.length}</p>
                   </div>
                 </div>
               </div>
-              <div className="bg-white/80 rounded-[3rem] p-4 shadow-xl divide-y divide-slate-100 overflow-hidden">
-                {allRsvps.map(r => (
-                  <div key={r.id} className="p-6 transition-colors hover:bg-white/40">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h4 className="font-bold text-lg text-[#333333]">{r.name}</h4>
-                        {r.phone && (
-                          <div className="flex items-center gap-1.5 text-xs text-slate-400 mt-1 font-medium">
-                            <Icons.Phone size={10} />
-                            <span>{r.phone}</span>
+              <div className="space-y-4">
+                {allRsvps.length === 0 ? (
+                  <p className="text-center text-slate-400 font-serif italic py-12">No responses yet...</p>
+                ) : (
+                  allRsvps.map(r => (
+                    <div key={r.id} className="bg-white/80 rounded-[2rem] p-6 border border-white shadow-sm transition-all hover:shadow-md">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h4 className="font-bold text-lg text-[#333333]">{r.name}</h4>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-[10px] bg-[#9E7E44]/10 text-[#9E7E44] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">
+                              {r.guests} {r.guests === 1 ? 'Guest' : 'Guests'}
+                            </span>
+                            <span className="text-xs text-slate-400 font-medium">{r.phone}</span>
                           </div>
-                        )}
+                        </div>
+                        <div className="text-[9px] text-slate-300 uppercase font-bold text-right">
+                          {r.submittedAt?.toDate ? r.submittedAt.toDate().toLocaleDateString() : 'Just now'}
+                        </div>
                       </div>
-                      <span className="text-[#9E7E44] font-serif italic text-sm">{r.guests} guests</span>
+                      {r.message && <p className="text-sm text-slate-500 mt-4 font-serif italic border-l-2 border-[#9E7E44]/10 pl-4">"{r.message}"</p>}
+                      <div className="flex flex-wrap gap-2 mt-4">
+                        {Object.entries(r.events || {}).filter(([_, v]) => v).map(([k]) => (
+                          <span key={k} className="text-[9px] uppercase tracking-tighter text-slate-400 border border-slate-100 px-2 py-0.5 rounded">
+                            {k}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                    {r.message && <p className="text-sm text-slate-500 mt-3 font-serif italic leading-relaxed">"{r.message}"</p>}
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           );
@@ -314,57 +366,51 @@
         switch (activeTab) {
           case 'home':
             return (
-              <div className="animate-in fade-in duration-1000 text-center space-y-12 py-10 relative">
-                <div className="space-y-12">
-                  <div className="space-y-6">
-                    <div className="flex justify-center items-center gap-8 mb-6">
-                      <div className="h-[0.5px] w-16 bg-gradient-to-r from-transparent to-[#9E7E44]/30" />
-                      <Icons.Sparkles className="text-[#9E7E44] opacity-30 animate-pulse" size={24} />
-                      <div className="h-[0.5px] w-16 bg-gradient-to-l from-transparent to-[#9E7E44]/30" />
-                    </div>
+              <div className="animate-in text-center space-y-12 py-10">
+                <div className="space-y-6">
+                  <div className="flex justify-center items-center gap-6 mb-4">
+                    <div className="h-[0.5px] w-12 bg-[#9E7E44]/20" />
+                    <Icons.Sparkles className="text-[#9E7E44] opacity-40 animate-pulse" size={20} />
+                    <div className="h-[0.5px] w-12 bg-[#9E7E44]/20" />
+                  </div>
 
-                    <span className="text-[12px] uppercase tracking-[0.6em] text-[#9E7E44] font-semibold block">The Auspicious Union</span>
-                    <h1 className="text-8xl md:text-9xl font-serif text-[#333333] leading-none tracking-tighter">
-                      Rishi <br />
-                      <span className="italic text-[#9E7E44] font-normal text-6xl md:text-8xl">&</span> <br />
-                      Marilyn
-                    </h1>
+                  <span className="text-[10px] uppercase tracking-[0.6em] text-[#9E7E44] font-bold block mb-4">You are cordially invited</span>
+                  <h1 className="text-7xl md:text-9xl font-serif text-[#333333] leading-tight tracking-tighter">
+                    Rishi <br />
+                    <span className="italic text-[#9E7E44] font-normal text-5xl md:text-7xl">&</span> <br />
+                    Marilyn
+                  </h1>
 
-                    <div className="max-w-md mx-auto pt-10 space-y-6">
-                      <MandalaDivider className="w-40 mx-auto text-[#9E7E44]/20" />
-                      <p className="text-[#555555] font-serif italic text-xl md:text-2xl leading-relaxed px-10 opacity-90">
-                        "In the sacred presence of our elders and loved ones, we embark on a journey of a thousand years. An auspicious union blessed by tradition and bound by grace."
-                      </p>
-                    </div>
+                  <div className="max-w-md mx-auto pt-10 px-6">
+                    <p className="text-slate-500 font-serif italic text-lg md:text-xl leading-relaxed">
+                      "In the presence of family and friends, we celebrate a journey of love, culture, and new beginnings."
+                    </p>
+                  </div>
 
-                    <div className="pt-12 space-y-4">
-                      <p className="text-[#9E7E44] font-serif italic text-3xl tracking-widest font-medium">August 22nd — 24th</p>
-                      <p className="text-[11px] uppercase tracking-[0.5em] text-[#888888] font-bold">Chennai • Tamil Nadu</p>
-                    </div>
+                  <div className="pt-10 flex flex-col items-center gap-2">
+                    <p className="text-[#9E7E44] font-serif italic text-2xl tracking-widest font-medium">August 22 — 24, 2026</p>
+                    <p className="text-[10px] uppercase tracking-[0.5em] text-slate-400 font-bold">Chennai • Tamil Nadu</p>
                   </div>
                 </div>
 
-                <div className="relative inline-block pt-6">
-                  <div className="bg-white/60 backdrop-blur-lg border border-white/80 p-12 rounded-[4rem] shadow-[0_20px_50px_rgba(158,126,68,0.08)] space-y-10 relative">
-                    <div className="flex justify-center gap-12">
-                      {Object.entries(timeLeft).map(([unit, value]) => (
-                        <div key={unit} className="flex flex-col">
-                          <span className="text-5xl md:text-6xl font-serif text-[#333333]">{value < 0 ? 0 : value}</span>
-                          <span className="text-[9px] uppercase tracking-[0.4em] text-[#9E7E44] font-bold mt-3">{unit}</span>
-                        </div>
-                      ))}
-                    </div>
+                <div className="bg-white/50 backdrop-blur-md border border-white/80 p-10 rounded-[4rem] shadow-xl inline-block">
+                  <div className="flex justify-center gap-8 md:gap-12">
+                    {Object.entries(timeLeft).map(([unit, value]) => (
+                      <div key={unit} className="flex flex-col items-center">
+                        <span className="text-4xl md:text-5xl font-serif text-[#333333]">{String(value).padStart(2, '0')}</span>
+                        <span className="text-[8px] uppercase tracking-[0.3em] text-[#9E7E44] font-bold mt-2">{unit}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                <div className="pt-12">
+                <div className="pt-10">
                   <button
-                    onClick={handleExplore}
-                    className="group relative px-20 py-6 overflow-hidden rounded-full transition-all shadow-xl active:scale-95 border border-[#9E7E44]/20 hover:border-[#9E7E44]/40"
+                    onClick={() => setActiveTab('schedule')}
+                    className="group relative px-14 py-5 overflow-hidden rounded-full transition-all duration-500 shadow-xl active:scale-95 bg-[#333333] text-white hover:bg-[#9E7E44]"
                   >
-                    <div className="absolute inset-0 bg-[#333333] group-hover:bg-[#9E7E44] transition-colors duration-700" />
-                    <span className="relative text-[11px] font-bold tracking-[0.6em] uppercase text-white flex items-center gap-4">
-                      View Itinerary <Icons.ChevronRight size={16} />
+                    <span className="relative text-[10px] font-bold tracking-[0.5em] uppercase flex items-center gap-3">
+                      The Itinerary <Icons.ChevronRight size={14} />
                     </span>
                   </button>
                 </div>
@@ -372,50 +418,45 @@
             );
           case 'schedule':
             return (
-              <div className="animate-in slide-in-from-bottom-8 duration-700 space-y-12 pb-24 text-center">
-                <div className="pt-6 flex flex-col items-center">
-                  <CoupleLogo className="w-32 h-32 md:w-44 md:h-44 mb-10" />
-                  <h2 className="text-6xl font-serif text-[#333333] tracking-tight">The Ceremonies</h2>
-                  <p className="text-[10px] uppercase tracking-[0.6em] text-[#9E7E44] mt-4 font-bold">Sacred Journey Details</p>
+              <div className="animate-in space-y-12 pb-24 text-center">
+                <div className="flex flex-col items-center pt-8">
+                  <CoupleLogo className="w-32 h-32 mb-8" />
+                  <h2 className="text-5xl font-serif text-[#333333] tracking-tight">The Ceremonies</h2>
+                  <div className="h-1 w-12 bg-[#9E7E44]/20 mt-4 rounded-full" />
                 </div>
 
-                <div className="grid grid-cols-1 gap-12 mt-12">
+                <div className="grid grid-cols-1 gap-8">
                   {events.map((event) => (
-                    <div key={event.id} className="group relative bg-white/80 backdrop-blur-xl p-12 rounded-[4rem] border border-white/80 shadow-sm hover:shadow-2xl transition-all duration-700 hover:-translate-y-2">
-                      <div className="flex flex-col md:flex-row gap-12 items-center md:items-start text-center md:text-left">
-                        <div className="w-24 h-24 bg-[#F8F5F2] rounded-[3rem] flex items-center justify-center border border-[#9E7E44]/10 shadow-inner group-hover:scale-105 transition-transform duration-700">
-                          {React.cloneElement(event.icon, { size: 36, strokeWidth: 0.8 })}
+                    <div key={event.id} className="group relative bg-white/70 backdrop-blur-xl p-10 rounded-[3.5rem] border border-white shadow-sm hover:shadow-2xl transition-all duration-500">
+                      <div className="flex flex-col md:flex-row gap-10 items-center md:items-start text-center md:text-left">
+                        <div className="w-20 h-20 bg-[#F8F5F2] rounded-[2.5rem] flex items-center justify-center border border-[#9E7E44]/10 text-[#9E7E44]">
+                          {event.icon}
                         </div>
-                        <div className="flex-1 space-y-8">
-                          <div className="space-y-3">
-                            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#9E7E44]">{event.theme}</span>
-                            <h3 className="text-4xl font-serif text-[#333333]">{event.title}</h3>
-                            <p className="text-[#9E7E44] font-serif italic text-xl opacity-80">{event.subtitle}</p>
+                        <div className="flex-1 space-y-6">
+                          <div className="space-y-1">
+                            <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-[#9E7E44]">{event.theme}</span>
+                            <h3 className="text-3xl font-serif text-[#333333]">{event.title}</h3>
+                            <p className="text-slate-500 font-serif italic text-lg">{event.subtitle}</p>
                           </div>
 
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-[#555555]">
-                            <div className="flex items-center gap-4 justify-center md:justify-start">
-                              <Icons.Calendar size={20} className="text-[#9E7E44]" strokeWidth={1} />
-                              <span className="text-base font-medium tracking-wide">{event.date}</span>
+                          <div className="flex flex-col md:flex-row gap-6 text-slate-500 text-sm font-medium">
+                            <div className="flex items-center gap-3 justify-center md:justify-start">
+                              <Icons.Calendar size={16} className="text-[#9E7E44]" />
+                              <span>{event.date}</span>
                             </div>
-                            <div className="flex items-center gap-4 justify-center md:justify-start">
-                              <Icons.Clock size={20} className="text-[#9E7E44]" strokeWidth={1} />
-                              <span className="text-base font-medium tracking-wide">{event.time}</span>
+                            <div className="flex items-center gap-3 justify-center md:justify-start">
+                              <Icons.Clock size={16} className="text-[#9E7E44]" />
+                              <span>{event.time} Onwards</span>
                             </div>
                           </div>
 
-                          <div className="flex items-start gap-4 text-[#555555] justify-center md:justify-start">
-                            <Icons.MapPin size={20} className="text-[#9E7E44] flex-shrink-0 mt-1" strokeWidth={1} />
-                            <span className="text-base font-medium leading-relaxed max-w-xs">{event.venue}</span>
+                          <div className="flex items-start gap-3 text-slate-500 justify-center md:justify-start">
+                            <Icons.MapPin size={16} className="text-[#9E7E44] flex-shrink-0 mt-0.5" />
+                            <span className="text-sm leading-relaxed max-w-xs">{event.venue}</span>
                           </div>
 
-                          <a
-                            href={event.mapUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] text-slate-400 hover:text-[#333333] border-b border-transparent hover:border-[#9E7E44] transition-all pb-2 mt-4"
-                          >
-                            Navigate to Location <Icons.ExternalLink size={14} />
+                          <a href={event.mapUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-slate-400 hover:text-[#9E7E44] transition-colors">
+                            Location Guide <Icons.ExternalLink size={12} />
                           </a>
                         </div>
                       </div>
@@ -427,124 +468,158 @@
           case 'rsvp':
             if (isSubmitted) {
               return (
-                <div className="animate-in zoom-in duration-1000 max-w-md mx-auto bg-white/80 backdrop-blur-md p-20 rounded-[5rem] border border-[#9E7E44]/20 shadow-2xl text-center space-y-10">
-                  <CoupleLogo className="w-28 h-28 mx-auto" />
-                  <div className="space-y-4">
-                    <h2 className="text-5xl font-serif text-[#333333]">With Gratitude</h2>
-                    <p className="text-[#666666] font-serif italic text-xl leading-relaxed">Your response has been registered. We await the honor of your company.</p>
+                <div className="animate-in max-w-md mx-auto bg-white/90 backdrop-blur-md p-16 rounded-[4rem] border border-[#9E7E44]/20 shadow-2xl text-center space-y-8">
+                  <div className="w-20 h-20 bg-[#F8F5F2] text-[#9E7E44] rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Icons.Check size={40} />
                   </div>
-                  <button onClick={() => setIsSubmitted(false)} className="text-[10px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] hover:text-[#333333] transition-colors border-b border-[#9E7E44]/30 pb-1">Modify Response</button>
+                  <h2 className="text-4xl font-serif text-[#333333]">With Gratitude</h2>
+                  <p className="text-slate-500 font-serif italic text-lg leading-relaxed px-4">Your presence is the greatest gift. We have registered your response and await your arrival.</p>
+                  <button onClick={() => { setIsSubmitted(false); setActiveTab('home'); }} className="text-[10px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] border-b border-[#9E7E44]/30 pb-1">Return Home</button>
                 </div>
               );
             }
             return (
-              <div className="animate-in zoom-in duration-1000 max-w-2xl mx-auto bg-white/60 backdrop-blur-2xl p-14 rounded-[5rem] border border-white shadow-2xl space-y-16 relative overflow-hidden text-center">
-                <div className="space-y-4">
-                  <h2 className="text-6xl font-serif text-[#333333]">RSVP</h2>
-                  <p className="text-[#9E7E44] font-serif italic text-xl">We'd be honored to have you.</p>
+              <div className="animate-in max-w-2xl mx-auto bg-white/70 backdrop-blur-2xl p-10 md:p-14 rounded-[4rem] border border-white shadow-2xl space-y-12">
+                <div className="text-center space-y-2">
+                  <h2 className="text-5xl font-serif text-[#333333]">R.S.V.P</h2>
+                  <p className="text-[#9E7E44] font-serif italic text-lg">Kindly respond by June 2026</p>
                 </div>
 
-                <form className="space-y-14" onSubmit={handleSubmitRsvp}>
-                  <div className="space-y-12">
-                    <div className="space-y-4 text-left">
-                      <label className="text-[11px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-8">Full Name</label>
-                      <input
-                        type="text" required
-                        value={rsvpData.name}
-                        onChange={(e) => setRsvpData({ ...rsvpData, name: e.target.value })}
-                        className="w-full p-8 bg-[#F8F5F2]/50 rounded-[3rem] border border-[#9E7E44]/10 focus:ring-4 focus:ring-[#9E7E44]/5 focus:bg-white outline-none transition-all placeholder:text-slate-300 italic font-serif text-xl"
-                        placeholder="Guest name..."
-                      />
-                    </div>
+                {errorMessage && (
+                  <div className="bg-red-50 text-red-500 p-4 rounded-2xl flex items-center gap-3 text-sm font-medium border border-red-100">
+                    <Icons.AlertCircle size={18} /> {errorMessage}
+                  </div>
+                )}
 
-                    <div className="space-y-4 text-left">
-                      <label className="text-[11px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-8">Contact Number</label>
-                      <input
-                        type="tel" required
-                        value={rsvpData.phone}
-                        onChange={(e) => setRsvpData({ ...rsvpData, phone: e.target.value })}
-                        className="w-full p-8 bg-[#F8F5F2]/50 rounded-[3rem] border border-[#9E7E44]/10 focus:ring-4 focus:ring-[#9E7E44]/5 focus:bg-white outline-none transition-all placeholder:text-slate-300 italic font-serif text-xl"
-                        placeholder="Enter number..."
-                      />
-                      <p className="text-[11px] text-slate-400 ml-8 font-serif italic">Please enter with your country code (e.g. +91 00000 00000)</p>
+                <form className="space-y-10" onSubmit={handleSubmitRsvp}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-2 text-left">
+                      <label className="text-[10px] uppercase tracking-widest font-bold text-[#9E7E44] ml-4">Full Name</label>
+                      <input type="text" required value={rsvpData.name} onChange={(e) => setRsvpData({ ...rsvpData, name: e.target.value })} className="w-full p-6 bg-[#F8F5F2]/40 rounded-[2rem] border border-[#9E7E44]/10 outline-none focus:bg-white focus:ring-4 focus:ring-[#9E7E44]/5 transition-all font-serif text-lg" placeholder="Name..." />
+                    </div>
+                    <div className="space-y-2 text-left">
+                      <label className="text-[10px] uppercase tracking-widest font-bold text-[#9E7E44] ml-4">Contact Number</label>
+                      <input type="tel" required value={rsvpData.phone} onChange={(e) => setRsvpData({ ...rsvpData, phone: e.target.value })} className="w-full p-6 bg-[#F8F5F2]/40 rounded-[2rem] border border-[#9E7E44]/10 outline-none focus:bg-white focus:ring-4 focus:ring-[#9E7E44]/5 transition-all font-serif text-lg" placeholder="+91..." />
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 text-left">
+                    <label className="text-[10px] uppercase tracking-widest font-bold text-[#9E7E44] ml-4">Guest Count</label>
+                    <div className="flex items-center justify-between p-4 bg-[#F8F5F2]/40 rounded-[2rem] border border-[#9E7E44]/10">
+                      <div className="flex items-center gap-4 ml-4 text-slate-500">
+                        <Icons.Users size={20} className="text-[#9E7E44]" />
+                        <span className="text-sm font-medium">Total attending</span>
+                      </div>
+                      <div className="flex items-center gap-6 mr-2">
+                        <button type="button" onClick={() => adjustGuests(-1)} className="w-10 h-10 rounded-xl bg-white border border-[#9E7E44]/10 flex items-center justify-center text-[#9E7E44] hover:bg-[#333333] hover:text-white transition-all"><Icons.Minus size={16} /></button>
+                        <span className="text-2xl font-serif text-[#333333] w-6 text-center">{rsvpData.guests}</span>
+                        <button type="button" onClick={() => adjustGuests(1)} className="w-10 h-10 rounded-xl bg-white border border-[#9E7E44]/10 flex items-center justify-center text-[#9E7E44] hover:bg-[#333333] hover:text-white transition-all"><Icons.Plus size={16} /></button>
+                      </div>
                     </div>
                   </div>
 
                   <div className="space-y-4 text-left">
-                    <label className="text-[11px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-8">Guest Party Count</label>
-                    <div className="flex items-center justify-between p-7 bg-[#F8F5F2]/50 rounded-[3rem] border border-[#9E7E44]/10 shadow-inner">
-                      <div className="flex items-center gap-4 ml-4 text-[#666666]">
-                        <Icons.Users className="text-[#9E7E44]" size={24} strokeWidth={1} />
-                        <span className="text-lg font-medium">Number attending</span>
-                      </div>
-                      <div className="flex items-center gap-8 mr-4">
-                        <button type="button" onClick={() => adjustGuests(-1)} className="w-14 h-14 rounded-3xl bg-white border border-[#9E7E44]/10 flex items-center justify-center text-[#9E7E44] hover:bg-[#333333] hover:text-white transition-all shadow-sm active:scale-90"><Icons.Minus size={20} /></button>
-                        <span className="text-3xl font-serif text-[#333333] w-8 text-center">{rsvpData.guests}</span>
-                        <button type="button" onClick={() => adjustGuests(1)} className="w-14 h-14 rounded-3xl bg-white border border-[#9E7E44]/10 flex items-center justify-center text-[#9E7E44] hover:bg-[#333333] hover:text-white transition-all shadow-sm active:scale-90"><Icons.Plus size={20} /></button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-8 text-left">
-                    <label className="text-[11px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-8">Ceremonies to Attend</label>
-                    <div className="grid grid-cols-1 gap-6">
+                    <label className="text-[10px] uppercase tracking-widest font-bold text-[#9E7E44] ml-4">Ceremonies Joining</label>
+                    <div className="space-y-3">
                       {events.map((event) => (
-                        <button
-                          key={event.id}
-                          type="button"
-                          onClick={() => setRsvpData({ ...rsvpData, events: { ...rsvpData.events, [event.id]: !rsvpData.events[event.id] } })}
-                          className={`flex items-center justify-between p-8 rounded-[3.5rem] border-2 transition-all duration-700 ${rsvpData.events[event.id] ? 'bg-white border-[#9E7E44]/40 shadow-xl' : 'bg-transparent border-transparent opacity-40'}`}
-                        >
-                          <div className="flex items-center gap-6 text-left">
-                            <div className={`p-4 rounded-3xl transition-all duration-700 ${rsvpData.events[event.id] ? 'bg-[#F8F5F2] scale-110' : 'bg-slate-100'}`}>
-                              {React.cloneElement(event.icon, { size: 24 })}
+                        <button key={event.id} type="button" onClick={() => setRsvpData({ ...rsvpData, events: { ...rsvpData.events, [event.id]: !rsvpData.events[event.id] } })} className={`w-full flex items-center justify-between p-5 rounded-[2rem] border-2 transition-all duration-500 ${rsvpData.events[event.id] ? 'bg-white border-[#9E7E44] shadow-md' : 'bg-transparent border-transparent opacity-50'}`}>
+                          <div className="flex items-center gap-4 text-left">
+                            <div className={`p-3 rounded-2xl ${rsvpData.events[event.id] ? 'bg-[#F8F5F2] text-[#9E7E44]' : 'bg-slate-100 text-slate-400'}`}>
+                              {event.icon}
                             </div>
-                            <div>
-                              <p className="font-bold text-[12px] tracking-[0.3em] uppercase text-[#333333]">{event.title}</p>
-                              <p className="text-xs text-[#9E7E44] italic font-serif mt-1">{event.date}</p>
-                            </div>
+                            <span className="font-bold text-[10px] tracking-widest uppercase text-[#333333]">{event.title}</span>
                           </div>
-                          <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-700 ${rsvpData.events[event.id] ? 'bg-[#9E7E44] border-[#9E7E44] text-white scale-125' : 'border-slate-200'}`}>
-                            {rsvpData.events[event.id] && <Icons.Check size={18} strokeWidth={4} />}
+                          <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${rsvpData.events[event.id] ? 'bg-[#9E7E44] border-[#9E7E44] text-white' : 'border-slate-200'}`}>
+                            {rsvpData.events[event.id] && <Icons.Check size={14} />}
                           </div>
                         </button>
                       ))}
                     </div>
                   </div>
 
-                  <div className="space-y-4 text-left">
-                    <label className="text-[11px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-8">Blessings & Message</label>
-                    <textarea
-                      value={rsvpData.message}
-                      onChange={(e) => setRsvpData({ ...rsvpData, message: e.target.value })}
-                      className="w-full p-8 bg-[#F8F5F2]/50 rounded-[3rem] border border-[#9E7E44]/10 focus:ring-4 focus:ring-[#9E7E44]/5 focus:bg-white outline-none transition-all placeholder:text-slate-300 shadow-inner italic font-serif text-xl h-40 resize-none"
-                      placeholder="Share your blessings..."
-                    />
+                  <div className="space-y-2 text-left">
+                    <label className="text-[10px] uppercase tracking-widest font-bold text-[#9E7E44] ml-4">Blessings / Dietary Needs</label>
+                    <textarea value={rsvpData.message} onChange={(e) => setRsvpData({ ...rsvpData, message: e.target.value })} className="w-full p-6 bg-[#F8F5F2]/40 rounded-[2rem] border border-[#9E7E44]/10 outline-none focus:bg-white focus:ring-4 focus:ring-[#9E7E44]/5 transition-all font-serif text-lg h-32 resize-none" placeholder="Share a message..." />
                   </div>
 
-                  <button
-                    type="submit"
-                    disabled={isSubmitting || !user}
-                    className="w-full py-8 bg-[#333333] text-white rounded-[3.5rem] font-bold text-[12px] uppercase tracking-[0.6em] hover:bg-[#9E7E44] transition-all duration-1000 shadow-2xl disabled:opacity-50 flex items-center justify-center gap-4 active:scale-95"
-                  >
-                    {isSubmitting ? <Icons.Loader2 className="animate-spin" size={24} /> : "Register Attendance"}
+                  <button type="submit" disabled={isSubmitting} className="w-full py-6 bg-[#333333] text-white rounded-[2.5rem] font-bold text-[11px] uppercase tracking-[0.5em] hover:bg-[#9E7E44] transition-all shadow-xl flex items-center justify-center gap-3 disabled:opacity-50">
+                    {isSubmitting ? <Icons.Loader2 className="animate-spin" size={20} /> : "Submit Response"}
                   </button>
                 </form>
               </div>
             );
-          default:
-            return null;
+          default: return null;
         }
       };
 
-      const root = ReactDOM.createRoot(document.getElementById('root'));
-      root.render(<App />);
-    }; // End of App Component definition.
+      return (
+        <div className="min-h-screen bg-[#F8F5F2] pb-48 selection:bg-[#9E7E44]/10 font-sans">
+          <style>{`
+                    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+                    .font-serif { font-family: 'Playfair Display', serif; }
+                    .font-sans { font-family: 'Inter', sans-serif; }
+                    .animate-in {
+                      animation: fadeIn 0.8s ease-out forwards;
+                    }
+                    @keyframes fadeIn {
+                      from { opacity: 0; transform: translateY(15px); }
+                      to { opacity: 1; transform: translateY(0); }
+                    }
+                    .glass-nav {
+                      background: rgba(255, 255, 255, 0.6);
+                      backdrop-filter: blur(20px);
+                      -webkit-backdrop-filter: blur(20px);
+                      border: 1px solid rgba(255, 255, 255, 0.8);
+                    }
+                  `}</style>
 
-    // Initialize and Render
-    // We ensure strict mode or direct render
+          <div className="fixed inset-0 pointer-events-none overflow-hidden">
+            <div className="absolute -top-40 -right-40 w-[100vw] h-[100vw] bg-gradient-to-bl from-[#9E7E44]/5 to-transparent rounded-full blur-[120px]" />
+            <div className="absolute -bottom-40 -left-40 w-[100vw] h-[100vw] bg-gradient-to-tr from-[#9E7E44]/5 to-transparent rounded-full blur-[120px]" />
+          </div>
+
+          <div className="relative max-w-4xl mx-auto px-6 pt-16 md:pt-24">
+            <nav className="fixed bottom-10 left-1/2 -translate-x-1/2 glass-nav px-3 py-3 rounded-full shadow-2xl z-[110] flex items-center gap-2">
+              {['home', 'schedule', 'rsvp'].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => { setActiveTab(tab); setShowAdminPanel(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  className={`px-8 md:px-12 py-4 rounded-full text-[9px] font-bold uppercase tracking-[0.4em] transition-all duration-500 ${activeTab === tab ? 'bg-[#333333] text-white shadow-lg scale-105' : 'text-slate-400 hover:text-[#333333]'}`}
+                >
+                  {tab === 'schedule' ? 'Plan' : tab}
+                </button>
+              ))}
+            </nav>
+
+            <main className="min-h-[70vh]">
+              {renderContent()}
+            </main>
+
+            <footer className="mt-40 text-center space-y-10 pb-12">
+              <div className="flex justify-center items-center gap-4 opacity-10">
+                <div className="h-[0.5px] w-20 bg-[#333333]" />
+                <Icons.Heart size={16} />
+                <div className="h-[0.5px] w-20 bg-[#333333]" />
+              </div>
+              <div className="space-y-3">
+                <p className="font-serif italic text-slate-400 text-2xl">Awaiting your presence.</p>
+                <p className="text-[10px] tracking-[0.5em] uppercase text-slate-300 font-bold">Rishi & Marilyn • MMXXVI</p>
+              </div>
+              <button
+                onClick={() => { setShowAdminPanel(!showAdminPanel); if (!showAdminPanel) setActiveTab('admin'); }}
+                className="text-[8px] text-slate-200 hover:text-[#9E7E44] transition-colors uppercase tracking-[0.4em] font-bold flex items-center gap-2 mx-auto"
+              >
+                <Icons.ShieldCheck size={12} /> Host Access
+              </button>
+            </footer>
+          </div>
+        </div>
+      );
+    }
+
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
+
   </script>
 </body>
 
