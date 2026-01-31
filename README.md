@@ -11,7 +11,12 @@ This application is designed to run as a standalone HTML file without needing a 
 
 ## Setup
 1. **Open `index.html`**: Simply open the file in any modern web browser.
-2. **Firebase Config**: Update the `window.__firebase_config` object in `index.html` with your actual Firebase project details to enable the RSVP functionality.
+2. **Firebase Config**: Update the `window.__firebase_config` object in `index.html` with your actual Firebase project details.
+
+## Data Storage Note
+- **GitHub**: Stores the **code** and **website files**.
+- **Firebase**: Stores the **RSVP data** (guest names, messages).
+*Note: You must set up a free Firebase project for the RSVPs to be saved permanently. Without it, the app runs in "Mock Mode" and data is not saved.*
 
 ## Technologies
 - **React**: UI Library (loaded via ESM CDN).

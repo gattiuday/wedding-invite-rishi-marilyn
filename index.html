@@ -340,7 +340,11 @@
           }
         } catch (err) {
           console.error("RSVP error:", err);
-          setErrorMessage(err.message || "Unable to save RSVP. Please check connection.");
+          if (err.code === 'permission-denied') {
+            setErrorMessage("Access Denied: Please update Firestore Rules to 'Test Mode' in Console.");
+          } else {
+            setErrorMessage(err.message || "Unable to save RSVP. Please check connection.");
+          }
         } finally {
           setIsSubmitting(false);
         }
