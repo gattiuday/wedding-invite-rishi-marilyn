@@ -290,24 +290,45 @@
 
       const handleSubmitRsvp = async (e) => {
         e.preventDefault();
-        if (!user) {
+
+        // Mock Mode Check
+        const isMockMode = finalConfig.apiKey.includes('PLACEHOLDER');
+
+        if (!user && !isMockMode) {
           setErrorMessage("Establishing secure connection...");
           return;
         }
+
         setIsSubmitting(true);
         setErrorMessage(null);
 
         try {
-          const rsvpsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('rsvps');
-          await rsvpsRef.add({
-            ...rsvpData,
-            submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
-            uid: user.uid
-          });
-          setIsSubmitted(true);
+          if (isMockMode) {
+            // Simulate network delay for Mock Mode
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            console.log("Mock RSVP Submitted:", rsvpData);
+            setIsSubmitted(true);
+          } else {
+            // Real Firestore Submission with Timeout
+            const rsvpsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('rsvps');
+
+            const submitPromise = rsvpsRef.add({
+              ...rsvpData,
+              submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+              uid: user ? user.uid : 'anonymous'
+            });
+
+            // 10s Timeout
+            const timeoutPromise = new Promise((_, reject) =>
+              setTimeout(() => reject(new Error("Request timed out. Please check your internet or Firebase config.")), 10000)
+            );
+
+            await Promise.race([submitPromise, timeoutPromise]);
+            setIsSubmitted(true);
+          }
         } catch (err) {
-          setErrorMessage("Unable to save RSVP. Please check connection.");
           console.error("RSVP error:", err);
+          setErrorMessage(err.message || "Unable to save RSVP. Please check connection.");
         } finally {
           setIsSubmitting(false);
         }
