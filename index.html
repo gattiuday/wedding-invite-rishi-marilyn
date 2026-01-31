@@ -47,6 +47,25 @@
   <!-- Babel for JSX -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
+  <!-- Error Handling -->
+  <script>
+    window.onerror = function (msg, url, line, col, error) {
+      document.body.innerHTML += '<div style="color:red; background:white; padding:20px; border:2px solid red; position:fixed; top:0; left:0; right:0; z-index:9999;">' +
+        '<h3>Application Error</h3>' +
+        '<pre>' + msg + '\n' + url + ':' + line + ':' + col + '</pre>' +
+        (error ? '<pre>' + error.stack + '</pre>' : '') +
+        '</div>';
+      console.error("Global Error:", error);
+    };
+    window.addEventListener('unhandledrejection', function (event) {
+      document.body.innerHTML += '<div style="color:orange; background:white; padding:20px; border:2px solid orange; position:fixed; top:100px; left:0; right:0; z-index:9999;">' +
+        '<h3>Unhandled Promise Rejection</h3>' +
+        '<pre>' + event.reason + '</pre>' +
+        '</div>';
+      console.error("Unhandled Rejection:", event.reason);
+    });
+  </script>
+
   <!-- Configuration Injection -->
   <script>
     // Placeholder configuration to prevent crashes and provide immediate visual feedback.
@@ -75,7 +94,7 @@
 <body class="bg-[#F8F5F2] text-[#333333]">
   <div id="root"></div>
 
-  <script type="text/babel" data-type="module">
+  <script type="text/babel" data-type="module" data-presets="react">
     import React, { useState, useEffect } from 'react';
     import { createRoot } from 'react-dom/client';
     import { initializeApp } from 'firebase/app';
