@@ -91,6 +91,7 @@
 
   <script type="text/babel">
     // --- 1. ICONS (Inline SVGs) ---
+    // Replacing Lucide imports with this persistent object
     const Icon = ({ path, className, strokeWidth = 2, size = 24, fill = "none" }) => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -132,7 +133,7 @@
     // --- 2. CONFIG & GLOBALS ---
     const { useState, useEffect } = React;
 
-    // Firebase Setup using Compat (Global Window Object)
+    // Firebase Configuration (Compat Mode)
     // PLACEHOLDER CONFIG: Replace with your actual details from console.firebase.google.com
     const firebaseConfig = {
       apiKey: "AIzaSy_PLACEHOLDER_KEY",
@@ -143,6 +144,7 @@
       appId: "1:123456:web:123456"
     };
 
+    // Use window.__firebase_config if injected, otherwise fallback
     const finalConfig = typeof window.__firebase_config !== 'undefined'
       ? JSON.parse(window.__firebase_config)
       : firebaseConfig;
@@ -150,11 +152,11 @@
     firebase.initializeApp(finalConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
-    const appId = typeof window.__app_id !== 'undefined' ? window.__app_id : 'wedding-rishi-marilyn-royal-v4';
+    const appId = typeof window.__app_id !== 'undefined' ? window.__app_id : 'wedding-rishi-marilyn';
 
     // --- 3. COMPONENTS ---
 
-    // Floating Petal Component for "Wedding Vibes"
+    // Floating Petal Component
     const FloatingPetal = ({ delay, left, duration }) => (
       <div
         className="absolute pointer-events-none text-[#9E7E44]/20 animate-petal-fall"
@@ -168,6 +170,7 @@
       </div>
     );
 
+    // Main App Component
     const App = () => {
       const [activeTab, setActiveTab] = useState('home');
       const [user, setUser] = useState(null);
@@ -188,7 +191,7 @@
         message: ''
       });
 
-      // Authentication
+      // 1. Authentication
       useEffect(() => {
         const initAuth = async () => {
           try {
@@ -198,8 +201,9 @@
               await auth.signInAnonymously();
             }
           } catch (e) {
-            console.warn("Auth failed (likely placeholder config). Using mock user for UI.");
-            setUser({ uid: 'guest-preview', isAnonymous: true });
+            console.warn("Auth failed (likely due to placeholder config). Utilizing mock user for display.", e);
+            // Fallback for UI testing
+            setUser({ uid: 'guest-mock', isAnonymous: true });
           } finally {
             setLoading(false);
           }
@@ -209,7 +213,7 @@
         return () => unsubscribe();
       }, []);
 
-      // Data Sync
+      // 2. Data Sync
       useEffect(() => {
         if (!user || !showAdminPanel || adminPassword !== 'rishi2026') return;
 
@@ -224,10 +228,12 @@
             (error) => console.error("Firestore sync error:", error)
           );
           return () => unsubscribe();
-        } catch (e) { console.warn("Firestore access error:", e); }
+        } catch (err) {
+          console.error("Firestore error (likely perm or config):", err);
+        }
       }, [user, showAdminPanel, adminPassword]);
 
-      // Countdown
+      // 3. Countdown logic
       useEffect(() => {
         const targetDate = new Date('August 22, 2026 16:00:00').getTime();
         const timer = setInterval(() => {
@@ -256,7 +262,7 @@
           time: '4:00 PM',
           venue: 'Blue House, ECR, Chennai',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=Blue+House+Chennai',
-          icon: <Icons.Music className="text-[#9E7E44]" strokeWidth={1.5} />,
+          icon: <Icons.Music strokeWidth={1.5} />,
           theme: 'Traditional Silk'
         },
         {
@@ -267,18 +273,18 @@
           time: '9:30 AM',
           venue: 'The Leela Palace, Chennai',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=The+Leela+Palace+Chennai',
-          icon: <Icons.Flower2 className="text-[#9E7E44]" strokeWidth={1.5} />,
+          icon: <Icons.Flower2 strokeWidth={1.5} />,
           theme: 'Royal Heritage'
         },
         {
           id: 'reception',
           title: 'Sangeet & Cocktail',
-          subtitle: 'Dance, Drinks & Celebration',
+          subtitle: 'Dance & Celebration',
           date: 'August 24, 2026',
           time: '6:30 PM',
           venue: 'Pullman, Chennai',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=Pullman+Hotel+Chennai',
-          icon: <Icons.GlassWater className="text-[#9E7E44]" strokeWidth={1.5} />,
+          icon: <Icons.GlassWater strokeWidth={1.5} />,
           theme: 'Starlit Evening'
         }
       ];
@@ -303,7 +309,6 @@
         } catch (err) {
           setErrorMessage("Unable to save RSVP. Please check connection.");
           console.error("RSVP error:", err);
-          setTimeout(() => { setIsSubmitted(true); setIsSubmitting(false); }, 1000);
         } finally {
           setIsSubmitting(false);
         }
@@ -319,7 +324,7 @@
           </svg>
           <div className="relative z-10 flex flex-col items-center justify-center bg-white/70 backdrop-blur-xl rounded-full w-[85%] h-[85%] border-2 border-[#9E7E44]/20 shadow-2xl">
             <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent rounded-full" />
-            <span className="font-serif text-[#9E7E44] text-4xl md:text-5xl tracking-tighter leading-none select-none drop-shadow-sm">
+            <span className="font-serif text-[#9E7E44] text-3xl md:text-4xl tracking-tighter leading-none select-none drop-shadow-sm">
               R<span className="text-xl mx-[-3px] opacity-60 italic">&</span>M
             </span>
             <div className="h-[0.5px] w-12 bg-gradient-to-r from-transparent via-[#9E7E44]/40 to-transparent my-2" />
@@ -397,62 +402,62 @@
         switch (activeTab) {
           case 'home':
             return (
-              <div className="animate-in text-center space-y-16 py-10">
-                <div className="space-y-8">
+              <div className="animate-in text-center space-y-12 py-10">
+                <div className="space-y-6">
                   <div className="flex justify-center items-center gap-6 mb-4">
-                    <div className="h-[1px] w-16 bg-gradient-to-r from-transparent to-[#9E7E44]/30" />
-                    <Icons.Sparkles className="text-[#9E7E44] opacity-40 animate-pulse" size={24} />
-                    <div className="h-[1px] w-16 bg-gradient-to-l from-transparent to-[#9E7E44]/30" />
+                    <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-[#9E7E44]/30" />
+                    <Icons.Sparkles className="text-[#9E7E44] opacity-40 animate-pulse" size={20} />
+                    <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-[#9E7E44]/30" />
                   </div>
 
-                  <div className="space-y-4">
-                    <span className="text-[11px] uppercase tracking-[0.7em] text-[#9E7E44] font-bold block mb-4">The Celebration of a Lifetime</span>
-                    <h1 className="text-7xl md:text-[10rem] font-serif text-[#333333] leading-[0.85] tracking-tighter">
+                  <div className="space-y-3">
+                    <span className="text-[10px] uppercase tracking-[0.6em] text-[#9E7E44] font-bold block mb-4">The Celebration of a Lifetime</span>
+                    <h1 className="text-6xl md:text-[8rem] font-serif text-[#333333] leading-[0.9] tracking-tighter">
                       Rishi <br />
-                      <span className="italic text-[#9E7E44] font-normal text-5xl md:text-8xl">&</span> <br />
+                      <span className="italic text-[#9E7E44] font-normal text-4xl md:text-7xl">&</span> <br />
                       Marilyn
                     </h1>
                   </div>
 
-                  <div className="max-w-xl mx-auto pt-10 px-6 relative">
-                    <Icons.Quote className="absolute -top-4 left-0 text-[#9E7E44]/10" size={60} />
-                    <p className="text-slate-500 font-serif italic text-xl md:text-2xl leading-relaxed">
+                  <div className="max-w-lg mx-auto pt-8 px-6 relative">
+                    <Icons.Quote className="absolute -top-2 left-0 text-[#9E7E44]/10" size={50} />
+                    <p className="text-slate-500 font-serif italic text-lg md:text-xl leading-relaxed">
                       "As the sun sets over the ocean, we begin our new horizon. Two souls, two cultures, one beautiful journey."
                     </p>
                   </div>
 
-                  <div className="pt-12 flex flex-col items-center gap-3">
-                    <p className="text-[#9E7E44] font-serif italic text-3xl tracking-widest font-medium">August 22 — 24, 2026</p>
+                  <div className="pt-8 flex flex-col items-center gap-3">
+                    <p className="text-[#9E7E44] font-serif italic text-2xl tracking-widest font-medium">August 22 — 24, 2026</p>
                     <div className="flex items-center gap-3">
-                      <div className="h-px w-8 bg-[#9E7E44]/20" />
+                      <div className="h-px w-6 bg-[#9E7E44]/20" />
                       <p className="text-[10px] uppercase tracking-[0.5em] text-slate-400 font-bold">Chennai • Tamil Nadu</p>
-                      <div className="h-px w-8 bg-[#9E7E44]/20" />
+                      <div className="h-px w-6 bg-[#9E7E44]/20" />
                     </div>
                   </div>
                 </div>
 
                 <div className="relative inline-block">
                   <div className="absolute -inset-4 bg-gradient-to-r from-[#9E7E44]/10 to-transparent blur-2xl rounded-full" />
-                  <div className="relative bg-white/60 backdrop-blur-xl border border-white p-10 rounded-[4rem] shadow-2xl">
-                    <div className="flex justify-center gap-10 md:gap-14">
+                  <div className="relative bg-white/60 backdrop-blur-xl border border-white p-8 rounded-[3.5rem] shadow-2xl">
+                    <div className="flex justify-center gap-8 md:gap-12">
                       {Object.entries(timeLeft).map(([unit, value]) => (
                         <div key={unit} className="flex flex-col items-center">
-                          <span className="text-4xl md:text-6xl font-serif text-[#333333]">{String(value).padStart(2, '0')}</span>
-                          <span className="text-[9px] uppercase tracking-[0.3em] text-[#9E7E44] font-bold mt-2">{unit}</span>
+                          <span className="text-3xl md:text-5xl font-serif text-[#333333]">{String(value).padStart(2, '0')}</span>
+                          <span className="text-[8px] uppercase tracking-[0.3em] text-[#9E7E44] font-bold mt-2">{unit}</span>
                         </div>
                       ))}
                     </div>
                   </div>
                 </div>
 
-                <div className="pt-12">
+                <div className="pt-10">
                   <button
                     onClick={() => setActiveTab('schedule')}
-                    className="group relative px-16 py-6 overflow-hidden rounded-full transition-all duration-700 shadow-2xl active:scale-95 bg-[#333333] text-white hover:bg-[#9E7E44]"
+                    className="group relative px-14 py-5 overflow-hidden rounded-full transition-all duration-700 shadow-2xl active:scale-95 bg-[#333333] text-white hover:bg-[#9E7E44]"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                    <span className="relative text-[11px] font-bold tracking-[0.6em] uppercase flex items-center gap-3">
-                      Open Invitation <Icons.ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                    <span className="relative text-[10px] font-bold tracking-[0.5em] uppercase flex items-center gap-3">
+                      View Details <Icons.ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                     </span>
                   </button>
                 </div>
@@ -460,51 +465,51 @@
             );
           case 'schedule':
             return (
-              <div className="animate-in space-y-16 pb-24 text-center">
+              <div className="animate-in space-y-12 pb-24 text-center">
                 <div className="flex flex-col items-center pt-8">
-                  <CoupleLogo className="w-36 h-36 mb-10" />
-                  <h2 className="text-6xl font-serif text-[#333333] tracking-tight">The Itinerary</h2>
-                  <div className="flex items-center gap-3 mt-6">
-                    <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#9E7E44]/30" />
-                    <Icons.Heart className="text-[#9E7E44]/40" size={16} />
-                    <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#9E7E44]/30" />
+                  <CoupleLogo className="w-32 h-32 mb-8" />
+                  <h2 className="text-5xl font-serif text-[#333333] tracking-tight">The Itinerary</h2>
+                  <div className="flex items-center gap-3 mt-4">
+                    <div className="h-px w-10 bg-gradient-to-r from-transparent to-[#9E7E44]/30" />
+                    <Icons.Heart className="text-[#9E7E44]/40" size={14} />
+                    <div className="h-px w-10 bg-gradient-to-l from-transparent to-[#9E7E44]/30" />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-10">
+                <div className="grid grid-cols-1 gap-8">
                   {events.map((event) => (
-                    <div key={event.id} className="group relative bg-white/60 backdrop-blur-xl p-12 rounded-[4rem] border border-white/50 shadow-sm hover:shadow-3xl hover:-translate-y-1 transition-all duration-700 overflow-hidden">
-                      <div className="absolute -right-20 -top-20 text-[#9E7E44]/5 group-hover:text-[#9E7E44]/10 transition-colors">
-                        {React.cloneElement(event.icon, { size: 200 })}
+                    <div key={event.id} className="group relative bg-white/60 backdrop-blur-xl p-10 rounded-[3rem] border border-white/50 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-700 overflow-hidden">
+                      <div className="absolute -right-16 -top-16 text-[#9E7E44]/5 group-hover:text-[#9E7E44]/10 transition-colors">
+                        {React.cloneElement(event.icon, { size: 150 })}
                       </div>
-                      <div className="relative flex flex-col md:flex-row gap-12 items-center md:items-start text-center md:text-left z-10">
-                        <div className="w-24 h-24 bg-gradient-to-br from-[#F8F5F2] to-white rounded-[2.5rem] flex items-center justify-center border border-[#9E7E44]/10 text-[#9E7E44] shadow-inner">
-                          {React.cloneElement(event.icon, { size: 40 })}
+                      <div className="relative flex flex-col md:flex-row gap-10 items-center md:items-start text-center md:text-left z-10">
+                        <div className="w-20 h-20 bg-gradient-to-br from-[#F8F5F2] to-white rounded-[2rem] flex items-center justify-center border border-[#9E7E44]/10 text-[#9E7E44] shadow-inner">
+                          {React.cloneElement(event.icon, { size: 32 })}
                         </div>
-                        <div className="flex-1 space-y-8">
-                          <div className="space-y-2">
-                            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#9E7E44]">{event.theme}</span>
-                            <h3 className="text-4xl font-serif text-[#333333]">{event.title}</h3>
-                            <p className="text-slate-400 font-serif italic text-xl">{event.subtitle}</p>
+                        <div className="flex-1 space-y-6">
+                          <div className="space-y-1">
+                            <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-[#9E7E44]">{event.theme}</span>
+                            <h3 className="text-3xl font-serif text-[#333333]">{event.title}</h3>
+                            <p className="text-slate-400 font-serif italic text-lg">{event.subtitle}</p>
                           </div>
 
-                          <div className="flex flex-wrap justify-center md:justify-start gap-8 text-slate-500 text-sm font-medium">
-                            <div className="flex items-center gap-3">
-                              <Icons.Calendar size={18} className="text-[#9E7E44]" />
+                          <div className="flex flex-wrap justify-center md:justify-start gap-6 text-slate-500 text-sm font-medium">
+                            <div className="flex items-center gap-2">
+                              <Icons.Calendar size={16} className="text-[#9E7E44]" />
                               <span className="tracking-wide">{event.date}</span>
                             </div>
-                            <div className="flex items-center gap-3">
-                              <Icons.Clock size={18} className="text-[#9E7E44]" />
+                            <div className="flex items-center gap-2">
+                              <Icons.Clock size={16} className="text-[#9E7E44]" />
                               <span className="tracking-wide">{event.time}</span>
                             </div>
-                            <div className="flex items-start gap-3 max-w-xs">
-                              <Icons.MapPin size={18} className="text-[#9E7E44] flex-shrink-0 mt-0.5" />
+                            <div className="flex items-start gap-2 max-w-xs">
+                              <Icons.MapPin size={16} className="text-[#9E7E44] flex-shrink-0 mt-0.5" />
                               <span className="leading-relaxed">{event.venue}</span>
                             </div>
                           </div>
 
-                          <a href={event.mapUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.4em] text-slate-400 hover:text-[#9E7E44] transition-all group/btn">
-                            View On Map <Icons.ExternalLink size={14} className="group-hover/btn:scale-110 transition-transform" />
+                          <a href={event.mapUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.4em] text-slate-400 hover:text-[#9E7E44] transition-all group/btn">
+                            View On Map <Icons.ExternalLink size={12} className="group-hover/btn:scale-110 transition-transform" />
                           </a>
                         </div>
                       </div>
@@ -516,77 +521,77 @@
           case 'rsvp':
             if (isSubmitted) {
               return (
-                <div className="animate-in max-w-md mx-auto bg-white/95 backdrop-blur-md p-20 rounded-[5rem] border border-[#9E7E44]/20 shadow-2xl text-center space-y-10">
-                  <div className="w-24 h-24 bg-gradient-to-br from-[#F8F5F2] to-white text-[#9E7E44] rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
-                    <Icons.Check size={48} />
+                <div className="animate-in max-w-md mx-auto bg-white/95 backdrop-blur-md p-16 rounded-[4rem] border border-[#9E7E44]/20 shadow-2xl text-center space-y-8">
+                  <div className="w-20 h-20 bg-gradient-to-br from-[#F8F5F2] to-white text-[#9E7E44] rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl">
+                    <Icons.Check size={40} />
                   </div>
-                  <h2 className="text-5xl font-serif text-[#333333]">With Gratitude</h2>
-                  <p className="text-slate-500 font-serif italic text-xl leading-relaxed">Your presence is the greatest gift. We have registered your response and await your arrival in Chennai.</p>
-                  <button onClick={() => { setIsSubmitted(false); setActiveTab('home'); }} className="text-[11px] uppercase tracking-[0.5em] font-bold text-[#9E7E44] border-b-2 border-[#9E7E44]/10 hover:border-[#9E7E44] pb-2 transition-all">Return Home</button>
+                  <h2 className="text-4xl font-serif text-[#333333]">With Gratitude</h2>
+                  <p className="text-slate-500 font-serif italic text-lg leading-relaxed">Your presence is the greatest gift. We have registered your response and await your arrival in Chennai.</p>
+                  <button onClick={() => { setIsSubmitted(false); setActiveTab('home'); }} className="text-[10px] uppercase tracking-[0.5em] font-bold text-[#9E7E44] border-b border-[#9E7E44]/10 hover:border-[#9E7E44] pb-1 transition-all">Return Home</button>
                 </div>
               );
             }
             return (
-              <div className="animate-in max-w-2xl mx-auto bg-white/70 backdrop-blur-3xl p-12 md:p-20 rounded-[5rem] border border-white/80 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] space-y-16">
-                <div className="text-center space-y-4">
-                  <div className="inline-flex items-center gap-4 mb-2">
-                    <div className="h-px w-10 bg-[#9E7E44]/20" />
-                    <Icons.Flower2 size={24} className="text-[#9E7E44]/40" />
-                    <div className="h-px w-10 bg-[#9E7E44]/20" />
+              <div className="animate-in max-w-2xl mx-auto bg-white/70 backdrop-blur-3xl p-10 md:p-16 rounded-[4rem] border border-white/80 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] space-y-12">
+                <div className="text-center space-y-3">
+                  <div className="inline-flex items-center gap-3 mb-1">
+                    <div className="h-px w-8 bg-[#9E7E44]/20" />
+                    <Icons.Flower2 size={20} className="text-[#9E7E44]/40" />
+                    <div className="h-px w-8 bg-[#9E7E44]/20" />
                   </div>
-                  <h2 className="text-6xl font-serif text-[#333333]">R.S.V.P</h2>
-                  <p className="text-[#9E7E44] font-serif italic text-xl">Kindly respond by June 15, 2026</p>
+                  <h2 className="text-5xl font-serif text-[#333333]">R.S.V.P</h2>
+                  <p className="text-[#9E7E44] font-serif italic text-lg">Kindly respond by June 15, 2026</p>
                 </div>
 
                 {errorMessage && (
-                  <div className="bg-red-50 text-red-500 p-6 rounded-3xl flex items-center gap-4 text-sm font-medium border border-red-100 animate-pulse">
-                    <Icons.AlertCircle size={20} /> {errorMessage}
+                  <div className="bg-red-50 text-red-500 p-5 rounded-2xl flex items-center gap-4 text-sm font-medium border border-red-100 animate-pulse">
+                    <Icons.AlertCircle size={18} /> {errorMessage}
                   </div>
                 )}
 
-                <form className="space-y-12" onSubmit={handleSubmitRsvp}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <div className="space-y-3 text-left">
-                      <label className="text-[10px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-6">Full Name</label>
-                      <input type="text" required value={rsvpData.name} onChange={(e) => setRsvpData({ ...rsvpData, name: e.target.value })} className="w-full p-7 bg-[#F8F5F2]/50 rounded-[2.5rem] border border-transparent outline-none focus:bg-white focus:border-[#9E7E44]/20 focus:ring-8 focus:ring-[#9E7E44]/5 transition-all font-serif text-xl" placeholder="Guest Name" />
+                <form className="space-y-10" onSubmit={handleSubmitRsvp}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-2 text-left">
+                      <label className="text-[9px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-6">Full Name</label>
+                      <input type="text" required value={rsvpData.name} onChange={(e) => setRsvpData({ ...rsvpData, name: e.target.value })} className="w-full p-6 bg-[#F8F5F2]/50 rounded-[2rem] border border-transparent outline-none focus:bg-white focus:border-[#9E7E44]/20 focus:ring-8 focus:ring-[#9E7E44]/5 transition-all font-serif text-lg" placeholder="Guest Name" />
                     </div>
-                    <div className="space-y-3 text-left">
-                      <label className="text-[10px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-6">Contact Number</label>
-                      <input type="tel" required value={rsvpData.phone} onChange={(e) => setRsvpData({ ...rsvpData, phone: e.target.value })} className="w-full p-7 bg-[#F8F5F2]/50 rounded-[2.5rem] border border-transparent outline-none focus:bg-white focus:border-[#9E7E44]/20 focus:ring-8 focus:ring-[#9E7E44]/5 transition-all font-serif text-xl" placeholder="+91..." />
-                    </div>
-                  </div>
-
-                  <div className="space-y-4 text-left">
-                    <label className="text-[10px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-6">Guest Count</label>
-                    <div className="flex items-center justify-between p-6 bg-[#F8F5F2]/50 rounded-[2.5rem]">
-                      <div className="flex items-center gap-5 ml-6 text-slate-500">
-                        <Icons.Users size={24} className="text-[#9E7E44]" />
-                        <span className="text-base font-medium">Total attending</span>
-                      </div>
-                      <div className="flex items-center gap-8 mr-4">
-                        <button type="button" onClick={() => adjustGuests(-1)} className="w-12 h-12 rounded-2xl bg-white border border-[#9E7E44]/10 flex items-center justify-center text-[#9E7E44] hover:bg-[#333333] hover:text-white transition-all shadow-sm"><Icons.Minus size={18} /></button>
-                        <span className="text-3xl font-serif text-[#333333] w-8 text-center">{rsvpData.guests}</span>
-                        <button type="button" onClick={() => adjustGuests(1)} className="w-12 h-12 rounded-2xl bg-white border border-[#9E7E44]/10 flex items-center justify-center text-[#9E7E44] hover:bg-[#333333] hover:text-white transition-all shadow-sm"><Icons.Plus size={18} /></button>
-                      </div>
+                    <div className="space-y-2 text-left">
+                      <label className="text-[9px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-6">Contact Number</label>
+                      <input type="tel" required value={rsvpData.phone} onChange={(e) => setRsvpData({ ...rsvpData, phone: e.target.value })} className="w-full p-6 bg-[#F8F5F2]/50 rounded-[2rem] border border-transparent outline-none focus:bg-white focus:border-[#9E7E44]/20 focus:ring-8 focus:ring-[#9E7E44]/5 transition-all font-serif text-lg" placeholder="Mobile Number" />
                     </div>
                   </div>
 
-                  <div className="space-y-6 text-left">
-                    <label className="text-[10px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-6">Ceremonies Joining</label>
-                    <div className="grid grid-cols-1 gap-4">
+                  <div className="space-y-3 text-left">
+                    <label className="text-[9px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-6">Guest Count</label>
+                    <div className="flex items-center justify-between p-5 bg-[#F8F5F2]/50 rounded-[2rem]">
+                      <div className="flex items-center gap-4 ml-6 text-slate-500">
+                        <Icons.Users size={20} className="text-[#9E7E44]" />
+                        <span className="text-sm font-medium">Total attending</span>
+                      </div>
+                      <div className="flex items-center gap-6 mr-4">
+                        <button type="button" onClick={() => adjustGuests(-1)} className="w-10 h-10 rounded-xl bg-white border border-[#9E7E44]/10 flex items-center justify-center text-[#9E7E44] hover:bg-[#333333] hover:text-white transition-all shadow-sm"><Icons.Minus size={16} /></button>
+                        <span className="text-2xl font-serif text-[#333333] w-6 text-center">{rsvpData.guests}</span>
+                        <button type="button" onClick={() => adjustGuests(1)} className="w-10 h-10 rounded-xl bg-white border border-[#9E7E44]/10 flex items-center justify-center text-[#9E7E44] hover:bg-[#333333] hover:text-white transition-all shadow-sm"><Icons.Plus size={16} /></button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-5 text-left">
+                    <label className="text-[9px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-6">Ceremonies Joining</label>
+                    <div className="grid grid-cols-1 gap-3">
                       {events.map((event) => (
-                        <button key={event.id} type="button" onClick={() => setRsvpData({ ...rsvpData, events: { ...rsvpData.events, [event.id]: !rsvpData.events[event.id] } })} className={`w-full flex items-center justify-between p-6 rounded-[2.5rem] border-2 transition-all duration-700 ${rsvpData.events[event.id] ? 'bg-white border-[#9E7E44]/30 shadow-xl' : 'bg-transparent border-transparent opacity-40 hover:opacity-70'}`}>
-                          <div className="flex items-center gap-5 text-left">
-                            <div className={`p-4 rounded-[1.5rem] ${rsvpData.events[event.id] ? 'bg-[#F8F5F2] text-[#9E7E44]' : 'bg-slate-100 text-slate-400'}`}>
-                              {React.cloneElement(event.icon, { size: 24 })}
+                        <button key={event.id} type="button" onClick={() => setRsvpData({ ...rsvpData, events: { ...rsvpData.events, [event.id]: !rsvpData.events[event.id] } })} className={`w-full flex items-center justify-between p-5 rounded-[2rem] border-2 transition-all duration-700 ${rsvpData.events[event.id] ? 'bg-white border-[#9E7E44]/30 shadow-xl' : 'bg-transparent border-transparent opacity-40 hover:opacity-70'}`}>
+                          <div className="flex items-center gap-4 text-left">
+                            <div className={`p-3 rounded-[1.2rem] ${rsvpData.events[event.id] ? 'bg-[#F8F5F2] text-[#9E7E44]' : 'bg-slate-100 text-slate-400'}`}>
+                              {React.cloneElement(event.icon, { size: 20 })}
                             </div>
                             <div>
-                              <p className="font-bold text-[11px] tracking-[0.3em] uppercase text-[#333333]">{event.title}</p>
-                              <p className="text-[10px] text-slate-400 mt-0.5">{event.date}</p>
+                              <p className="font-bold text-[10px] tracking-[0.2em] uppercase text-[#333333]">{event.title}</p>
+                              <p className="text-[9px] text-slate-400 mt-0.5">{event.date}</p>
                             </div>
                           </div>
-                          <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-colors ${rsvpData.events[event.id] ? 'bg-[#9E7E44] border-[#9E7E44] text-white' : 'border-slate-200'}`}>
-                            {rsvpData.events[event.id] && <Icons.Check size={16} strokeWidth={3} />}
+                          <div className={`w-7 h-7 rounded-full border-2 flex items-center justify-center transition-colors ${rsvpData.events[event.id] ? 'bg-[#9E7E44] border-[#9E7E44] text-white' : 'border-slate-200'}`}>
+                            {rsvpData.events[event.id] && <Icons.Check size={14} strokeWidth={3} />}
                           </div>
                         </button>
                       ))}
@@ -594,13 +599,13 @@
                   </div>
 
                   <div className="space-y-3 text-left">
-                    <label className="text-[10px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-6">Share a Blessing or Message</label>
-                    <textarea value={rsvpData.message} onChange={(e) => setRsvpData({ ...rsvpData, message: e.target.value })} className="w-full p-8 bg-[#F8F5F2]/50 rounded-[3rem] border border-transparent outline-none focus:bg-white focus:border-[#9E7E44]/20 focus:ring-8 focus:ring-[#9E7E44]/5 transition-all font-serif text-xl h-44 resize-none" placeholder="We'd love to hear from you..." />
+                    <label className="text-[9px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-6">Share a Blessing or Message</label>
+                    <textarea value={rsvpData.message} onChange={(e) => setRsvpData({ ...rsvpData, message: e.target.value })} className="w-full p-6 bg-[#F8F5F2]/50 rounded-[2.5rem] border border-transparent outline-none focus:bg-white focus:border-[#9E7E44]/20 focus:ring-8 focus:ring-[#9E7E44]/5 transition-all font-serif text-lg h-36 resize-none" placeholder="We'd love to hear from you..." />
                   </div>
 
-                  <button type="submit" disabled={isSubmitting} className="group relative w-full py-8 bg-[#333333] text-white rounded-[3rem] font-bold text-[12px] uppercase tracking-[0.6em] hover:bg-[#9E7E44] transition-all duration-700 shadow-3xl flex items-center justify-center gap-4 disabled:opacity-50 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                    {isSubmitting ? <Icons.Loader2 className="animate-spin" size={24} /> : "Send RSVP"}
+                  <button type="submit" disabled={isSubmitting} className="group relative w-full py-6 bg-[#333333] text-white rounded-[2.5rem] font-bold text-[11px] uppercase tracking-[0.5em] hover:bg-[#9E7E44] transition-all duration-700 shadow-xl flex items-center justify-center gap-4 disabled:opacity-50 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                    {isSubmitting ? <Icons.Loader2 className="animate-spin" size={20} /> : "Send RSVP"}
                   </button>
                 </form>
               </div>
@@ -609,8 +614,7 @@
         }
       };
 
-      const root = ReactDOM.createRoot(document.getElementById('root'));
-      root.render(
+      return (
         <div className="min-h-screen bg-[#F8F5F2] pb-64 selection:bg-[#9E7E44]/20 font-sans overflow-x-hidden">
           {/* Decorative Floating Petals */}
           <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
@@ -626,13 +630,13 @@
             <div className="absolute bottom-0 left-0 w-[80vw] h-[80vw] bg-gradient-to-tr from-[#9E7E44]/10 to-transparent rounded-full blur-[150px] opacity-40" />
           </div>
 
-          <div className="relative max-w-5xl mx-auto px-6 pt-20 md:pt-32 z-20">
-            <nav className="fixed bottom-12 left-1/2 -translate-x-1/2 glass-nav p-2 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.15)] z-[110] flex items-center gap-1">
+          <div className="relative max-w-5xl mx-auto px-6 pt-16 md:pt-24 z-20">
+            <nav className="fixed bottom-10 left-1/2 -translate-x-1/2 glass-nav p-2 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.15)] z-[110] flex items-center gap-1">
               {['home', 'schedule', 'rsvp'].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => { setActiveTab(tab); setShowAdminPanel(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className={`px-10 md:px-14 py-4 rounded-full text-[10px] font-bold uppercase tracking-[0.5em] transition-all duration-700 ${activeTab === tab ? 'bg-[#333333] text-white shadow-xl scale-105' : 'text-slate-400 hover:text-[#333333] hover:bg-white/50'}`}
+                  className={`px-8 md:px-12 py-3 rounded-full text-[9px] font-bold uppercase tracking-[0.4em] transition-all duration-700 ${activeTab === tab ? 'bg-[#333333] text-white shadow-xl scale-105' : 'text-slate-400 hover:text-[#333333] hover:bg-white/50'}`}
                 >
                   {tab === 'schedule' ? 'Details' : tab}
                 </button>
@@ -640,34 +644,33 @@
             </nav>
 
             <main className="min-h-[70vh]">
-              {/* We need to pass the state down or move state up if we want the App to handle everything. 
-                            Wait, the user's code had App as the default export.
-                            I will just render <App /> but I need to make sure App includes the Layout or vice-versa.
-                            The user's App component INCLUDES the layout (divs, nav, main, footer).
-                            So I should just render <App />.
-                        */}
-              <App />
+              {renderContent()}
             </main>
+
+            <footer className="mt-40 text-center space-y-10 pb-20">
+              <div className="flex justify-center items-center gap-6 opacity-20">
+                <div className="h-[0.5px] w-20 bg-gradient-to-r from-transparent to-[#333333]" />
+                <Icons.Heart size={16} className="fill-[#333333]" />
+                <div className="h-[0.5px] w-20 bg-gradient-to-l from-transparent to-[#333333]" />
+              </div>
+              <div className="space-y-3">
+                <p className="font-serif italic text-slate-400 text-2xl">With love, forever after.</p>
+                <p className="text-[10px] tracking-[0.5em] uppercase text-slate-300 font-bold">Rishi & Marilyn • MMXXVI</p>
+              </div>
+              <button
+                onClick={() => { setShowAdminPanel(!showAdminPanel); if (!showAdminPanel) setActiveTab('admin'); }}
+                className="text-[8px] text-slate-200 hover:text-[#9E7E44] transition-all uppercase tracking-[0.4em] font-bold flex items-center gap-2 mx-auto px-3 py-2 hover:bg-white/30 rounded-full"
+              >
+                <Icons.ShieldCheck size={12} /> Host Portal
+              </button>
+            </footer>
           </div>
         </div>
       );
+    };
 
-      // Correction: The user's code HAS the layout inside App.
-      // I should revert the render to just <App /> and ensure App contains everything.
-      // The user's App logic:
-      // return (
-      //   <div className="min-h-screen bg-[#F8F5F2] ...">
-      //      <FloatingPetals ... />
-      //      <nav ... />
-      //      <main>{renderContent()}</main>
-      //      <footer ... />
-      //   </div>
-      // )
-      // So I will update my usage above to match that structure.
-
-      // Redefining render to just mount App, because App handles the full page layout.
-      root.render(<App />);
-
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />); 
   </script>
 </body>
 
