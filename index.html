@@ -91,7 +91,6 @@
 
   <script type="text/babel">
     // --- 1. ICONS (Inline SVGs) ---
-    // Replacing Lucide imports with this persistent object
     const Icon = ({ path, className, strokeWidth = 2, size = 24, fill = "none" }) => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -361,39 +360,89 @@
               </div>
             );
           }
-          const totalGuests = allRsvps.reduce((acc, curr) => acc + (Number(curr.guests) || 0), 0);
+
+          const eventStats = allRsvps.reduce((acc, curr) => {
+            const guestCount = Number(curr.guests) || 0;
+            if (curr.events?.haldi) acc.haldi += guestCount;
+            if (curr.events?.wedding) acc.wedding += guestCount;
+            if (curr.events?.reception) acc.reception += guestCount;
+            acc.total += guestCount;
+            return acc;
+          }, { haldi: 0, wedding: 0, reception: 0, total: 0 });
+
           return (
-            <div className="animate-in space-y-6 pb-24 text-left">
-              <div className="bg-white/90 p-8 rounded-[3rem] border border-[#9E7E44]/10 shadow-xl">
-                <h3 className="font-serif text-2xl text-[#333333] mb-6 text-center">RSVP Dashboard</h3>
-                <div className="grid grid-cols-2 gap-4">
+            <div className="animate-in space-y-8 pb-24 text-left">
+              <div className="bg-white/90 p-8 md:p-10 rounded-[3rem] border border-[#9E7E44]/10 shadow-xl space-y-8">
+                <h3 className="font-serif text-3xl text-[#333333]">RSVP Dashboard</h3>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/5 text-center">
-                    <p className="text-[10px] uppercase tracking-widest text-[#9E7E44] font-bold">Total Expected</p>
-                    <p className="text-4xl font-serif text-[#333333] mt-2">{totalGuests}</p>
+                    <p className="text-[9px] uppercase tracking-widest text-[#9E7E44] font-bold">Total Guests</p>
+                    <p className="text-4xl font-serif text-[#333333] mt-2">{eventStats.total}</p>
                   </div>
                   <div className="bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/5 text-center">
-                    <p className="text-[10px] uppercase tracking-widest text-[#9E7E44] font-bold">Groups</p>
+                    <p className="text-[9px] uppercase tracking-widest text-[#9E7E44] font-bold">Total Groups</p>
                     <p className="text-4xl font-serif text-[#333333] mt-2">{allRsvps.length}</p>
+                  </div>
+                  <div className="col-span-2 bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/10 flex flex-col justify-center">
+                    <p className="text-[9px] uppercase tracking-widest text-[#9E7E44] font-bold text-center mb-4">Arrivals per Event</p>
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-slate-400 uppercase tracking-tighter font-bold">Haldi</span>
+                        <span className="font-serif text-[#333333] text-lg">{eventStats.haldi}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-slate-400 uppercase tracking-tighter font-bold">Wedding</span>
+                        <span className="font-serif text-[#333333] text-lg">{eventStats.wedding}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-slate-400 uppercase tracking-tighter font-bold">Reception</span>
+                        <span className="font-serif text-[#333333] text-lg">{eventStats.reception}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
+
               <div className="space-y-4">
-                {allRsvps.map(r => (
-                  <div key={r.id} className="bg-white/80 rounded-[2rem] p-6 border border-white shadow-sm transition-all hover:shadow-md">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h4 className="font-bold text-lg text-[#333333]">{r.name}</h4>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="text-[10px] bg-[#9E7E44]/10 text-[#9E7E44] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">
-                            {r.guests} {r.guests === 1 ? 'Guest' : 'Guests'}
-                          </span>
-                          <span className="text-xs text-slate-400 font-medium">{r.phone}</span>
+                <h4 className="text-[10px] uppercase tracking-[0.4em] font-bold text-slate-400 ml-6">Guest List</h4>
+                {allRsvps.length === 0 ? (
+                  <p className="text-center text-slate-400 font-serif italic py-12 bg-white/40 rounded-[2rem]">Empty guest list</p>
+                ) : (
+                  allRsvps.map(r => (
+                    <div key={r.id} className="group bg-white/80 rounded-[2rem] p-8 border border-white shadow-sm transition-all hover:shadow-md relative overflow-hidden">
+                      <div className="flex justify-between items-start mb-4">
+                        <div className="flex-1">
+                          <h4 className="font-bold text-xl text-[#333333]">{r.name}</h4>
+                          <div className="flex items-center gap-3 mt-1">
+                            <span className="text-[10px] bg-[#9E7E44]/10 text-[#9E7E44] px-3 py-1 rounded-full font-bold uppercase tracking-widest">
+                              {r.guests} {r.guests === 1 ? 'Guest' : 'Guests'}
+                            </span>
+                            <span className="text-xs text-slate-400 font-medium">{r.phone}</span>
+                          </div>
+                        </div>
+
+                        <div className="text-[9px] text-slate-300 uppercase font-bold">
+                          {r.submittedAt?.toDate ? r.submittedAt.toDate().toLocaleDateString() : 'New'}
                         </div>
                       </div>
+
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {Object.entries(r.events || {}).filter(([_, v]) => v).map(([k]) => (
+                          <span key={k} className="text-[9px] uppercase tracking-[0.2em] bg-slate-100 text-slate-500 px-3 py-1 rounded-lg border border-slate-200/50">
+                            {k}
+                          </span>
+                        ))}
+                      </div>
+
+                      {r.message && (
+                        <div className="bg-[#F8F5F2]/50 p-4 rounded-2xl border-l-4 border-[#9E7E44]/20">
+                          <p className="text-sm text-slate-500 font-serif italic">"{r.message}"</p>
+                        </div>
+                      )}
                     </div>
-                    {r.message && <p className="text-sm text-slate-500 mt-4 font-serif italic border-l-2 border-[#9E7E44]/10 pl-4">"{r.message}"</p>}
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           );
@@ -670,7 +719,7 @@
     };
 
     const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />); 
+    root.render(<App />);
   </script>
 </body>
 
