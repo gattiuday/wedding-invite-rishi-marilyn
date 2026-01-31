@@ -30,53 +30,17 @@
     }
   </script>
 
-  <!-- Import Map for React & Firebase -->
-  <script type="importmap">
-    {
-        "imports": {
-            "react": "https://esm.sh/react@18.2.0",
-            "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-            "firebase/app": "https://esm.sh/firebase@10.7.1/app",
-            "firebase/auth": "https://esm.sh/firebase@10.7.1/auth",
-            "firebase/firestore": "https://esm.sh/firebase@10.7.1/firestore",
-            "lucide-react": "https://esm.sh/lucide-react@0.294.0"
-        }
-    }
-    </script>
+  <!-- React & ReactDOM (UMD) -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <!-- Firebase (Compat/Namespace) -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
   <!-- Babel for JSX -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-  <!-- Error Handling -->
-  <script>
-    window.onerror = function (msg, url, line, col, error) {
-      console.error("Global Error Caught:", msg, error);
-      document.body.innerHTML += '<div style="background:red;color:white;padding:10px;z-index:9999;position:fixed;top:0;left:0;width:100%;">Global Error: ' + msg + '</div>';
-    };
-  </script>
-
-  <!-- Configure Babel to support ES Modules via Import Maps -->
-  <script>
-    window.Babel.registerPreset("react-modules", {
-      presets: [
-        [Babel.availablePresets["env"], { modules: false }],
-        [Babel.availablePresets["react"]]
-      ]
-    });
-  </script>
-
-  <!-- Configuration Injection -->
-  <script>
-    window.__firebase_config = JSON.stringify({
-      apiKey: "AIzaSy_PLACEHOLDER_KEY",
-      authDomain: "wedding-placeholder.firebaseapp.com",
-      projectId: "wedding-placeholder",
-      storageBucket: "wedding-placeholder.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abcdef123456"
-    });
-    window.__app_id = 'wedding-rishi-marilyn-royal-v4';
-  </script>
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
@@ -92,51 +56,62 @@
 <body class="bg-[#F8F5F2] text-[#333333]">
   <div id="root"></div>
 
-  <script type="text/babel" data-type="module" data-presets="react-modules">
-    console.log("Application Script Starting...");
-    import React, { useState, useEffect } from 'react';
-    import { createRoot } from 'react-dom/client';
-    import { initializeApp } from 'firebase/app';
-    import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
-    import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
-    import {
-      Calendar, MapPin, Clock, Heart, Music, Sparkles,
-      GlassWater, ExternalLink, Check, Plus, Minus,
-      Users, Loader2, ShieldCheck, ClipboardList, ChevronRight,
-      Flower2, Phone
-    } from 'lucide-react';
+  <script type="text/babel">
+    // --- ICONS (Inline SVGs to replace Lucide-React dependency) ---
+    const Icon = ({ path, className, strokeWidth = 2, size = 24 }) => (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={size} height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={className}
+      >
+        {path}
+      </svg>
+    );
 
-    // --- DEPLOYMENT INSTRUCTIONS FOR GITHUB ---
-    // 1. Create a project at console.firebase.google.com
-    // 2. Enable "Anonymous Auth" and "Firestore" (in test mode)
-    // 3. Replace the object below with your project's configuration:
+    const Icons = {
+      Music: (props) => <Icon {...props} path={<><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></>} />,
+      Flower2: (props) => <Icon {...props} path={<><path d="M12 5a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3-3v18m0-13a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3 8a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3" /></>} />,
+      GlassWater: (props) => <Icon {...props} path={<><path d="M15.2 22a3 3 0 0 0-2.2-5" /><path d="M9 22a3 3 0 0 1 2.2-5" /><path d="M2 7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-6.1a2 2 0 0 0-1.8.9l-2.7 5.4a2 2 0 0 1-1.8.9H5a2 2 0 0 1-2-2z" /></>} />,
+      Calendar: (props) => <Icon {...props} path={<><rect width="18" height="18" x="3" y="4" rx="2" ry="2" /><line x1="16" x2="16" y1="2" y2="6" /><line x1="8" x2="8" y1="2" y2="6" /><line x1="3" x2="21" y1="10" y2="10" /></>} />,
+      Clock: (props) => <Icon {...props} path={<><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></>} />,
+      MapPin: (props) => <Icon {...props} path={<><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></>} />,
+      ExternalLink: (props) => <Icon {...props} path={<><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></>} />,
+      Sparkles: (props) => <Icon {...props} path={<><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" /></>} />,
+      ChevronRight: (props) => <Icon {...props} path={<path d="m9 18 6-6-6-6" />} />,
+      ShieldCheck: (props) => <Icon {...props} path={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" /><path d="m9 12 2 2 4-4" /></>} />,
+      Phone: (props) => <Icon {...props} path={<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />} />,
+      Users: (props) => <Icon {...props} path={<><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></>} />,
+      Plus: (props) => <Icon {...props} path={<><path d="M5 12h14" /><path d="M12 5v14" /></>} />,
+      Minus: (props) => <Icon {...props} path={<path d="M5 12h14" />} />,
+      Check: (props) => <Icon {...props} path={<path d="M20 6 9 17l-5-5" />} />,
+      Loader2: (props) => <Icon {...props} path={<path d="M21 12a9 9 0 1 1-6.219-8.56" />} className={props.className + " animate-spin"} />,
+    };
+
+
+    // --- FIREBASE CONFIG ---
+    // Replace "YOUR_..." with your actual config from console.firebase.google.com
     const firebaseConfig = {
       apiKey: "YOUR_API_KEY",
       authDomain: "YOUR_PROJECT.firebaseapp.com",
       projectId: "YOUR_PROJECT_ID",
       storageBucket: "YOUR_PROJECT.appspot.com",
-      messagingSenderId: "YOUR_ID",
-      appId: "YOUR_APP_ID"
+      messagingSenderId: "123456",
+      appId: "1:123456:web:123456"
     };
 
-    // If testing within this environment, we use the internal config; 
-    // otherwise, use the one defined above for your GitHub deployment.
-    const finalConfig = typeof window.__firebase_config !== 'undefined'
-      ? JSON.parse(window.__firebase_config)
-      : firebaseConfig;
+    // Use Global Compat Namespace
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const appId = 'wedding-rishi-marilyn-royal-v4';
 
-    const app = initializeApp(finalConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const appId = typeof window.__app_id !== 'undefined' ? window.__app_id : 'wedding-rishi-marilyn-royal-v4';
-
-    // --- Elegant Theme Constants ---
-    const COLORS = {
-      bg: '#F8F5F2',
-      accent: '#9E7E44',
-      textPrimary: '#333333',
-      textSecondary: '#666666',
-    };
+    const { useState, useEffect } = React;
 
     const App = () => {
       const [activeTab, setActiveTab] = useState('home');
@@ -160,17 +135,15 @@
       // Auth Logic
       useEffect(() => {
         const initAuth = async () => {
-          // In your GitHub build, this will sign in the guest anonymously to allow the save
           try {
-            await signInAnonymously(auth);
+            await auth.signInAnonymously();
           } catch (e) {
-            console.warn("Auth failed (likely placeholder config):", e);
-            // Fallback for UI visualization only
+            console.warn("Auth failed (likely placeholder config). Using mock user.");
             setUser({ uid: 'guest-preview', isAnonymous: true });
           }
         };
         initAuth();
-        const unsubscribe = onAuthStateChanged(auth, setUser);
+        const unsubscribe = auth.onAuthStateChanged(setUser);
         return () => unsubscribe();
       }, []);
 
@@ -178,15 +151,13 @@
       useEffect(() => {
         if (!user || !showAdminPanel) return;
         try {
-          const rsvpsRef = collection(db, 'artifacts', appId, 'public', 'data', 'rsvps');
-          const unsubscribe = onSnapshot(rsvpsRef, (snapshot) => {
+          const rsvpsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('rsvps');
+          const unsubscribe = rsvpsRef.onSnapshot((snapshot) => {
             const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             setAllRsvps(data);
-          }, (err) => {
-            console.warn("Firestore access denied or failed.");
-          });
+          }, (err) => console.warn("Firestore error:", err));
           return () => unsubscribe();
-        } catch (e) { console.warn("Firestore init failed:", e); }
+        } catch (e) { console.warn("Firestore init error:", e); }
       }, [user, showAdminPanel]);
 
       // Countdown Logic
@@ -216,7 +187,7 @@
           time: '4:00 PM — 10:00 PM',
           venue: 'Blue House, Chennai',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=Blue+House+Chennai',
-          icon: <Music strokeWidth={1} className="text-[#9E7E44]" />,
+          icon: <Icons.Music className="text-[#9E7E44]" />,
           theme: 'Traditional Silk'
         },
         {
@@ -227,7 +198,7 @@
           time: '9:30 AM — 2:00 PM',
           venue: 'The Leela Palace, Chennai',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=The+Leela+Palace+Chennai',
-          icon: <Flower2 strokeWidth={1} className="text-[#9E7E44]" />,
+          icon: <Icons.Flower2 className="text-[#9E7E44]" />,
           theme: 'Royal Heritage'
         },
         {
@@ -238,7 +209,7 @@
           time: '6:00 PM — 12:00 AM',
           venue: 'Pullman, Chennai',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=Pullman+Hotel+Chennai',
-          icon: <GlassWater strokeWidth={1} className="text-[#9E7E44]" />,
+          icon: <Icons.GlassWater className="text-[#9E7E44]" />,
           theme: 'Starlit Evening'
         }
       ];
@@ -248,12 +219,11 @@
         if (!user || !rsvpData.name) return;
         setIsSubmitting(true);
         try {
-          const rsvpsRef = collection(db, 'artifacts', appId, 'public', 'data', 'rsvps');
-          await addDoc(rsvpsRef, { ...rsvpData, submittedAt: serverTimestamp(), uid: user.uid });
+          const rsvpsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('rsvps');
+          await rsvpsRef.add({ ...rsvpData, submittedAt: firebase.firestore.FieldValue.serverTimestamp(), uid: user.uid });
           setIsSubmitted(true);
         } catch (err) {
           console.error(err);
-          // Simulate success for UI demo if offline
           setTimeout(() => { setIsSubmitted(true); setIsSubmitting(false); }, 1000);
         } finally { setIsSubmitting(false); }
       };
@@ -290,7 +260,7 @@
             return (
               <div className="animate-in fade-in max-w-sm mx-auto bg-white/40 backdrop-blur-md p-10 rounded-[2.5rem] border border-[#9E7E44]/20 shadow-2xl space-y-6">
                 <div className="text-center">
-                  <ShieldCheck className="mx-auto text-[#9E7E44] mb-3" size={32} strokeWidth={1} />
+                  <Icons.ShieldCheck className="mx-auto text-[#9E7E44] mb-3" size={32} strokeWidth={1} />
                   <h2 className="text-xl font-serif text-[#333333] tracking-wide uppercase">Host Access</h2>
                 </div>
                 <input
@@ -326,7 +296,7 @@
                         <h4 className="font-bold text-lg text-[#333333]">{r.name}</h4>
                         {r.phone && (
                           <div className="flex items-center gap-1.5 text-xs text-slate-400 mt-1 font-medium">
-                            <Phone size={10} />
+                            <Icons.Phone size={10} />
                             <span>{r.phone}</span>
                           </div>
                         )}
@@ -349,7 +319,7 @@
                   <div className="space-y-6">
                     <div className="flex justify-center items-center gap-8 mb-6">
                       <div className="h-[0.5px] w-16 bg-gradient-to-r from-transparent to-[#9E7E44]/30" />
-                      <Sparkles className="text-[#9E7E44] opacity-30 animate-pulse" size={24} />
+                      <Icons.Sparkles className="text-[#9E7E44] opacity-30 animate-pulse" size={24} />
                       <div className="h-[0.5px] w-16 bg-gradient-to-l from-transparent to-[#9E7E44]/30" />
                     </div>
 
@@ -394,7 +364,7 @@
                   >
                     <div className="absolute inset-0 bg-[#333333] group-hover:bg-[#9E7E44] transition-colors duration-700" />
                     <span className="relative text-[11px] font-bold tracking-[0.6em] uppercase text-white flex items-center gap-4">
-                      View Itinerary <ChevronRight size={16} />
+                      View Itinerary <Icons.ChevronRight size={16} />
                     </span>
                   </button>
                 </div>
@@ -425,17 +395,17 @@
 
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-[#555555]">
                             <div className="flex items-center gap-4 justify-center md:justify-start">
-                              <Calendar size={20} className="text-[#9E7E44]" strokeWidth={1} />
+                              <Icons.Calendar size={20} className="text-[#9E7E44]" strokeWidth={1} />
                               <span className="text-base font-medium tracking-wide">{event.date}</span>
                             </div>
                             <div className="flex items-center gap-4 justify-center md:justify-start">
-                              <Clock size={20} className="text-[#9E7E44]" strokeWidth={1} />
+                              <Icons.Clock size={20} className="text-[#9E7E44]" strokeWidth={1} />
                               <span className="text-base font-medium tracking-wide">{event.time}</span>
                             </div>
                           </div>
 
                           <div className="flex items-start gap-4 text-[#555555] justify-center md:justify-start">
-                            <MapPin size={20} className="text-[#9E7E44] flex-shrink-0 mt-1" strokeWidth={1} />
+                            <Icons.MapPin size={20} className="text-[#9E7E44] flex-shrink-0 mt-1" strokeWidth={1} />
                             <span className="text-base font-medium leading-relaxed max-w-xs">{event.venue}</span>
                           </div>
 
@@ -445,7 +415,7 @@
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] text-slate-400 hover:text-[#333333] border-b border-transparent hover:border-[#9E7E44] transition-all pb-2 mt-4"
                           >
-                            Navigate to Location <ExternalLink size={14} />
+                            Navigate to Location <Icons.ExternalLink size={14} />
                           </a>
                         </div>
                       </div>
@@ -504,13 +474,13 @@
                     <label className="text-[11px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-8">Guest Party Count</label>
                     <div className="flex items-center justify-between p-7 bg-[#F8F5F2]/50 rounded-[3rem] border border-[#9E7E44]/10 shadow-inner">
                       <div className="flex items-center gap-4 ml-4 text-[#666666]">
-                        <Users className="text-[#9E7E44]" size={24} strokeWidth={1} />
+                        <Icons.Users className="text-[#9E7E44]" size={24} strokeWidth={1} />
                         <span className="text-lg font-medium">Number attending</span>
                       </div>
                       <div className="flex items-center gap-8 mr-4">
-                        <button type="button" onClick={() => adjustGuests(-1)} className="w-14 h-14 rounded-3xl bg-white border border-[#9E7E44]/10 flex items-center justify-center text-[#9E7E44] hover:bg-[#333333] hover:text-white transition-all shadow-sm active:scale-90"><Minus size={20} /></button>
+                        <button type="button" onClick={() => adjustGuests(-1)} className="w-14 h-14 rounded-3xl bg-white border border-[#9E7E44]/10 flex items-center justify-center text-[#9E7E44] hover:bg-[#333333] hover:text-white transition-all shadow-sm active:scale-90"><Icons.Minus size={20} /></button>
                         <span className="text-3xl font-serif text-[#333333] w-8 text-center">{rsvpData.guests}</span>
-                        <button type="button" onClick={() => adjustGuests(1)} className="w-14 h-14 rounded-3xl bg-white border border-[#9E7E44]/10 flex items-center justify-center text-[#9E7E44] hover:bg-[#333333] hover:text-white transition-all shadow-sm active:scale-90"><Plus size={20} /></button>
+                        <button type="button" onClick={() => adjustGuests(1)} className="w-14 h-14 rounded-3xl bg-white border border-[#9E7E44]/10 flex items-center justify-center text-[#9E7E44] hover:bg-[#333333] hover:text-white transition-all shadow-sm active:scale-90"><Icons.Plus size={20} /></button>
                       </div>
                     </div>
                   </div>
@@ -535,7 +505,7 @@
                             </div>
                           </div>
                           <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-700 ${rsvpData.events[event.id] ? 'bg-[#9E7E44] border-[#9E7E44] text-white scale-125' : 'border-slate-200'}`}>
-                            {rsvpData.events[event.id] && <Check size={18} strokeWidth={4} />}
+                            {rsvpData.events[event.id] && <Icons.Check size={18} strokeWidth={4} />}
                           </div>
                         </button>
                       ))}
@@ -557,7 +527,7 @@
                     disabled={isSubmitting || !user}
                     className="w-full py-8 bg-[#333333] text-white rounded-[3.5rem] font-bold text-[12px] uppercase tracking-[0.6em] hover:bg-[#9E7E44] transition-all duration-1000 shadow-2xl disabled:opacity-50 flex items-center justify-center gap-4 active:scale-95"
                   >
-                    {isSubmitting ? <Loader2 className="animate-spin" size={24} /> : "Register Attendance"}
+                    {isSubmitting ? <Icons.Loader2 className="animate-spin" size={24} /> : "Register Attendance"}
                   </button>
                 </form>
               </div>
@@ -567,8 +537,14 @@
         }
       };
 
-      const root = createRoot(document.getElementById('root'));
+      const root = ReactDOM.createRoot(document.getElementById('root'));
       root.render(<App />);
+    }; // End of App Component definition.
+
+    // Initialize and Render
+    // We ensure strict mode or direct render
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
   </script>
 </body>
 
