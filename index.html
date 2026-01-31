@@ -50,25 +50,23 @@
   <!-- Error Handling -->
   <script>
     window.onerror = function (msg, url, line, col, error) {
-      document.body.innerHTML += '<div style="color:red; background:white; padding:20px; border:2px solid red; position:fixed; top:0; left:0; right:0; z-index:9999;">' +
-        '<h3>Application Error</h3>' +
-        '<pre>' + msg + '\n' + url + ':' + line + ':' + col + '</pre>' +
-        (error ? '<pre>' + error.stack + '</pre>' : '') +
-        '</div>';
-      console.error("Global Error:", error);
+      console.error("Global Error Caught:", msg, error);
+      document.body.innerHTML += '<div style="background:red;color:white;padding:10px;z-index:9999;position:fixed;top:0;left:0;width:100%;">Global Error: ' + msg + '</div>';
     };
-    window.addEventListener('unhandledrejection', function (event) {
-      document.body.innerHTML += '<div style="color:orange; background:white; padding:20px; border:2px solid orange; position:fixed; top:100px; left:0; right:0; z-index:9999;">' +
-        '<h3>Unhandled Promise Rejection</h3>' +
-        '<pre>' + event.reason + '</pre>' +
-        '</div>';
-      console.error("Unhandled Rejection:", event.reason);
+  </script>
+
+  <!-- Configure Babel to support ES Modules via Import Maps -->
+  <script>
+    window.Babel.registerPreset("react-modules", {
+      presets: [
+        [Babel.availablePresets["env"], { modules: false }],
+        [Babel.availablePresets["react"]]
+      ]
     });
   </script>
 
   <!-- Configuration Injection -->
   <script>
-    // Placeholder configuration to prevent crashes and provide immediate visual feedback.
     window.__firebase_config = JSON.stringify({
       apiKey: "AIzaSy_PLACEHOLDER_KEY",
       authDomain: "wedding-placeholder.firebaseapp.com",
@@ -94,7 +92,8 @@
 <body class="bg-[#F8F5F2] text-[#333333]">
   <div id="root"></div>
 
-  <script type="text/babel" data-type="module" data-presets="react">
+  <script type="text/babel" data-type="module" data-presets="react-modules">
+    console.log("Application Script Starting...");
     import React, { useState, useEffect } from 'react';
     import { createRoot } from 'react-dom/client';
     import { initializeApp } from 'firebase/app';
