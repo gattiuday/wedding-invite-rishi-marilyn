@@ -47,6 +47,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
 
   <!-- Babel for JSX -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -134,13 +135,15 @@
 
     // Firebase Configuration (Compat Mode)
     // PLACEHOLDER CONFIG: Replace with your actual details from console.firebase.google.com
+    // PLACEHOLDER CONFIG: Replace with your actual details from console.firebase.google.com
     const firebaseConfig = {
-      apiKey: "AIzaSy_PLACEHOLDER_KEY",
-      authDomain: "wedding-placeholder.firebaseapp.com",
-      projectId: "wedding-placeholder",
-      storageBucket: "wedding-placeholder.appspot.com",
-      messagingSenderId: "123456",
-      appId: "1:123456:web:123456"
+      apiKey: "AIzaSyAmqq8gwFTvpFH3rVfL43xurnbU7tWh0h4",
+      authDomain: "kumaranwedding-b59d6.firebaseapp.com",
+      projectId: "kumaranwedding-b59d6",
+      storageBucket: "kumaranwedding-b59d6.firebasestorage.app",
+      messagingSenderId: "281972038441",
+      appId: "1:281972038441:web:a46195c908003dd59b3538",
+      measurementId: "G-XKS7R1C63C"
     };
 
     // Use window.__firebase_config if injected, otherwise fallback
@@ -151,6 +154,15 @@
     firebase.initializeApp(finalConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
+    // Initialize Analytics if supported
+    if (firebase.analytics && typeof firebase.analytics.isSupported === 'function') {
+      firebase.analytics.isSupported().then((isSupported) => {
+        if (isSupported) firebase.analytics();
+      });
+    } else if (firebase.analytics) {
+      firebase.analytics();
+    }
+
     const appId = typeof window.__app_id !== 'undefined' ? window.__app_id : 'wedding-rishi-marilyn';
 
     // --- 3. COMPONENTS ---
