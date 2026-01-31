@@ -1,36 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rishi & Marilyn • The Wedding</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rishi & Marilyn • The Wedding</title>
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        bg: '#F8F5F2', 
-                        accent: '#9E7E44',
-                        textPrimary: '#333333',
-                        textSecondary: '#666666',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
-                    },
-                    animation: {
-                        'spin-slow': 'spin 60s linear infinite',
-                    }
-                }
-            }
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg: '#F8F5F2',
+            accent: '#9E7E44',
+            textPrimary: '#333333',
+            textSecondary: '#666666',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          },
+          animation: {
+            'spin-slow': 'spin 60s linear infinite',
+          }
         }
-    </script>
+      }
+    }
+  </script>
 
-    <!-- Import Map for React & Firebase -->
-    <script type="importmap">
+  <!-- Import Map for React & Firebase -->
+  <script type="importmap">
     {
         "imports": {
             "react": "https://esm.sh/react@18.2.0",
@@ -43,528 +44,514 @@
     }
     </script>
 
-    <!-- Babel for JSX -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Babel for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <!-- Configuration Injection -->
-    <script>
-        // Placeholder configuration to prevent crashes.
-        // The user effectively needs to replace this object with their real Firebase config.
-        window.__firebase_config = JSON.stringify({
-            apiKey: "AIzaSy_PLACEHOLDER_KEY",
-            authDomain: "wedding-placeholder.firebaseapp.com",
-            projectId: "wedding-placeholder",
-            storageBucket: "wedding-placeholder.appspot.com",
-            messagingSenderId: "1234567890",
-            appId: "1:1234567890:web:abcdef123456"
-        });
-        window.__app_id = 'wedding-rishi-marilyn-royal-v4';
-    </script>
+  <!-- Configuration Injection -->
+  <script>
+    // Placeholder configuration to prevent crashes and provide immediate visual feedback.
+    window.__firebase_config = JSON.stringify({
+      apiKey: "AIzaSy_PLACEHOLDER_KEY",
+      authDomain: "wedding-placeholder.firebaseapp.com",
+      projectId: "wedding-placeholder",
+      storageBucket: "wedding-placeholder.appspot.com",
+      messagingSenderId: "1234567890",
+      appId: "1:1234567890:web:abcdef123456"
+    });
+    window.__app_id = 'wedding-rishi-marilyn-royal-v4';
+  </script>
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; background-color: #F8F5F2; }
-    </style>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background-color: #F8F5F2;
+    }
+  </style>
 </head>
+
 <body class="bg-[#F8F5F2] text-[#333333]">
-    <div id="root"></div>
+  <div id="root"></div>
 
-    <script type="text/babel" data-type="module">
-        import React, { useState, useEffect } from 'react';
-        import { createRoot } from 'react-dom/client';
-        import { initializeApp } from 'firebase/app';
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
-        import { getFirestore, collection, addDoc, onSnapshot, query, serverTimestamp } from 'firebase/firestore';
-        import { 
-          Calendar, MapPin, Clock, Heart, Music, Sparkles, 
-          GlassWater, ExternalLink, Check, Plus, Minus, 
-          Users, Loader2, ShieldCheck, ClipboardList, ChevronRight,
-          Flower2
-        } from 'lucide-react';
+  <script type="text/babel" data-type="module">
+    import React, { useState, useEffect } from 'react';
+    import { createRoot } from 'react-dom/client';
+    import { initializeApp } from 'firebase/app';
+    import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
+    import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
+    import {
+      Calendar, MapPin, Clock, Heart, Music, Sparkles,
+      GlassWater, ExternalLink, Check, Plus, Minus,
+      Users, Loader2, ShieldCheck, ClipboardList, ChevronRight,
+      Flower2, Phone
+    } from 'lucide-react';
 
-        // --- Firebase Configuration ---
-        const firebaseConfig = JSON.parse(window.__firebase_config);
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const appId = typeof window.__app_id !== 'undefined' ? window.__app_id : 'wedding-rishi-marilyn-royal-v4';
+    // --- DEPLOYMENT INSTRUCTIONS FOR GITHUB ---
+    // 1. Create a project at console.firebase.google.com
+    // 2. Enable "Anonymous Auth" and "Firestore" (in test mode)
+    // 3. Replace the object below with your project's configuration:
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "YOUR_ID",
+      appId: "YOUR_APP_ID"
+    };
 
-        // --- Elegant Theme Constants ---
-        const COLORS = {
-          bg: '#F8F5F2', // Pearl White
-          accent: '#9E7E44', // Bronze Gold
-          textPrimary: '#333333', // Deep Charcoal
-          textSecondary: '#666666', // Soft Grey
-          cardBg: 'rgba(255, 255, 255, 0.7)',
+    // If testing within this environment, we use the internal config; 
+    // otherwise, use the one defined above for your GitHub deployment.
+    const finalConfig = typeof window.__firebase_config !== 'undefined'
+      ? JSON.parse(window.__firebase_config)
+      : firebaseConfig;
+
+    const app = initializeApp(finalConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const appId = typeof window.__app_id !== 'undefined' ? window.__app_id : 'wedding-rishi-marilyn-royal-v4';
+
+    // --- Elegant Theme Constants ---
+    const COLORS = {
+      bg: '#F8F5F2',
+      accent: '#9E7E44',
+      textPrimary: '#333333',
+      textSecondary: '#666666',
+    };
+
+    const App = () => {
+      const [activeTab, setActiveTab] = useState('home');
+      const [user, setUser] = useState(null);
+      const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      const [showAdminPanel, setShowAdminPanel] = useState(false);
+      const [adminPassword, setAdminPassword] = useState('');
+      const [allRsvps, setAllRsvps] = useState([]);
+      const [isSubmitting, setIsSubmitting] = useState(false);
+      const [isSubmitted, setIsSubmitted] = useState(false);
+
+      // RSVP Form State
+      const [rsvpData, setRsvpData] = useState({
+        name: '',
+        phone: '',
+        guests: 1,
+        events: { haldi: true, wedding: true, reception: true },
+        message: ''
+      });
+
+      // Auth Logic
+      useEffect(() => {
+        const initAuth = async () => {
+          // In your GitHub build, this will sign in the guest anonymously to allow the save
+          try {
+            await signInAnonymously(auth);
+          } catch (e) {
+            console.warn("Auth failed (likely placeholder config):", e);
+            // Fallback for UI visualization only
+            setUser({ uid: 'guest-preview', isAnonymous: true });
+          }
         };
+        initAuth();
+        const unsubscribe = onAuthStateChanged(auth, setUser);
+        return () => unsubscribe();
+      }, []);
 
-        const App = () => {
-          const [activeTab, setActiveTab] = useState('home');
-          const [user, setUser] = useState(null);
-          const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-          const [showAdminPanel, setShowAdminPanel] = useState(false);
-          const [adminPassword, setAdminPassword] = useState('');
-          const [allRsvps, setAllRsvps] = useState([]);
-          const [isSubmitting, setIsSubmitting] = useState(false);
-          const [isSubmitted, setIsSubmitted] = useState(false);
-
-          // RSVP Form State
-          const [rsvpData, setRsvpData] = useState({
-            name: '',
-            guests: 1,
-            events: { haldi: true, wedding: true, reception: true },
-            message: ''
+      // Admin Data Fetching
+      useEffect(() => {
+        if (!user || !showAdminPanel) return;
+        try {
+          const rsvpsRef = collection(db, 'artifacts', appId, 'public', 'data', 'rsvps');
+          const unsubscribe = onSnapshot(rsvpsRef, (snapshot) => {
+            const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setAllRsvps(data);
+          }, (err) => {
+            console.warn("Firestore access denied or failed.");
           });
+          return () => unsubscribe();
+        } catch (e) { console.warn("Firestore init failed:", e); }
+      }, [user, showAdminPanel]);
 
-          // Auth Logic
-          useEffect(() => {
-            const initAuth = async () => {
-              try {
-                  if (typeof window.__initial_auth_token !== 'undefined' && window.__initial_auth_token) {
-                    await signInWithCustomToken(auth, window.__initial_auth_token);
-                  } else {
-                    await signInAnonymously(auth);
-                  }
-              } catch (e) {
-                  console.warn("Auth failed (expected purely with placeholder config):", e);
-                  // Mock user for UI testing if auth fails
-                  setUser({ uid: 'mock-user-123', isAnonymous: true });
-              }
-            };
-            initAuth();
-            const unsubscribe = onAuthStateChanged(auth, setUser);
-            return () => unsubscribe();
-          }, []);
+      // Countdown Logic
+      useEffect(() => {
+        const targetDate = new Date('August 22, 2026 16:00:00').getTime();
+        const timer = setInterval(() => {
+          const now = new Date().getTime();
+          const distance = targetDate - now;
+          setTimeLeft({
+            days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+            hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+            minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+            seconds: Math.floor((distance % (1000 * 60)) / 1000),
+          });
+        }, 1000);
+        return () => clearInterval(timer);
+      }, []);
 
-          // Admin Data Fetching
-          useEffect(() => {
-            if (!user || !showAdminPanel) return;
-            try {
-                const rsvpsRef = collection(db, 'artifacts', appId, 'public', 'data', 'rsvps');
-                const unsubscribe = onSnapshot(rsvpsRef, (snapshot) => {
-                  const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                  setAllRsvps(data);
-                }, (err) => {
-                    console.warn("Firestore access denied or failed (expected with placeholder config).");
-                });
-                return () => unsubscribe();
-            } catch (e) { console.warn("Firestore init failed:", e); }
-          }, [user, showAdminPanel]);
+      const handleExplore = () => setActiveTab('schedule');
 
-          // Countdown Logic
-          useEffect(() => {
-            const targetDate = new Date('August 22, 2026 16:00:00').getTime();
-            const timer = setInterval(() => {
-              const now = new Date().getTime();
-              const distance = targetDate - now;
-              setTimeLeft({
-                days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-                hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-                minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-                seconds: Math.floor((distance % (1000 * 60)) / 1000),
-              });
-            }, 1000);
-            return () => clearInterval(timer);
-          }, []);
+      const events = [
+        {
+          id: 'haldi',
+          title: 'Haldi & Mehandi',
+          subtitle: 'The Saffron Celebration',
+          date: 'August 22, 2026',
+          time: '4:00 PM — 10:00 PM',
+          venue: 'Blue House, Chennai',
+          mapUrl: 'https://www.google.com/maps/search/?api=1&query=Blue+House+Chennai',
+          icon: <Music strokeWidth={1} className="text-[#9E7E44]" />,
+          theme: 'Traditional Silk'
+        },
+        {
+          id: 'wedding',
+          title: 'Wedding Ceremony',
+          subtitle: 'The Auspicious Vows',
+          date: 'August 23, 2026',
+          time: '9:30 AM — 2:00 PM',
+          venue: 'The Leela Palace, Chennai',
+          mapUrl: 'https://www.google.com/maps/search/?api=1&query=The+Leela+Palace+Chennai',
+          icon: <Flower2 strokeWidth={1} className="text-[#9E7E44]" />,
+          theme: 'Royal Heritage'
+        },
+        {
+          id: 'reception',
+          title: 'Sangeet & Cocktail',
+          subtitle: 'Dance, Drinks & Celebration',
+          date: 'August 24, 2026',
+          time: '6:00 PM — 12:00 AM',
+          venue: 'Pullman, Chennai',
+          mapUrl: 'https://www.google.com/maps/search/?api=1&query=Pullman+Hotel+Chennai',
+          icon: <GlassWater strokeWidth={1} className="text-[#9E7E44]" />,
+          theme: 'Starlit Evening'
+        }
+      ];
 
-          const handleExplore = () => setActiveTab('schedule');
+      const handleSubmitRsvp = async (e) => {
+        e.preventDefault();
+        if (!user || !rsvpData.name) return;
+        setIsSubmitting(true);
+        try {
+          const rsvpsRef = collection(db, 'artifacts', appId, 'public', 'data', 'rsvps');
+          await addDoc(rsvpsRef, { ...rsvpData, submittedAt: serverTimestamp(), uid: user.uid });
+          setIsSubmitted(true);
+        } catch (err) {
+          console.error(err);
+          // Simulate success for UI demo if offline
+          setTimeout(() => { setIsSubmitted(true); setIsSubmitting(false); }, 1000);
+        } finally { setIsSubmitting(false); }
+      };
 
-          const events = [
-            {
-              id: 'haldi',
-              title: 'Haldi & Mehandi',
-              subtitle: 'The Saffron Celebration',
-              date: 'August 22, 2026',
-              time: '4:00 PM — 10:00 PM',
-              venue: 'Blue House, Chennai',
-              mapUrl: 'https://www.google.com/maps/search/?api=1&query=Blue+House+Chennai',
-              icon: <Music strokeWidth={1} className="text-[#9E7E44]" />,
-              theme: 'Traditional Silk'
-            },
-            {
-              id: 'wedding',
-              title: 'Wedding Ceremony',
-              subtitle: 'The Auspicious Vows',
-              date: 'August 23, 2026',
-              time: '9:30 AM — 2:00 PM',
-              venue: 'The Leela Palace, Chennai',
-              mapUrl: 'https://www.google.com/maps/search/?api=1&query=The+Leela+Palace+Chennai',
-              icon: <Flower2 strokeWidth={1} className="text-[#9E7E44]" />,
-              theme: 'Royal Heritage'
-            },
-            {
-              id: 'reception',
-              title: 'Sangeet & Cocktail',
-              subtitle: 'Dance, Drinks & Celebration',
-              date: 'August 24, 2026',
-              time: '6:00 PM — 12:00 AM',
-              venue: 'Pullman, Chennai',
-              mapUrl: 'https://www.google.com/maps/search/?api=1&query=Pullman+Hotel+Chennai',
-              icon: <GlassWater strokeWidth={1} className="text-[#9E7E44]" />,
-              theme: 'Starlit Evening'
-            }
-          ];
+      const adjustGuests = (amount) => setRsvpData(prev => ({ ...prev, guests: Math.max(1, prev.guests + amount) }));
 
-          const handleSubmitRsvp = async (e) => {
-            e.preventDefault();
-            if (!user || !rsvpData.name) return;
-            setIsSubmitting(true);
-            try {
-              const rsvpsRef = collection(db, 'artifacts', appId, 'public', 'data', 'rsvps');
-              await addDoc(rsvpsRef, { ...rsvpData, submittedAt: serverTimestamp(), uid: user.uid });
-              setIsSubmitted(true);
-            } catch (err) { 
-                console.error(err); 
-                // Simulate success for UI demo if offline
-                setTimeout(() => { setIsSubmitted(true); setIsSubmitting(false); }, 1000);
-            } finally { setIsSubmitting(false); }
-          };
+      const CoupleLogo = ({ className }) => (
+        <div className={`relative flex items-center justify-center ${className}`}>
+          <svg viewBox="0 0 100 100" className="absolute w-full h-full text-[#9E7E44] opacity-30 animate-spin-slow">
+            <path fill="none" stroke="currentColor" strokeWidth="0.3" d="M50 2 L52 48 L98 50 L52 52 L50 98 L48 52 L2 50 L48 48 Z" />
+            <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" strokeWidth="0.2" strokeDasharray="2 4" />
+          </svg>
+          <div className="relative z-10 flex flex-col items-center justify-center bg-white/40 backdrop-blur-md rounded-full w-[85%] h-[85%] border border-[#9E7E44]/10 shadow-sm">
+            <span className="font-serif text-[#9E7E44] text-4xl md:text-5xl tracking-tighter leading-none select-none">
+              R<span className="text-xl mx-[-3px] opacity-60 italic">&</span>M
+            </span>
+            <div className="h-[0.5px] w-10 bg-[#9E7E44]/30 my-1.5" />
+            <span className="text-[8px] uppercase tracking-[0.5em] text-[#9E7E44]/60 font-bold">MMXXVI</span>
+          </div>
+        </div>
+      );
 
-          const adjustGuests = (amount) => setRsvpData(prev => ({ ...prev, guests: Math.max(1, prev.guests + amount) }));
+      const MandalaDivider = ({ className }) => (
+        <svg viewBox="0 0 100 20" className={className}>
+          <path fill="none" stroke="currentColor" strokeWidth="0.3" d="M0 10 L42 10 M58 10 L100 10" />
+          <circle cx="50" cy="10" r="2.5" fill="none" stroke="currentColor" strokeWidth="0.5" />
+          <circle cx="50" cy="10" r="5" fill="none" stroke="currentColor" strokeWidth="0.2" strokeDasharray="1 1" />
+        </svg>
+      );
 
-          const CoupleLogo = ({ className }) => {
+      const renderContent = () => {
+        if (activeTab === 'admin') {
+          if (adminPassword !== 'rishi2026') {
             return (
-                <div className={`relative flex items-center justify-center ${className}`}>
-                  <svg viewBox="0 0 100 100" className="absolute w-full h-full text-[#9E7E44] opacity-30 animate-spin-slow">
-                    <path fill="none" stroke="currentColor" strokeWidth="0.3" d="M50 2 L52 48 L98 50 L52 52 L50 98 L48 52 L2 50 L48 48 Z" />
-                    <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" strokeWidth="0.2" strokeDasharray="2 4" />
-                  </svg>
-                  <div className="relative z-10 flex flex-col items-center justify-center bg-white/40 backdrop-blur-md rounded-full w-[85%] h-[85%] border border-[#9E7E44]/10 shadow-sm">
-                    <span className="font-serif text-[#9E7E44] text-4xl md:text-5xl tracking-tighter leading-none select-none">
-                      R<span className="text-xl mx-[-3px] opacity-60 italic">&</span>M
-                    </span>
-                    <div className="h-[0.5px] w-10 bg-[#9E7E44]/30 my-1.5" />
-                    <span className="text-[8px] uppercase tracking-[0.5em] text-[#9E7E44]/60 font-bold">MMXXVI</span>
-                  </div>
+              <div className="animate-in fade-in max-w-sm mx-auto bg-white/40 backdrop-blur-md p-10 rounded-[2.5rem] border border-[#9E7E44]/20 shadow-2xl space-y-6">
+                <div className="text-center">
+                  <ShieldCheck className="mx-auto text-[#9E7E44] mb-3" size={32} strokeWidth={1} />
+                  <h2 className="text-xl font-serif text-[#333333] tracking-wide uppercase">Host Access</h2>
                 </div>
-            );
-          };
-
-          const MandalaDivider = ({ className }) => (
-            <svg viewBox="0 0 100 20" className={className}>
-               <path fill="none" stroke="currentColor" strokeWidth="0.3" d="M0 10 L42 10 M58 10 L100 10" />
-               <circle cx="50" cy="10" r="2.5" fill="none" stroke="currentColor" strokeWidth="0.5" />
-               <circle cx="50" cy="10" r="5" fill="none" stroke="currentColor" strokeWidth="0.2" strokeDasharray="1 1" />
-            </svg>
-          );
-
-          const renderContent = () => {
-            if (activeTab === 'admin') {
-              if (adminPassword !== 'rishi2026') {
-                return (
-                  <div className="animate-in fade-in max-w-sm mx-auto bg-white/40 backdrop-blur-md p-10 rounded-[2.5rem] border border-[#9E7E44]/20 shadow-2xl space-y-6">
-                    <div className="text-center">
-                      <ShieldCheck className="mx-auto text-[#9E7E44] mb-3" size={32} strokeWidth={1} />
-                      <h2 className="text-xl font-serif text-[#333333] tracking-wide uppercase">Host Access</h2>
-                    </div>
-                    <input 
-                      type="password" autoFocus
-                      className="w-full p-4 bg-white/50 rounded-2xl border-none outline-none text-center text-xl tracking-widest placeholder:text-slate-300 shadow-inner"
-                      placeholder="••••"
-                      onChange={(e) => setAdminPassword(e.target.value)}
-                    />
-                  </div>
-                );
-              }
-              const totalGuests = allRsvps.reduce((acc, curr) => acc + (curr.guests || 0), 0);
-              return (
-                <div className="animate-in slide-in-from-bottom duration-500 space-y-6 pb-24 text-left">
-                   <div className="bg-white/80 backdrop-blur-md rounded-[3rem] border border-[#9E7E44]/10 shadow-xl p-8 text-center">
-                      <h3 className="font-serif text-2xl text-[#333333] mb-6">Attendance Overview</h3>
-                      <div className="grid grid-cols-2 gap-4">
-                         <div className="bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/5">
-                            <p className="text-[10px] uppercase tracking-widest text-[#9E7E44] font-bold">Total Souls</p>
-                            <p className="text-4xl font-serif text-[#333333] mt-2">{totalGuests}</p>
-                         </div>
-                         <div className="bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/5">
-                            <p className="text-[10px] uppercase tracking-widest text-[#9E7E44] font-bold">Entries</p>
-                            <p className="text-4xl font-serif text-[#333333] mt-2">{allRsvps.length}</p>
-                         </div>
-                      </div>
-                   </div>
-                   <div className="bg-white/80 rounded-[3rem] p-4 shadow-xl divide-y divide-slate-100">
-                      {allRsvps.map(r => (
-                        <div key={r.id} className="p-6 transition-colors hover:bg-white/40">
-                          <div className="flex justify-between items-center">
-                            <h4 className="font-bold text-lg text-[#333333]">{r.name}</h4>
-                            <span className="text-[#9E7E44] font-serif italic text-sm">{r.guests} guests</span>
-                          </div>
-                          <p className="text-sm text-slate-500 mt-2 font-serif italic">"{r.message || "Blessings from the guest"}"</p>
-                        </div>
-                      ))}
-                   </div>
-                </div>
-              );
-            }
-
-            switch (activeTab) {
-              case 'home':
-                return (
-                  <div className="animate-in fade-in duration-1000 text-center space-y-12 py-10 relative">
-                    <div className="space-y-12">
-                      <div className="space-y-6">
-                        <div className="flex justify-center items-center gap-8 mb-6">
-                           <div className="h-[0.5px] w-16 bg-gradient-to-r from-transparent to-[#9E7E44]/30" />
-                           <Sparkles className="text-[#9E7E44] opacity-30 animate-pulse" size={24} />
-                           <div className="h-[0.5px] w-16 bg-gradient-to-l from-transparent to-[#9E7E44]/30" />
-                        </div>
-                        
-                        <span className="text-[12px] uppercase tracking-[0.6em] text-[#9E7E44] font-semibold block">The Auspicious Union</span>
-                        <h1 className="text-8xl md:text-9xl font-serif text-[#333333] leading-none tracking-tighter">
-                          Rishi <br /> 
-                          <span className="italic text-[#9E7E44] font-normal text-6xl md:text-8xl">&</span> <br />
-                          Marilyn
-                        </h1>
-                        
-                        <div className="max-w-md mx-auto pt-10 space-y-6">
-                           <MandalaDivider className="w-40 mx-auto text-[#9E7E44]/20" />
-                           <p className="text-[#555555] font-serif italic text-xl md:text-2xl leading-relaxed px-10 opacity-90">
-                              "With the blessings of our elders and the grace of tradition, we invite you to witness our sacred step into forever."
-                           </p>
-                        </div>
-
-                        <div className="pt-12 space-y-4">
-                          <p className="text-[#9E7E44] font-serif italic text-3xl tracking-widest font-medium">August 2026</p>
-                          <p className="text-[11px] uppercase tracking-[0.5em] text-[#888888] font-bold">Chennai • Tamil Nadu</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="relative inline-block pt-6">
-                      <div className="bg-white/60 backdrop-blur-lg border border-white/80 p-12 rounded-[4rem] shadow-[0_20px_50px_rgba(158,126,68,0.08)] space-y-10 relative">
-                        <div className="flex justify-center gap-12">
-                          {Object.entries(timeLeft).map(([unit, value]) => (
-                            <div key={unit} className="flex flex-col">
-                              <span className="text-5xl md:text-6xl font-serif text-[#333333]">{value < 0 ? 0 : value}</span>
-                              <span className="text-[9px] uppercase tracking-[0.4em] text-[#9E7E44] font-bold mt-3">{unit}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="pt-12">
-                      <button 
-                        onClick={handleExplore}
-                        className="group relative px-20 py-6 overflow-hidden rounded-full transition-all shadow-xl active:scale-95 border border-[#9E7E44]/20 hover:border-[#9E7E44]/40"
-                      >
-                        <div className="absolute inset-0 bg-[#333333] group-hover:bg-[#9E7E44] transition-colors duration-700" />
-                        <span className="relative text-[11px] font-bold tracking-[0.6em] uppercase text-white flex items-center gap-4">
-                          View Itinerary <ChevronRight size={16} />
-                        </span>
-                      </button>
-                    </div>
-                  </div>
-                );
-              case 'schedule':
-                return (
-                  <div className="animate-in slide-in-from-bottom-8 duration-700 space-y-12 pb-24 text-center">
-                    <div className="pt-6 flex flex-col items-center">
-                       <CoupleLogo className="w-32 h-32 md:w-44 md:h-44 mb-10" />
-                       <h2 className="text-6xl font-serif text-[#333333] tracking-tight">The Ceremonies</h2>
-                       <p className="text-[10px] uppercase tracking-[0.6em] text-[#9E7E44] mt-4 font-bold">Sacred Journey Details</p>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 gap-12 mt-12">
-                      {events.map((event) => (
-                        <div key={event.id} className="group relative bg-white/60 backdrop-blur-xl p-12 rounded-[4rem] border border-white/80 shadow-sm hover:shadow-2xl transition-all duration-700 hover:-translate-y-2">
-                          <div className="flex flex-col md:flex-row gap-12 items-center md:items-start text-center md:text-left">
-                            <div className="w-24 h-24 bg-[#F8F5F2] rounded-[3rem] flex items-center justify-center border border-[#9E7E44]/10 shadow-inner group-hover:scale-105 transition-transform duration-700">
-                              {React.cloneElement(event.icon, { size: 36, strokeWidth: 0.8 })}
-                            </div>
-                            <div className="flex-1 space-y-8">
-                              <div className="space-y-3">
-                                <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#9E7E44]">{event.theme}</span>
-                                <h3 className="text-4xl font-serif text-[#333333]">{event.title}</h3>
-                                <p className="text-[#9E7E44] font-serif italic text-xl opacity-80">{event.subtitle}</p>
-                              </div>
-                              
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-[#555555]">
-                                <div className="flex items-center gap-4 justify-center md:justify-start">
-                                  <Calendar size={20} className="text-[#9E7E44]" strokeWidth={1} />
-                                  <span className="text-base font-medium tracking-wide">{event.date}</span>
-                                </div>
-                                <div className="flex items-center gap-4 justify-center md:justify-start">
-                                  <Clock size={20} className="text-[#9E7E44]" strokeWidth={1} />
-                                  <span className="text-base font-medium tracking-wide">{event.time}</span>
-                                </div>
-                              </div>
-
-                              <div className="flex items-start gap-4 text-[#555555] justify-center md:justify-start">
-                                <MapPin size={20} className="text-[#9E7E44] flex-shrink-0 mt-1" strokeWidth={1} />
-                                <span className="text-base font-medium leading-relaxed max-w-xs">{event.venue}</span>
-                              </div>
-
-                              <a 
-                                href={event.mapUrl} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] text-slate-400 hover:text-[#333333] border-b border-transparent hover:border-[#9E7E44] transition-all pb-2 mt-4"
-                              >
-                                Navigate to Location <ExternalLink size={14} />
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                );
-              case 'rsvp':
-                if (isSubmitted) {
-                  return (
-                    <div className="animate-in zoom-in duration-1000 max-w-md mx-auto bg-white/80 backdrop-blur-md p-20 rounded-[5rem] border border-[#9E7E44]/20 shadow-2xl text-center space-y-10">
-                      <CoupleLogo className="w-28 h-28 mx-auto" />
-                      <div className="space-y-4">
-                        <h2 className="text-5xl font-serif text-[#333333]">With Gratitude</h2>
-                        <p className="text-[#666666] font-serif italic text-xl leading-relaxed">Your response has been registered. We await the honor of your company.</p>
-                      </div>
-                      <button onClick={() => setIsSubmitted(false)} className="text-[10px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] hover:text-[#333333] transition-colors border-b border-[#9E7E44]/30 pb-1">Modify Response</button>
-                    </div>
-                  );
-                }
-                return (
-                  <div className="animate-in zoom-in duration-1000 max-w-2xl mx-auto bg-white/60 backdrop-blur-2xl p-14 rounded-[5rem] border border-white shadow-2xl space-y-16 relative overflow-hidden text-center">
-                    <div className="space-y-4">
-                      <h2 className="text-6xl font-serif text-[#333333]">RSVP</h2>
-                      <p className="text-[#9E7E44] font-serif italic text-xl">We'd be honored to have you.</p>
-                    </div>
-
-                    <form className="space-y-14" onSubmit={handleSubmitRsvp}>
-                      <div className="space-y-4 text-left">
-                        <label className="text-[11px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-8">Full Name</label>
-                        <input 
-                          type="text" required
-                          value={rsvpData.name}
-                          onChange={(e) => setRsvpData({...rsvpData, name: e.target.value})}
-                          className="w-full p-8 bg-[#F8F5F2]/50 rounded-[3rem] border border-[#9E7E44]/10 focus:ring-4 focus:ring-[#9E7E44]/5 focus:bg-white outline-none transition-all placeholder:text-slate-300 italic font-serif text-xl" 
-                          placeholder="Guest name..." 
-                        />
-                      </div>
-
-                      <div className="space-y-4 text-left">
-                        <label className="text-[11px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-8">Guest Party Count</label>
-                        <div className="flex items-center justify-between p-7 bg-[#F8F5F2]/50 rounded-[3rem] border border-[#9E7E44]/10">
-                          <div className="flex items-center gap-4 ml-4 text-[#666666]">
-                            <Users className="text-[#9E7E44]" size={24} strokeWidth={1} />
-                            <span className="text-lg font-medium">Number attending</span>
-                          </div>
-                          <div className="flex items-center gap-8 mr-4">
-                            <button type="button" onClick={() => adjustGuests(-1)} className="w-14 h-14 rounded-3xl bg-white border border-[#9E7E44]/10 flex items-center justify-center text-[#9E7E44] hover:bg-[#333333] hover:text-white transition-all shadow-sm active:scale-90"><Minus size={20} /></button>
-                            <span className="text-3xl font-serif text-[#333333] w-8 text-center">{rsvpData.guests}</span>
-                            <button type="button" onClick={() => adjustGuests(1)} className="w-14 h-14 rounded-3xl bg-white border border-[#9E7E44]/10 flex items-center justify-center text-[#9E7E44] hover:bg-[#333333] hover:text-white transition-all shadow-sm active:scale-90"><Plus size={20} /></button>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="space-y-8 text-left">
-                        <label className="text-[11px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-8">Ceremonies to Attend</label>
-                        <div className="grid grid-cols-1 gap-6">
-                          {events.map((event) => (
-                            <button
-                              key={event.id}
-                              type="button"
-                              onClick={() => setRsvpData({ ...rsvpData, events: { ...rsvpData.events, [event.id]: !rsvpData.events[event.id] } })}
-                              className={`flex items-center justify-between p-8 rounded-[3.5rem] border-2 transition-all duration-700 ${rsvpData.events[event.id] ? 'bg-white border-[#9E7E44]/40 shadow-xl' : 'bg-transparent border-transparent opacity-40'}`}
-                            >
-                              <div className="flex items-center gap-6 text-left">
-                                <div className={`p-4 rounded-3xl transition-all duration-700 ${rsvpData.events[event.id] ? 'bg-[#F8F5F2] scale-110' : 'bg-slate-100'}`}>
-                                  {React.cloneElement(event.icon, { size: 24 })}
-                                </div>
-                                <div>
-                                  <p className="font-bold text-[12px] tracking-[0.3em] uppercase text-[#333333]">{event.title}</p>
-                                  <p className="text-xs text-[#9E7E44] italic font-serif mt-1">{event.date}</p>
-                                </div>
-                              </div>
-                              <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-700 ${rsvpData.events[event.id] ? 'bg-[#9E7E44] border-[#9E7E44] text-white scale-125' : 'border-slate-200'}`}>
-                                {rsvpData.events[event.id] && <Check size={18} strokeWidth={4} />}
-                              </div>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="space-y-4 text-left">
-                        <label className="text-[11px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-8">Blessings & Message</label>
-                        <textarea 
-                          value={rsvpData.message}
-                          onChange={(e) => setRsvpData({...rsvpData, message: e.target.value})}
-                          className="w-full p-8 bg-[#F8F5F2]/50 rounded-[3rem] border border-[#9E7E44]/10 focus:ring-4 focus:ring-[#9E7E44]/5 focus:bg-white outline-none transition-all placeholder:text-slate-300 shadow-inner italic font-serif text-xl h-40 resize-none" 
-                          placeholder="Share your blessings..." 
-                        />
-                      </div>
-
-                      <button 
-                        type="submit"
-                        disabled={isSubmitting || !user}
-                        className="w-full py-8 bg-[#333333] text-white rounded-[3.5rem] font-bold text-[12px] uppercase tracking-[0.6em] hover:bg-[#9E7E44] transition-all duration-1000 shadow-2xl disabled:opacity-50 flex items-center justify-center gap-4 active:scale-95"
-                      >
-                        {isSubmitting ? <Loader2 className="animate-spin" size={24} /> : "Register Attendance"}
-                      </button>
-                    </form>
-                  </div>
-                );
-              default:
-                return null;
-            }
-          };
-
-          return (
-            <div className="min-h-screen bg-[#F8F5F2] text-[#333333] font-sans selection:bg-[#9E7E44]/20 pb-48 overflow-x-hidden">
-              {/* Visual Ambiance Layers */}
-              <div className="fixed inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-0 right-0 w-[80vw] h-[80vw] bg-gradient-to-bl from-[#9E7E44]/5 to-transparent rounded-full blur-[200px] -translate-y-1/2 translate-x-1/2" />
-                <div className="absolute bottom-0 left-0 w-[70vw] h-[70vw] bg-gradient-to-tr from-[#9E7E44]/5 to-transparent rounded-full blur-[180px] translate-y-1/2 -translate-x-1/2" />
-                {/* Minimalist Floating MANDALA Background */}
-                <svg viewBox="0 0 100 100" className="absolute top-[10%] left-[-10%] w-[40rem] h-[40rem] text-[#9E7E44] opacity-[0.03] animate-spin-slow">
-                   <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="0.2" />
-                   <path d="M50 0 L52 48 L100 50 L52 52 L50 100 L48 52 L0 50 L48 48 Z" fill="none" stroke="currentColor" strokeWidth="0.2" />
-                </svg>
+                <input
+                  type="password" autoFocus
+                  className="w-full p-4 bg-white/50 rounded-2xl border-none outline-none text-center text-xl tracking-widest placeholder:text-slate-300 shadow-inner"
+                  placeholder="••••"
+                  onChange={(e) => setAdminPassword(e.target.value)}
+                />
               </div>
-
-              <div className="relative max-w-4xl mx-auto px-6 pt-24">
-                {/* Navigation - Glassmorphism Refined */}
-                <nav className="fixed bottom-14 left-1/2 -translate-x-1/2 bg-white/40 backdrop-blur-3xl border border-white/60 px-4 py-4 rounded-[4rem] shadow-[0_40px_80px_rgba(0,0,0,0.08)] z-[110] flex items-center gap-3">
-                  {['home', 'schedule', 'rsvp'].map((tab) => (
-                    <button 
-                      key={tab}
-                      onClick={() => { setActiveTab(tab); setShowAdminPanel(false); }}
-                      className={`px-12 py-5 rounded-[3.5rem] text-[10px] font-bold uppercase tracking-[0.5em] transition-all duration-700 ${activeTab === tab ? 'bg-[#333333] text-white shadow-2xl scale-110' : 'text-[#888888] hover:text-[#333333] hover:bg-white/50'}`}
-                    >
-                      {tab === 'schedule' ? 'Journey' : tab}
-                    </button>
-                  ))}
-                  {showAdminPanel && (
-                    <button onClick={() => setActiveTab('admin')} className={`px-12 py-5 rounded-[3.5rem] text-[10px] font-bold uppercase tracking-[0.5em] transition-all duration-700 ${activeTab === 'admin' ? 'bg-[#9E7E44] text-white shadow-xl scale-110' : 'text-[#9E7E44] hover:bg-white/50'}`}>
-                      Host
-                    </button>
-                  )}
-                </nav>
-
-                <main className="min-h-[85vh] flex flex-col justify-center">
-                  {renderContent()}
-                </main>
-
-                <footer className="mt-40 text-center space-y-12 pb-10">
-                  <MandalaDivider className="w-64 mx-auto text-[#9E7E44]/20" />
-                  <div className="space-y-4">
-                    <p className="font-serif italic text-slate-400 text-2xl tracking-[0.1em] opacity-80">Awaiting your presence.</p>
-                    <p className="text-[11px] tracking-[0.6em] uppercase text-slate-400 font-bold opacity-60">Rishi & Marilyn • MMXXVI</p>
+            );
+          }
+          const totalGuests = allRsvps.reduce((acc, curr) => acc + (curr.guests || 0), 0);
+          return (
+            <div className="animate-in slide-in-from-bottom duration-500 space-y-6 pb-24 text-left">
+              <div className="bg-white/80 backdrop-blur-md rounded-[3rem] border border-[#9E7E44]/10 shadow-xl p-8 text-center">
+                <h3 className="font-serif text-2xl text-[#333333] mb-6">Attendance Overview</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/5">
+                    <p className="text-[10px] uppercase tracking-widest text-[#9E7E44] font-bold">Total Souls</p>
+                    <p className="text-4xl font-serif text-[#333333] mt-2">{totalGuests}</p>
                   </div>
-                  <button 
-                    onClick={() => setShowAdminPanel(!showAdminPanel)}
-                    className="text-[9px] text-[#BDBDBD] hover:text-[#9E7E44] flex items-center gap-4 mx-auto transition-all duration-1000 uppercase tracking-[0.6em] font-bold py-6 group"
-                  >
-                    <ShieldCheck size={14} strokeWidth={1} className="group-hover:rotate-12 transition-transform" /> MANAGEMENT ACCESS
-                  </button>
-                </footer>
+                  <div className="bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/5">
+                    <p className="text-[10px] uppercase tracking-widest text-[#9E7E44] font-bold">Entries</p>
+                    <p className="text-4xl font-serif text-[#333333] mt-2">{allRsvps.length}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white/80 rounded-[3rem] p-4 shadow-xl divide-y divide-slate-100 overflow-hidden">
+                {allRsvps.map(r => (
+                  <div key={r.id} className="p-6 transition-colors hover:bg-white/40">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="font-bold text-lg text-[#333333]">{r.name}</h4>
+                        {r.phone && (
+                          <div className="flex items-center gap-1.5 text-xs text-slate-400 mt-1 font-medium">
+                            <Phone size={10} />
+                            <span>{r.phone}</span>
+                          </div>
+                        )}
+                      </div>
+                      <span className="text-[#9E7E44] font-serif italic text-sm">{r.guests} guests</span>
+                    </div>
+                    {r.message && <p className="text-sm text-slate-500 mt-3 font-serif italic leading-relaxed">"{r.message}"</p>}
+                  </div>
+                ))}
               </div>
             </div>
           );
-        };
+        }
 
-        const root = createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+        switch (activeTab) {
+          case 'home':
+            return (
+              <div className="animate-in fade-in duration-1000 text-center space-y-12 py-10 relative">
+                <div className="space-y-12">
+                  <div className="space-y-6">
+                    <div className="flex justify-center items-center gap-8 mb-6">
+                      <div className="h-[0.5px] w-16 bg-gradient-to-r from-transparent to-[#9E7E44]/30" />
+                      <Sparkles className="text-[#9E7E44] opacity-30 animate-pulse" size={24} />
+                      <div className="h-[0.5px] w-16 bg-gradient-to-l from-transparent to-[#9E7E44]/30" />
+                    </div>
+
+                    <span className="text-[12px] uppercase tracking-[0.6em] text-[#9E7E44] font-semibold block">The Auspicious Union</span>
+                    <h1 className="text-8xl md:text-9xl font-serif text-[#333333] leading-none tracking-tighter">
+                      Rishi <br />
+                      <span className="italic text-[#9E7E44] font-normal text-6xl md:text-8xl">&</span> <br />
+                      Marilyn
+                    </h1>
+
+                    <div className="max-w-md mx-auto pt-10 space-y-6">
+                      <MandalaDivider className="w-40 mx-auto text-[#9E7E44]/20" />
+                      <p className="text-[#555555] font-serif italic text-xl md:text-2xl leading-relaxed px-10 opacity-90">
+                        "In the sacred presence of our elders and loved ones, we embark on a journey of a thousand years. An auspicious union blessed by tradition and bound by grace."
+                      </p>
+                    </div>
+
+                    <div className="pt-12 space-y-4">
+                      <p className="text-[#9E7E44] font-serif italic text-3xl tracking-widest font-medium">August 22nd — 24th</p>
+                      <p className="text-[11px] uppercase tracking-[0.5em] text-[#888888] font-bold">Chennai • Tamil Nadu</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="relative inline-block pt-6">
+                  <div className="bg-white/60 backdrop-blur-lg border border-white/80 p-12 rounded-[4rem] shadow-[0_20px_50px_rgba(158,126,68,0.08)] space-y-10 relative">
+                    <div className="flex justify-center gap-12">
+                      {Object.entries(timeLeft).map(([unit, value]) => (
+                        <div key={unit} className="flex flex-col">
+                          <span className="text-5xl md:text-6xl font-serif text-[#333333]">{value < 0 ? 0 : value}</span>
+                          <span className="text-[9px] uppercase tracking-[0.4em] text-[#9E7E44] font-bold mt-3">{unit}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-12">
+                  <button
+                    onClick={handleExplore}
+                    className="group relative px-20 py-6 overflow-hidden rounded-full transition-all shadow-xl active:scale-95 border border-[#9E7E44]/20 hover:border-[#9E7E44]/40"
+                  >
+                    <div className="absolute inset-0 bg-[#333333] group-hover:bg-[#9E7E44] transition-colors duration-700" />
+                    <span className="relative text-[11px] font-bold tracking-[0.6em] uppercase text-white flex items-center gap-4">
+                      View Itinerary <ChevronRight size={16} />
+                    </span>
+                  </button>
+                </div>
+              </div>
+            );
+          case 'schedule':
+            return (
+              <div className="animate-in slide-in-from-bottom-8 duration-700 space-y-12 pb-24 text-center">
+                <div className="pt-6 flex flex-col items-center">
+                  <CoupleLogo className="w-32 h-32 md:w-44 md:h-44 mb-10" />
+                  <h2 className="text-6xl font-serif text-[#333333] tracking-tight">The Ceremonies</h2>
+                  <p className="text-[10px] uppercase tracking-[0.6em] text-[#9E7E44] mt-4 font-bold">Sacred Journey Details</p>
+                </div>
+
+                <div className="grid grid-cols-1 gap-12 mt-12">
+                  {events.map((event) => (
+                    <div key={event.id} className="group relative bg-white/80 backdrop-blur-xl p-12 rounded-[4rem] border border-white/80 shadow-sm hover:shadow-2xl transition-all duration-700 hover:-translate-y-2">
+                      <div className="flex flex-col md:flex-row gap-12 items-center md:items-start text-center md:text-left">
+                        <div className="w-24 h-24 bg-[#F8F5F2] rounded-[3rem] flex items-center justify-center border border-[#9E7E44]/10 shadow-inner group-hover:scale-105 transition-transform duration-700">
+                          {React.cloneElement(event.icon, { size: 36, strokeWidth: 0.8 })}
+                        </div>
+                        <div className="flex-1 space-y-8">
+                          <div className="space-y-3">
+                            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#9E7E44]">{event.theme}</span>
+                            <h3 className="text-4xl font-serif text-[#333333]">{event.title}</h3>
+                            <p className="text-[#9E7E44] font-serif italic text-xl opacity-80">{event.subtitle}</p>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-[#555555]">
+                            <div className="flex items-center gap-4 justify-center md:justify-start">
+                              <Calendar size={20} className="text-[#9E7E44]" strokeWidth={1} />
+                              <span className="text-base font-medium tracking-wide">{event.date}</span>
+                            </div>
+                            <div className="flex items-center gap-4 justify-center md:justify-start">
+                              <Clock size={20} className="text-[#9E7E44]" strokeWidth={1} />
+                              <span className="text-base font-medium tracking-wide">{event.time}</span>
+                            </div>
+                          </div>
+
+                          <div className="flex items-start gap-4 text-[#555555] justify-center md:justify-start">
+                            <MapPin size={20} className="text-[#9E7E44] flex-shrink-0 mt-1" strokeWidth={1} />
+                            <span className="text-base font-medium leading-relaxed max-w-xs">{event.venue}</span>
+                          </div>
+
+                          <a
+                            href={event.mapUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] text-slate-400 hover:text-[#333333] border-b border-transparent hover:border-[#9E7E44] transition-all pb-2 mt-4"
+                          >
+                            Navigate to Location <ExternalLink size={14} />
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          case 'rsvp':
+            if (isSubmitted) {
+              return (
+                <div className="animate-in zoom-in duration-1000 max-w-md mx-auto bg-white/80 backdrop-blur-md p-20 rounded-[5rem] border border-[#9E7E44]/20 shadow-2xl text-center space-y-10">
+                  <CoupleLogo className="w-28 h-28 mx-auto" />
+                  <div className="space-y-4">
+                    <h2 className="text-5xl font-serif text-[#333333]">With Gratitude</h2>
+                    <p className="text-[#666666] font-serif italic text-xl leading-relaxed">Your response has been registered. We await the honor of your company.</p>
+                  </div>
+                  <button onClick={() => setIsSubmitted(false)} className="text-[10px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] hover:text-[#333333] transition-colors border-b border-[#9E7E44]/30 pb-1">Modify Response</button>
+                </div>
+              );
+            }
+            return (
+              <div className="animate-in zoom-in duration-1000 max-w-2xl mx-auto bg-white/60 backdrop-blur-2xl p-14 rounded-[5rem] border border-white shadow-2xl space-y-16 relative overflow-hidden text-center">
+                <div className="space-y-4">
+                  <h2 className="text-6xl font-serif text-[#333333]">RSVP</h2>
+                  <p className="text-[#9E7E44] font-serif italic text-xl">We'd be honored to have you.</p>
+                </div>
+
+                <form className="space-y-14" onSubmit={handleSubmitRsvp}>
+                  <div className="space-y-12">
+                    <div className="space-y-4 text-left">
+                      <label className="text-[11px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-8">Full Name</label>
+                      <input
+                        type="text" required
+                        value={rsvpData.name}
+                        onChange={(e) => setRsvpData({ ...rsvpData, name: e.target.value })}
+                        className="w-full p-8 bg-[#F8F5F2]/50 rounded-[3rem] border border-[#9E7E44]/10 focus:ring-4 focus:ring-[#9E7E44]/5 focus:bg-white outline-none transition-all placeholder:text-slate-300 italic font-serif text-xl"
+                        placeholder="Guest name..."
+                      />
+                    </div>
+
+                    <div className="space-y-4 text-left">
+                      <label className="text-[11px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-8">Contact Number</label>
+                      <input
+                        type="tel" required
+                        value={rsvpData.phone}
+                        onChange={(e) => setRsvpData({ ...rsvpData, phone: e.target.value })}
+                        className="w-full p-8 bg-[#F8F5F2]/50 rounded-[3rem] border border-[#9E7E44]/10 focus:ring-4 focus:ring-[#9E7E44]/5 focus:bg-white outline-none transition-all placeholder:text-slate-300 italic font-serif text-xl"
+                        placeholder="Enter number..."
+                      />
+                      <p className="text-[11px] text-slate-400 ml-8 font-serif italic">Please enter with your country code (e.g. +91 00000 00000)</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 text-left">
+                    <label className="text-[11px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-8">Guest Party Count</label>
+                    <div className="flex items-center justify-between p-7 bg-[#F8F5F2]/50 rounded-[3rem] border border-[#9E7E44]/10 shadow-inner">
+                      <div className="flex items-center gap-4 ml-4 text-[#666666]">
+                        <Users className="text-[#9E7E44]" size={24} strokeWidth={1} />
+                        <span className="text-lg font-medium">Number attending</span>
+                      </div>
+                      <div className="flex items-center gap-8 mr-4">
+                        <button type="button" onClick={() => adjustGuests(-1)} className="w-14 h-14 rounded-3xl bg-white border border-[#9E7E44]/10 flex items-center justify-center text-[#9E7E44] hover:bg-[#333333] hover:text-white transition-all shadow-sm active:scale-90"><Minus size={20} /></button>
+                        <span className="text-3xl font-serif text-[#333333] w-8 text-center">{rsvpData.guests}</span>
+                        <button type="button" onClick={() => adjustGuests(1)} className="w-14 h-14 rounded-3xl bg-white border border-[#9E7E44]/10 flex items-center justify-center text-[#9E7E44] hover:bg-[#333333] hover:text-white transition-all shadow-sm active:scale-90"><Plus size={20} /></button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-8 text-left">
+                    <label className="text-[11px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-8">Ceremonies to Attend</label>
+                    <div className="grid grid-cols-1 gap-6">
+                      {events.map((event) => (
+                        <button
+                          key={event.id}
+                          type="button"
+                          onClick={() => setRsvpData({ ...rsvpData, events: { ...rsvpData.events, [event.id]: !rsvpData.events[event.id] } })}
+                          className={`flex items-center justify-between p-8 rounded-[3.5rem] border-2 transition-all duration-700 ${rsvpData.events[event.id] ? 'bg-white border-[#9E7E44]/40 shadow-xl' : 'bg-transparent border-transparent opacity-40'}`}
+                        >
+                          <div className="flex items-center gap-6 text-left">
+                            <div className={`p-4 rounded-3xl transition-all duration-700 ${rsvpData.events[event.id] ? 'bg-[#F8F5F2] scale-110' : 'bg-slate-100'}`}>
+                              {React.cloneElement(event.icon, { size: 24 })}
+                            </div>
+                            <div>
+                              <p className="font-bold text-[12px] tracking-[0.3em] uppercase text-[#333333]">{event.title}</p>
+                              <p className="text-xs text-[#9E7E44] italic font-serif mt-1">{event.date}</p>
+                            </div>
+                          </div>
+                          <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-700 ${rsvpData.events[event.id] ? 'bg-[#9E7E44] border-[#9E7E44] text-white scale-125' : 'border-slate-200'}`}>
+                            {rsvpData.events[event.id] && <Check size={18} strokeWidth={4} />}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 text-left">
+                    <label className="text-[11px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-8">Blessings & Message</label>
+                    <textarea
+                      value={rsvpData.message}
+                      onChange={(e) => setRsvpData({ ...rsvpData, message: e.target.value })}
+                      className="w-full p-8 bg-[#F8F5F2]/50 rounded-[3rem] border border-[#9E7E44]/10 focus:ring-4 focus:ring-[#9E7E44]/5 focus:bg-white outline-none transition-all placeholder:text-slate-300 shadow-inner italic font-serif text-xl h-40 resize-none"
+                      placeholder="Share your blessings..."
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting || !user}
+                    className="w-full py-8 bg-[#333333] text-white rounded-[3.5rem] font-bold text-[12px] uppercase tracking-[0.6em] hover:bg-[#9E7E44] transition-all duration-1000 shadow-2xl disabled:opacity-50 flex items-center justify-center gap-4 active:scale-95"
+                  >
+                    {isSubmitting ? <Loader2 className="animate-spin" size={24} /> : "Register Attendance"}
+                  </button>
+                </form>
+              </div>
+            );
+          default:
+            return null;
+        }
+      };
+
+      const root = createRoot(document.getElementById('root'));
+      root.render(<App />);
+  </script>
 </body>
+
 </html>
