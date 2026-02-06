@@ -626,9 +626,11 @@
                             </div>
                           </div>
 
-                          <a href={event.mapUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.4em] text-slate-400 hover:text-[#9E7E44] transition-all group/btn">
-                            View On Map <Icons.ExternalLink size={12} className="group-hover/btn:scale-110 transition-transform" />
-                          </a>
+                          {event.mapUrl && event.mapUrl !== '#' && (
+                            <a href={event.mapUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.4em] text-slate-400 hover:text-[#9E7E44] transition-all group/btn">
+                              View On Map <Icons.ExternalLink size={12} className="group-hover/btn:scale-110 transition-transform" />
+                            </a>
+                          )}
                         </div>
                       </div>
                     </div>
