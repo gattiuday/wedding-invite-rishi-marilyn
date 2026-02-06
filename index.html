@@ -198,7 +198,7 @@
         name: '',
         phone: '',
         guests: 1,
-        events: { haldi: true, wedding: true, reception: true },
+        events: { welcome: true, haldi_21: true, haldi: true, wedding: true, reception: true },
         message: ''
       });
 
@@ -265,6 +265,28 @@
       }, []);
 
       const events = [
+        {
+          id: 'welcome',
+          title: 'Welcome & Bachelor Party',
+          subtitle: 'The Beginning of Celebration',
+          date: 'August 20, 2026',
+          time: '7:00 PM Onwards',
+          venue: 'Noci Adante, Chennai',
+          mapUrl: 'https://www.google.com/maps/search/?api=1&query=Noci+Adante+Chennai',
+          icon: <Icons.GlassWater strokeWidth={1.5} />,
+          theme: 'By Invite Only'
+        },
+        {
+          id: 'haldi_21',
+          title: 'Haldi Ceremony',
+          subtitle: 'The Golden Glow',
+          date: 'August 21, 2026',
+          time: '6:00 PM - 10:00 PM',
+          venue: 'Venue Not Decided',
+          mapUrl: '#',
+          icon: <Icons.Sparkles strokeWidth={1.5} />,
+          theme: 'Yellow & Bright'
+        },
         {
           id: 'haldi',
           title: 'Haldi & Mehandi',
@@ -400,12 +422,14 @@
 
           const eventStats = allRsvps.reduce((acc, curr) => {
             const guestCount = Number(curr.guests) || 0;
+            if (curr.events?.welcome) acc.welcome += guestCount;
+            if (curr.events?.haldi_21) acc.haldi_21 += guestCount;
             if (curr.events?.haldi) acc.haldi += guestCount;
             if (curr.events?.wedding) acc.wedding += guestCount;
             if (curr.events?.reception) acc.reception += guestCount;
             acc.total += guestCount;
             return acc;
-          }, { haldi: 0, wedding: 0, reception: 0, total: 0 });
+          }, { welcome: 0, haldi_21: 0, haldi: 0, wedding: 0, reception: 0, total: 0 });
 
           return (
             <div className="animate-in space-y-8 pb-24 text-left">
@@ -424,6 +448,14 @@
                   <div className="col-span-2 bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/10 flex flex-col justify-center">
                     <p className="text-[9px] uppercase tracking-widest text-[#9E7E44] font-bold text-center mb-4">Arrivals per Event</p>
                     <div className="space-y-2">
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-slate-400 uppercase tracking-tighter font-bold">Welcome (20th)</span>
+                        <span className="font-serif text-[#333333] text-lg">{eventStats.welcome}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-slate-400 uppercase tracking-tighter font-bold">Haldi (21st)</span>
+                        <span className="font-serif text-[#333333] text-lg">{eventStats.haldi_21}</span>
+                      </div>
                       <div className="flex justify-between items-center text-xs">
                         <span className="text-slate-400 uppercase tracking-tighter font-bold">Haldi</span>
                         <span className="font-serif text-[#333333] text-lg">{eventStats.haldi}</span>
