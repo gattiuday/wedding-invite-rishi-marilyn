@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rishi & Marilyn • The Wedding</title>
+  <title>Rishi & Marilyn • Sacred Indian Wedding Invitation</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -13,25 +13,45 @@
       theme: {
         extend: {
           colors: {
-            bg: '#F8F5F2',
-            accent: '#9E7E44',
-            textPrimary: '#333333',
-            textSecondary: '#666666',
+            turmeric: '#ffcc00',
+            kumkum: '#b30000',
+            mango: '#2e7d32',
+            silk: '#fff9e6',
+            gold: '#aa771c',
+            peacock: '#005f6b',
+            parakeet: '#4caf50',
           },
           fontFamily: {
             sans: ['Inter', 'sans-serif'],
             serif: ['Playfair Display', 'serif'],
+            traditional: ['Cinzel', 'serif'],
+            script: ['Great Vibes', 'cursive'],
           },
           animation: {
             'spin-slow': 'spin 60s linear infinite',
             'petal-fall': 'petalFall linear infinite',
+            'float': 'float 6s ease-in-out infinite',
+            'sway': 'sway 4s ease-in-out infinite',
+            'bell-swing': 'bellSwing 3s ease-in-out infinite',
           },
           keyframes: {
             petalFall: {
               '0%': { transform: 'translate(0, -100px) rotate(0deg)', opacity: '0' },
-              '10%': { opacity: '0.4' },
-              '90%': { opacity: '0.4' },
+              '10%': { opacity: '1' },
+              '90%': { opacity: '1' },
               '100%': { transform: 'translate(100px, 100vh) rotate(360deg)', opacity: '0' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-15px)' },
+            },
+            sway: {
+              '0%, 100%': { transform: 'rotate(-5deg)' },
+              '50%': { transform: 'rotate(5deg)' },
+            },
+            bellSwing: {
+              '0%, 100%': { transform: 'rotate(-8deg)' },
+              '50%': { transform: 'rotate(8deg)' },
             }
           }
         }
@@ -47,744 +67,428 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
 
   <!-- Babel for JSX -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Great+Vibes&family=Cinzel:wght@400;700&display=swap');
 
     body {
-      font-family: 'Inter', sans-serif;
+      background-color: #fff9e6;
+      background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
       -webkit-font-smoothing: antialiased;
-      background-color: #F8F5F2;
     }
 
-    /* Custom Animations */
+    .animate-in {
+      animation: revealIn 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
     @keyframes revealIn {
       from {
         opacity: 0;
-        transform: translateY(30px) scale(0.98);
+        transform: translateY(30px);
       }
 
       to {
         opacity: 1;
-        transform: translateY(0) scale(1);
+        transform: translateY(0);
       }
     }
 
-    .animate-in {
-      animation: revealIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(15px);
+      border-top: 2px solid #aa771c44;
     }
 
-    .glass-nav {
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border: 1px solid rgba(255, 255, 255, 0.8);
+    .kolam-bg {
+      background-image: url("data:image/svg+xml,%3Csvg width='300' height='300' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M100 100m-25 0a25 25 0 1 0 50 0a25 25 0 1 0 -50 0 M100 10 L100 40 M100 160 L100 190 M10 100 L40 100 M160 100 L190 100' stroke='%23aa771c' stroke-width='0.4' fill='none' opacity='0.2'/%3E%3C/svg%3E");
+    }
+
+    .mango-leaf-toran {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100px;
+      background: url("data:image/svg+xml,%3Csvg width='80' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0 C65 40 75 60 50 100 C25 60 35 40 50 0' fill='%232e7d32' /%3E%3Ccircle cx='50' cy='5' r='8' fill='%23ff9800' /%3E%3C/svg%3E") repeat-x;
+      background-size: 50px 100px;
+      z-index: 51;
+    }
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      /* IE and Edge */
+      scrollbar-width: none;
+      /* Firefox */
     }
   </style>
 </head>
 
-<body class="bg-[#F8F5F2] text-[#333333] overflow-x-hidden selection:bg-[#9E7E44]/20">
+<body class="overflow-x-hidden selection:bg-peacock/20">
   <div id="root"></div>
 
   <script type="text/babel">
-    // --- 1. ICONS (Inline SVGs) ---
-    const Icon = ({ path, className, strokeWidth = 2, size = 24, fill = "none" }) => (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width={size} height={size}
-        viewBox="0 0 24 24"
-        fill={fill}
-        stroke="currentColor"
-        strokeWidth={strokeWidth}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className={className}
-      >
-        {path}
-      </svg>
-    );
-
-    const Icons = {
-      Music: (props) => <Icon {...props} path={<><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></>} />,
-      Flower2: (props) => <Icon {...props} path={<><path d="M12 5a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3-3v18m0-13a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3 8a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3" /></>} />,
-      GlassWater: (props) => <Icon {...props} path={<><path d="M15.2 22a3 3 0 0 0-2.2-5" /><path d="M9 22a3 3 0 0 1 2.2-5" /><path d="M2 7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-6.1a2 2 0 0 0-1.8.9l-2.7 5.4a2 2 0 0 1-1.8.9H5a2 2 0 0 1-2-2z" /></>} />,
-      Calendar: (props) => <Icon {...props} path={<><rect width="18" height="18" x="3" y="4" rx="2" ry="2" /><line x1="16" x2="16" y1="2" y2="6" /><line x1="8" x2="8" y1="2" y2="6" /><line x1="3" x2="21" y1="10" y2="10" /></>} />,
-      Clock: (props) => <Icon {...props} path={<><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></>} />,
-      MapPin: (props) => <Icon {...props} path={<><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></>} />,
-      ExternalLink: (props) => <Icon {...props} path={<><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></>} />,
-      Sparkles: (props) => <Icon {...props} path={<><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L12 3Z" /></>} />,
-      ChevronRight: (props) => <Icon {...props} path={<path d="m9 18 6-6-6-6" />} />,
-      ShieldCheck: (props) => <Icon {...props} path={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" /><path d="m9 12 2 2 4-4" /></>} />,
-      Phone: (props) => <Icon {...props} path={<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />} />,
-      Users: (props) => <Icon {...props} path={<><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></>} />,
-      Plus: (props) => <Icon {...props} path={<><path d="M5 12h14" /><path d="M12 5v14" /></>} />,
-      Minus: (props) => <Icon {...props} path={<path d="M5 12h14" />} />,
-      Check: (props) => <Icon {...props} path={<path d="M20 6 9 17l-5-5" />} />,
-      Loader2: (props) => <Icon {...props} path={<path d="M21 12a9 9 0 1 1-6.219-8.56" />} className={props.className + " animate-spin"} />,
-      AlertCircle: (props) => <Icon {...props} path={<><circle cx="12" cy="12" r="10" /><line x1="12" x2="12" y1="8" y2="12" /><line x1="12" x2="12.01" y1="16" y2="16" /></>} />,
-      Heart: (props) => <Icon {...props} path={<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />} />,
-      Quote: (props) => <Icon {...props} path={<><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" /><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" /></>} />
-    };
-
-    // --- 2. CONFIG & GLOBALS ---
     const { useState, useEffect } = React;
 
-    // Firebase Configuration (Compat Mode)
-    // PLACEHOLDER CONFIG: Replace with your actual details from console.firebase.google.com
-    // PLACEHOLDER CONFIG: Replace with your actual details from console.firebase.google.com
+    // --- ICONS ---
+    const Icons = {
+      Ganesh: (props) => (
+        <svg {...props} viewBox="0 0 100 100" fill="currentColor">
+          <path d="M50 10c-15 0-25 12-25 25 0 10 5 18 12 22-4 4-7 10-7 15 0 12 10 20 20 20s20-8 20-20c0-5-3-11-7-15 7-4 12-12 12-22 0-13-10-25-25-25zm0 5c12 0 20 10 20 20s-8 20-20 20-20-10-20-20 8-20 20-20zm-10 45c0-6 4-10 10-10s10 4 10 10-4 10-10 10-10-4-10-10z" opacity="0.9" />
+          <path d="M40 60c-5 0-8 5-8 10s3 10 8 10M60 60c5 0 8 5 8 10s-3 10-8 10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+        </svg>
+      ),
+      Elephant: (props) => (
+        <svg {...props} viewBox="0 0 100 100" fill="currentColor">
+          <path d="M85 45c-2-8-8-15-25-15-15 0-25 10-30 20-5-5-12-8-20-8-5 0-10 4-10 10 0 15 15 25 25 35 15-5 30-10 40-10 10 0 20 5 25 15 5-2 10-5 10-12 0-10-5-18-15-25zM45 40c5 0 10 5 10 10s-5 10-10 10-10-5-10-10 5-10 10-10z" opacity="0.8" />
+        </svg>
+      ),
+      Peacock: (props) => (
+        <svg {...props} viewBox="0 0 100 100" fill="currentColor">
+          <path d="M70 25c-5-5-12-8-20-8-18 0-32 12-32 28 0 10 4 18 10 22-2 4-4 8-4 12 0 12 10 22 22 22s22-10 22-22c0-4-2-8-4-12 6-4 10-12 10-22 0-16-14-28-32-28zm0 28c0 10-8 18-18 18s-18-8-18-18 8-18 18-18 18 8 18 18z" />
+          <circle cx="50" cy="53" r="10" opacity="0.4" />
+        </svg>
+      ),
+      Parrot: (props) => (
+        <svg {...props} viewBox="0 0 100 100" fill="currentColor">
+          <path d="M60 20c-10 0-18 8-18 18v10c0 15-10 25-15 25s5 15 15 15 15-10 15-25V38c0-10 8-18 18-18s-5-5-15-5z" />
+          <path d="M42 38c0 5 4 10 10 10s10-5 10-10" fill="none" stroke="currentColor" strokeWidth="2" />
+        </svg>
+      ),
+      Bell: (props) => (
+        <svg {...props} viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2a2 2 0 0 0-2 2v1.07c-2.84.45-5 2.92-5 5.93V17l-2 2v1h18v-1l-2-2v-6c0-3.01-2.16-5.48-5-5.93V4a2 2 0 0 0-2-2zm0 21a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2z" />
+        </svg>
+      ),
+      Flower: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3-3v18m0-13a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3 8a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3" /></svg>,
+      Clock: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>,
+      MapPin: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="3" /></svg>,
+      Check: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>,
+      Loader: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={props.className + " animate-spin"}><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>
+    };
+
+    // --- CONFIG ---
+    // Note: API key is left empty as per environment standard.
     const firebaseConfig = {
       apiKey: "AIzaSyAmqq8gwFTvpFH3rVfL43xurnbU7tWh0h4",
       authDomain: "kumaranwedding-b59d6.firebaseapp.com",
       projectId: "kumaranwedding-b59d6",
       storageBucket: "kumaranwedding-b59d6.firebasestorage.app",
       messagingSenderId: "281972038441",
-      appId: "1:281972038441:web:a46195c908003dd59b3538",
-      measurementId: "G-XKS7R1C63C"
+      appId: "1:281972038441:web:a46195c908003dd59b3538"
     };
 
-    // Use window.__firebase_config if injected, otherwise fallback
-    const finalConfig = typeof window.__firebase_config !== 'undefined'
-      ? JSON.parse(window.__firebase_config)
-      : firebaseConfig;
+    const finalConfig = typeof window.__firebase_config !== 'undefined' ? JSON.parse(window.__firebase_config) : firebaseConfig;
 
-    firebase.initializeApp(finalConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-    // Initialize Analytics if supported
-    if (firebase.analytics && typeof firebase.analytics.isSupported === 'function') {
-      firebase.analytics.isSupported().then((isSupported) => {
-        if (isSupported) firebase.analytics();
-      });
-    } else if (firebase.analytics) {
-      firebase.analytics();
+    // Initialize Firebase
+    if (!firebase.apps.length) {
+      firebase.initializeApp(finalConfig);
     }
 
+    const db = firebase.firestore();
+    const auth = firebase.auth();
     const appId = typeof window.__app_id !== 'undefined' ? window.__app_id : 'wedding-rishi-marilyn';
 
-    // --- 3. COMPONENTS ---
-
-    // Floating Petal Component
-    const FloatingPetal = ({ delay, left, duration }) => (
+    // --- COMPONENTS ---
+    const FloatingElement = ({ delay, left, duration, color, children }) => (
       <div
-        className="absolute pointer-events-none text-[#9E7E44]/20 animate-petal-fall"
-        style={{
-          left: `${left}%`,
-          animationDelay: `${delay}s`,
-          animationDuration: `${duration}s`
-        }}
+        className="absolute pointer-events-none animate-petal-fall z-0"
+        style={{ left: `${left}%`, animationDelay: `${delay}s`, animationDuration: `${duration}s`, color: color }}
       >
-        <Icons.Flower2 size={Math.random() * 20 + 10} strokeWidth={1} />
+        {children}
       </div>
     );
 
-    // Main App Component
     const App = () => {
       const [activeTab, setActiveTab] = useState('home');
-      const [user, setUser] = useState(null);
-      const [loading, setLoading] = useState(true);
       const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-      const [showAdminPanel, setShowAdminPanel] = useState(false);
-      const [adminPassword, setAdminPassword] = useState('');
-      const [allRsvps, setAllRsvps] = useState([]);
       const [isSubmitting, setIsSubmitting] = useState(false);
       const [isSubmitted, setIsSubmitted] = useState(false);
-      const [errorMessage, setErrorMessage] = useState(null);
-
       const [rsvpData, setRsvpData] = useState({
-        name: '',
-        phone: '',
-        guests: 1,
-        events: { welcome: true, haldi_21: true, haldi: true, wedding: true, reception: true },
-        message: ''
+        name: '', phone: '', guests: 1, message: '',
+        events: { welcome: true, nalungu: true, haldi: true, wedding: true, sangeet: true }
       });
 
-      // 1. Authentication
       useEffect(() => {
-        const initAuth = async () => {
-          try {
-            if (typeof window.__initial_auth_token !== 'undefined' && window.__initial_auth_token) {
-              await auth.signInWithCustomToken(window.__initial_auth_token);
-            } else {
-              await auth.signInAnonymously();
-            }
-          } catch (e) {
-            console.warn("Auth failed (likely due to placeholder config). Utilizing mock user for display.", e);
-            // Fallback for UI testing
-            setUser({ uid: 'guest-mock', isAnonymous: true });
-          } finally {
-            setLoading(false);
-          }
-        };
-        initAuth();
-        const unsubscribe = auth.onAuthStateChanged(setUser);
-        return () => unsubscribe();
-      }, []);
-
-      // 2. Data Sync
-      useEffect(() => {
-        if (!user || !showAdminPanel || adminPassword !== 'rishi2026') return;
-
-        try {
-          const rsvpsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('rsvps');
-          const unsubscribe = rsvpsRef.onSnapshot(
-            (snapshot) => {
-              const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-              data.sort((a, b) => (b.submittedAt?.seconds || 0) - (a.submittedAt?.seconds || 0));
-              setAllRsvps(data);
-            },
-            (error) => console.error("Firestore sync error:", error)
-          );
-          return () => unsubscribe();
-        } catch (err) {
-          console.error("Firestore error (likely perm or config):", err);
-        }
-      }, [user, showAdminPanel, adminPassword]);
-
-      // 3. Countdown logic
-      useEffect(() => {
-        const targetDate = new Date('August 22, 2026 16:00:00').getTime();
-        const timer = setInterval(() => {
+        const target = new Date('August 23, 2026 09:30:00').getTime();
+        const interval = setInterval(() => {
           const now = new Date().getTime();
-          const distance = targetDate - now;
-          if (distance < 0) {
-            setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-          } else {
-            setTimeLeft({
-              days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-              hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-              minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-              seconds: Math.floor((distance % (1000 * 60)) / 1000),
-            });
-          }
+          const dist = target - now;
+          if (dist < 0) return;
+          setTimeLeft({
+            days: Math.floor(dist / (1000 * 60 * 60 * 24)),
+            hours: Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+            minutes: Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60)),
+            seconds: Math.floor((dist % (1000 * 60)) / 1000)
+          });
         }, 1000);
-        return () => clearInterval(timer);
+        return () => clearInterval(interval);
       }, []);
 
-      const events = [
-        {
-          id: 'welcome',
-          title: 'Welcome & Bachelor Party (By Invite Only)',
-          subtitle: 'The Beginning of Celebration',
-          date: 'August 20, 2026',
-          time: '7:00 PM',
-          venue: 'Noci Adante, Chennai',
-          mapUrl: 'https://www.google.com/maps/search/?api=1&query=Noci+Adante+Chennai',
-          icon: <Icons.GlassWater strokeWidth={1.5} />,
-          theme: 'Dress to impress'
-        },
-        {
-          id: 'haldi_21',
-          title: 'Patti and Athai Nalungu',
-          subtitle: 'Traditional Ceremony',
-          date: 'August 21, 2026',
-          time: '6:00 PM - 10:00 PM',
-          venue: 'Venue Not Decided',
-          mapUrl: '#',
-          icon: <Icons.Sparkles strokeWidth={1.5} />,
-          theme: 'Yellow & Bright'
-        },
-        {
-          id: 'haldi',
-          title: 'Haldi & Mehndi',
-          subtitle: 'The Saffron Celebration',
-          date: 'August 22, 2026',
-          time: '4:00 PM',
-          venue: 'Blue House, ECR, Chennai',
-          mapUrl: 'https://www.google.com/maps/search/?api=1&query=Blue+House+Chennai',
-          icon: <Icons.Music strokeWidth={1.5} />,
-          theme: 'Traditional Silk'
-        },
-        {
-          id: 'wedding',
-          title: 'Wedding Ceremony',
-          subtitle: 'The Auspicious Vows',
-          date: 'August 23, 2026',
-          time: '9:30 AM',
-          venue: 'The Leela Palace, Chennai',
-          mapUrl: 'https://www.google.com/maps/search/?api=1&query=The+Leela+Palace+Chennai',
-          icon: <Icons.Flower2 strokeWidth={1.5} />,
-          theme: 'Royal Heritage'
-        },
-        {
-          id: 'reception',
-          title: 'Sangeet & Cocktail',
-          subtitle: 'Dance & Celebration',
-          date: 'August 24, 2026',
-          time: '6:30 PM',
-          venue: 'Pullman, Chennai',
-          mapUrl: 'https://www.google.com/maps/search/?api=1&query=Pullman+Hotel+Chennai',
-          icon: <Icons.GlassWater strokeWidth={1.5} />,
-          theme: 'Starlit Evening'
-        }
+      const eventList = [
+        { id: 'welcome', title: "Bachelor's Party", date: "Aug 20", time: "7:00 PM", venue: "Noci Andante, Chennai", note: "By Invite Only", icon: <Icons.Peacock className="w-6 h-6" /> },
+        { id: 'nalungu', title: "Patti & Athai Nalungu", date: "Aug 21", time: "6:00 PM", venue: "To Be Announced", icon: <Icons.Elephant className="w-6 h-6" /> },
+        { id: 'haldi', title: "Haldi & Mehndi", date: "Aug 22", time: "4:00 PM", venue: "Blue House, ECR, Chennai", icon: <Icons.Flower className="w-6 h-6" /> },
+        { id: 'wedding', title: "Muhurtham", date: "Aug 23", time: "9:30 AM", venue: "The Leela Palace, Chennai", featured: true, icon: <Icons.Ganesh className="w-8 h-8" /> },
+        { id: 'sangeet', title: "Sangeet & Cocktail", date: "Aug 24", time: "6:30 PM", venue: "Pullman, Chennai", icon: <Icons.Peacock className="w-6 h-6" /> }
       ];
 
-      const handleSubmitRsvp = async (e) => {
+      const handleRsvp = async (e) => {
         e.preventDefault();
-
-        // Mock Mode Check
-        const isMockMode = finalConfig.apiKey.includes('PLACEHOLDER');
-
-        if (!user && !isMockMode) {
-          setErrorMessage("Establishing secure connection...");
-          return;
-        }
-
         setIsSubmitting(true);
-        setErrorMessage(null);
-
         try {
-          if (isMockMode) {
-            // Simulate network delay for Mock Mode
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            console.log("Mock RSVP Submitted:", rsvpData);
-            setIsSubmitted(true);
-          } else {
-            // Real Firestore Submission with Timeout
-            const rsvpsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('rsvps');
-
-            const submitPromise = rsvpsRef.add({
-              ...rsvpData,
-              submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
-              uid: user ? user.uid : 'anonymous'
-            });
-
-            // 10s Timeout
-            const timeoutPromise = new Promise((_, reject) =>
-              setTimeout(() => reject(new Error("Request timed out. Please check your internet or Firebase config.")), 10000)
-            );
-
-            await Promise.race([submitPromise, timeoutPromise]);
-            setIsSubmitted(true);
-          }
+          // Rule: Always use the strict path for collections in this environment
+          await db.collection('artifacts').doc(appId).collection('public').doc('data').collection('rsvps').add({
+            ...rsvpData, submittedAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          setIsSubmitted(true);
         } catch (err) {
-          console.error("RSVP error:", err);
-          if (err.code === 'permission-denied') {
-            setErrorMessage("Access Denied: Please update Firestore Rules to 'Test Mode' in Console.");
-          } else {
-            setErrorMessage(err.message || "Unable to save RSVP. Please check connection.");
-          }
-        } finally {
-          setIsSubmitting(false);
+          console.error(err);
+          // Non-blocking user message instead of alert
+          const msg = document.createElement('div');
+          msg.innerHTML = "Submission error. Check your internet or configuration.";
+          msg.className = "fixed top-10 left-1/2 -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-full z-[1000]";
+          document.body.appendChild(msg);
+          setTimeout(() => msg.remove(), 3000);
         }
+        setIsSubmitting(false);
       };
 
-      const adjustGuests = (amount) => setRsvpData(prev => ({ ...prev, guests: Math.max(1, prev.guests + amount) }));
+      return (
+        <div className="min-h-screen pb-32 kolam-bg relative overflow-hidden">
+          <div className="mango-leaf-toran" />
 
-      const CoupleLogo = ({ className }) => (
-        <div className={`relative flex items-center justify-center ${className}`}>
-          <svg viewBox="0 0 100 100" className="absolute w-full h-full text-[#9E7E44] opacity-20 animate-[spin_60s_linear_infinite]">
-            <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="0.2" strokeDasharray="1 3" />
-            <path fill="none" stroke="currentColor" strokeWidth="0.3" d="M50 2 L52 48 L98 50 L52 52 L50 98 L48 52 L2 50 L48 48 Z" />
-          </svg>
-          <div className="relative z-10 flex flex-col items-center justify-center bg-white/70 backdrop-blur-xl rounded-full w-[85%] h-[85%] border-2 border-[#9E7E44]/20 shadow-2xl">
-            <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent rounded-full" />
-            <span className="font-serif text-[#9E7E44] text-3xl md:text-4xl tracking-tighter leading-none select-none drop-shadow-sm">
-              R<span className="text-xl mx-[-3px] opacity-60 italic">&</span>M
-            </span>
-            <div className="h-[0.5px] w-12 bg-gradient-to-r from-transparent via-[#9E7E44]/40 to-transparent my-2" />
-            <span className="text-[8px] uppercase tracking-[0.5em] text-[#9E7E44]/60 font-bold">AUGUST 2026</span>
+          {/* Siting Parrots on Toran */}
+          <div className="absolute top-0 w-full flex justify-around px-10 pointer-events-none z-[52] opacity-60">
+            <Icons.Parrot className="w-10 h-10 text-parakeet animate-sway" />
+            <Icons.Parrot className="w-10 h-10 text-parakeet animate-sway scale-x-[-1]" />
+            <Icons.Parrot className="w-10 h-10 text-parakeet animate-sway hidden md:block" />
           </div>
-        </div>
-      );
 
-      if (loading) {
-        return (
-          <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8F5F2] text-[#9E7E44]">
-            <Icons.Loader2 className="animate-spin mb-4" size={40} />
-            <p className="text-[10px] uppercase tracking-[0.4em] font-bold">Unfolding the Invitation</p>
+          {/* Swaying Temple Bells */}
+          <div className="absolute top-10 left-0 w-full flex justify-around px-4 pointer-events-none z-[53]">
+            <Icons.Bell className="w-6 h-6 text-gold animate-bell-swing" />
+            <Icons.Bell className="w-6 h-6 text-gold animate-bell-swing hidden md:block" />
+            <Icons.Bell className="w-6 h-6 text-gold animate-bell-swing" />
           </div>
-        );
-      }
 
-      const renderContent = () => {
-        if (activeTab === 'admin') {
-          if (adminPassword !== 'rishi2026') {
-            return (
-              <div className="animate-in max-w-sm mx-auto bg-white/60 backdrop-blur-md p-10 rounded-[2.5rem] border border-[#9E7E44]/20 shadow-2xl space-y-6">
-                <div className="text-center">
-                  <Icons.ShieldCheck className="mx-auto text-[#9E7E44] mb-3" size={32} />
-                  <h2 className="text-xl font-serif text-[#333333] tracking-wide uppercase">Host Access</h2>
+          {/* Floating Decorative Elements */}
+          <div className="fixed inset-0 pointer-events-none z-0">
+            {[20, 40, 60, 80].map((l, i) => (
+              <FloatingElement key={i} left={l} delay={i * 3} duration={12} color={i % 2 ? '#ff9800' : '#ffc107'}>
+                <div className="w-2.5 h-2.5 rounded-full bg-current opacity-30 shadow-sm" />
+              </FloatingElement>
+            ))}
+            {[5, 50, 85].map((l, i) => (
+              <FloatingElement key={`p-${i}`} left={l} delay={i * 5 + 2} duration={18} color="#005f6b11">
+                <Icons.Peacock className="w-10 h-10 transform -rotate-12" />
+              </FloatingElement>
+            ))}
+          </div>
+
+          <main className="relative z-10 max-w-4xl mx-auto px-6 pt-32 text-center">
+            {activeTab === 'home' && (
+              <div className="animate-in space-y-16">
+
+                {/* Ganesh Idol Header */}
+                <div className="flex flex-col items-center animate-float">
+                  <div className="w-28 h-28 text-kumkum mb-4 drop-shadow-2xl">
+                    <Icons.Ganesh className="w-full h-full" />
+                  </div>
+                  <p className="font-traditional text-kumkum tracking-[0.6em] text-[10px] font-bold uppercase">Om Shri Ganesha Namaha</p>
                 </div>
-                <input
-                  type="password" autoFocus
-                  className="w-full p-4 bg-white/80 rounded-2xl border border-[#9E7E44]/10 outline-none text-center text-xl tracking-widest placeholder:text-slate-300"
-                  placeholder="••••"
-                  onChange={(e) => setAdminPassword(e.target.value)}
-                />
-                <p className="text-[10px] text-center text-slate-400 uppercase tracking-widest">Authorized hosts only</p>
-              </div>
-            );
-          }
 
-          const eventStats = allRsvps.reduce((acc, curr) => {
-            const guestCount = Number(curr.guests) || 0;
-            if (curr.events?.welcome) acc.welcome += guestCount;
-            if (curr.events?.haldi_21) acc.haldi_21 += guestCount;
-            if (curr.events?.haldi) acc.haldi += guestCount;
-            if (curr.events?.wedding) acc.wedding += guestCount;
-            if (curr.events?.reception) acc.reception += guestCount;
-            acc.total += guestCount;
-            return acc;
-          }, { welcome: 0, haldi_21: 0, haldi: 0, wedding: 0, reception: 0, total: 0 });
-
-          return (
-            <div className="animate-in space-y-8 pb-24 text-left">
-              <div className="bg-white/90 p-8 md:p-10 rounded-[3rem] border border-[#9E7E44]/10 shadow-xl space-y-8">
-                <h3 className="font-serif text-3xl text-[#333333]">RSVP Dashboard</h3>
-
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/5 text-center">
-                    <p className="text-[9px] uppercase tracking-widest text-[#9E7E44] font-bold">Total Guests</p>
-                    <p className="text-4xl font-serif text-[#333333] mt-2">{eventStats.total}</p>
+                <div className="space-y-8">
+                  <div className="relative inline-block">
+                    <Icons.Elephant className="absolute -left-20 top-0 w-14 h-14 text-gold/20 animate-sway hidden md:block" />
+                    <Icons.Elephant className="absolute -right-20 top-0 w-14 h-14 text-gold/20 animate-sway scale-x-[-1] hidden md:block" />
+                    <h2 className="font-serif italic text-gray-500 text-lg md:text-xl">With the blessings of our elders & Almighty</h2>
                   </div>
-                  <div className="bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/5 text-center">
-                    <p className="text-[9px] uppercase tracking-widest text-[#9E7E44] font-bold">Total Groups</p>
-                    <p className="text-4xl font-serif text-[#333333] mt-2">{allRsvps.length}</p>
-                  </div>
-                  <div className="col-span-2 bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/10 flex flex-col justify-center">
-                    <p className="text-[9px] uppercase tracking-widest text-[#9E7E44] font-bold text-center mb-4">Arrivals per Event</p>
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center text-xs">
-                        <span className="text-slate-400 uppercase tracking-tighter font-bold">Welcome (20th)</span>
-                        <span className="font-serif text-[#333333] text-lg">{eventStats.welcome}</span>
-                      </div>
-                      <div className="flex justify-between items-center text-xs">
-                        <span className="text-slate-400 uppercase tracking-tighter font-bold">Nalungu (21st)</span>
-                        <span className="font-serif text-[#333333] text-lg">{eventStats.haldi_21}</span>
-                      </div>
-                      <div className="flex justify-between items-center text-xs">
-                        <span className="text-slate-400 uppercase tracking-tighter font-bold">Haldi</span>
-                        <span className="font-serif text-[#333333] text-lg">{eventStats.haldi}</span>
-                      </div>
-                      <div className="flex justify-between items-center text-xs">
-                        <span className="text-slate-400 uppercase tracking-tighter font-bold">Wedding</span>
-                        <span className="font-serif text-[#333333] text-lg">{eventStats.wedding}</span>
-                      </div>
-                      <div className="flex justify-between items-center text-xs">
-                        <span className="text-slate-400 uppercase tracking-tighter font-bold">Reception</span>
-                        <span className="font-serif text-[#333333] text-lg">{eventStats.reception}</span>
-                      </div>
+
+                  <div className="py-6 relative">
+                    <Icons.Parrot className="absolute -left-10 top-1/2 w-8 h-8 text-parakeet/20 animate-sway hidden lg:block" />
+                    <Icons.Parrot className="absolute -right-10 top-1/2 w-8 h-8 text-parakeet/20 animate-sway scale-x-[-1] hidden lg:block" />
+
+                    <h1 className="font-script text-8xl md:text-[10rem] text-kumkum leading-tight drop-shadow-md">Rishi</h1>
+                    <div className="flex items-center justify-center gap-8 my-4">
+                      <div className="h-0.5 w-20 bg-gradient-to-r from-transparent to-gold" />
+                      <span className="font-traditional text-gold text-3xl lowercase tracking-widest italic font-medium">weds</span>
+                      <div className="h-0.5 w-20 bg-gradient-to-l from-transparent to-gold" />
                     </div>
+                    <h1 className="font-script text-8xl md:text-[10rem] text-kumkum leading-tight drop-shadow-md">Marilyn</h1>
+                  </div>
+
+                  <div className="bg-turmeric/10 border-y-2 border-gold/30 inline-block px-10 md:px-14 py-5 shadow-sm">
+                    <p className="font-traditional text-xl md:text-3xl tracking-[0.5em] text-yellow-950 uppercase font-semibold">August 2026 • Chennai</p>
                   </div>
                 </div>
-              </div>
 
-              <div className="space-y-4">
-                <h4 className="text-[10px] uppercase tracking-[0.4em] font-bold text-slate-400 ml-6">Guest List</h4>
-                {allRsvps.length === 0 ? (
-                  <p className="text-center text-slate-400 font-serif italic py-12 bg-white/40 rounded-[2rem]">Empty guest list</p>
-                ) : (
-                  allRsvps.map(r => (
-                    <div key={r.id} className="group bg-white/80 rounded-[2rem] p-8 border border-white shadow-sm transition-all hover:shadow-md relative overflow-hidden">
-                      <div className="flex justify-between items-start mb-4">
-                        <div className="flex-1">
-                          <h4 className="font-bold text-xl text-[#333333]">{r.name}</h4>
-                          <div className="flex items-center gap-3 mt-1">
-                            <span className="text-[10px] bg-[#9E7E44]/10 text-[#9E7E44] px-3 py-1 rounded-full font-bold uppercase tracking-widest">
-                              {r.guests} {r.guests === 1 ? 'Guest' : 'Guests'}
-                            </span>
-                            <span className="text-xs text-slate-400 font-medium">{r.phone}</span>
-                          </div>
-                        </div>
-
-                        <div className="text-[9px] text-slate-300 uppercase font-bold">
-                          {r.submittedAt?.toDate ? r.submittedAt.toDate().toLocaleDateString() : 'New'}
-                        </div>
+                {/* Countdown */}
+                <div className="relative max-w-md mx-auto">
+                  <div className="grid grid-cols-4 gap-4 md:gap-6 bg-white/70 p-6 md:p-8 rounded-[2.5rem] border border-gold/40 backdrop-blur-md shadow-inner">
+                    {Object.entries(timeLeft).map(([k, v]) => (
+                      <div key={k} className="text-center">
+                        <p className="text-3xl md:text-4xl font-serif text-kumkum leading-none">{v}</p>
+                        <p className="text-[9px] uppercase tracking-widest text-gold font-bold mt-3">{k}</p>
                       </div>
-
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {Object.entries(r.events || {}).filter(([_, v]) => v).map(([k]) => (
-                          <span key={k} className="text-[9px] uppercase tracking-[0.2em] bg-slate-100 text-slate-500 px-3 py-1 rounded-lg border border-slate-200/50">
-                            {k}
-                          </span>
-                        ))}
-                      </div>
-
-                      {r.message && (
-                        <div className="bg-[#F8F5F2]/50 p-4 rounded-2xl border-l-4 border-[#9E7E44]/20">
-                          <p className="text-sm text-slate-500 font-serif italic">"{r.message}"</p>
-                        </div>
-                      )}
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-          );
-        }
-
-        switch (activeTab) {
-          case 'home':
-            return (
-              <div className="animate-in text-center space-y-12 py-10">
-                <div className="space-y-6">
-                  <div className="flex justify-center items-center gap-6 mb-4">
-                    <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-[#9E7E44]/30" />
-                    <Icons.Sparkles className="text-[#9E7E44] opacity-40 animate-pulse" size={20} />
-                    <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-[#9E7E44]/30" />
+                    ))}
                   </div>
+                </div>
 
-                  <div className="space-y-3">
-                    <span className="text-[10px] uppercase tracking-[0.6em] text-[#9E7E44] font-bold block mb-4">The Celebration of a Lifetime</span>
-                    <h1 className="text-6xl md:text-[8rem] font-serif text-[#333333] leading-[0.9] tracking-tighter">
-                      Rishi <br />
-                      <span className="italic text-[#9E7E44] font-normal text-4xl md:text-7xl">&</span> <br />
-                      Marilyn
-                    </h1>
+                {/* Invitation Frame */}
+                <div className="max-w-3xl mx-auto p-8 md:p-16 bg-white/95 shadow-2xl border-4 border-double border-gold/50 rounded-[3rem] md:rounded-[4rem] relative">
+                  <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-silk p-4 rounded-full border-2 border-gold/30 shadow-xl">
+                    <Icons.Flower className="text-kumkum w-10 h-10 animate-sway" />
                   </div>
-
-                  <div className="max-w-lg mx-auto pt-8 px-6 relative">
-                    <Icons.Quote className="absolute -top-2 left-0 text-[#9E7E44]/10" size={50} />
-                    <p className="text-slate-500 font-serif italic text-lg md:text-xl leading-relaxed">
-                      "As the sun sets over the ocean, we begin our new horizon. Two souls, two cultures, one beautiful journey."
+                  <div className="space-y-8">
+                    <p className="font-serif italic text-2xl md:text-4xl text-yellow-950 leading-relaxed px-2 md:px-8">
+                      "While we wish we could hand-deliver this to you in person, please know that this invitation comes from the heart."
                     </p>
-                  </div>
-
-                  <div className="pt-8 flex flex-col items-center gap-3">
-                    <p className="text-[#9E7E44] font-serif italic text-2xl tracking-widest font-medium">August 20, 2026- August 24, 2026</p>
-                    <div className="flex items-center gap-3">
-                      <div className="h-px w-6 bg-[#9E7E44]/20" />
-                      <p className="text-[10px] uppercase tracking-[0.5em] text-slate-400 font-bold">Chennai • Tamil Nadu</p>
-                      <div className="h-px w-6 bg-[#9E7E44]/20" />
+                    <div className="flex justify-center items-center gap-6">
+                      <Icons.Peacock className="w-8 h-8 text-peacock opacity-40" />
+                      <div className="h-px w-20 md:w-32 bg-gold/50" />
+                      <Icons.Elephant className="w-8 h-8 text-gold opacity-30" />
                     </div>
+                    <p className="text-gray-700 text-base md:text-lg leading-relaxed max-w-xl mx-auto italic font-serif">Your presence would truly honor us and add a special warmth to our wedding celebrations. We look forward to creating beautiful memories together in the presence of our loved ones.</p>
                   </div>
-                </div>
-
-                <div className="relative inline-block">
-                  <div className="absolute -inset-4 bg-gradient-to-r from-[#9E7E44]/10 to-transparent blur-2xl rounded-full" />
-                  <div className="relative bg-white/60 backdrop-blur-xl border border-white p-8 rounded-[3.5rem] shadow-2xl">
-                    <div className="flex justify-center gap-8 md:gap-12">
-                      {Object.entries(timeLeft).map(([unit, value]) => (
-                        <div key={unit} className="flex flex-col items-center">
-                          <span className="text-3xl md:text-5xl font-serif text-[#333333]">{String(value).padStart(2, '0')}</span>
-                          <span className="text-[8px] uppercase tracking-[0.3em] text-[#9E7E44] font-bold mt-2">{unit}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-10">
-                  <button
-                    onClick={() => setActiveTab('schedule')}
-                    className="group relative px-14 py-5 overflow-hidden rounded-full transition-all duration-700 shadow-2xl active:scale-95 bg-[#333333] text-white hover:bg-[#9E7E44]"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                    <span className="relative text-[10px] font-bold tracking-[0.5em] uppercase flex items-center gap-3">
-                      View Details <Icons.ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                    </span>
-                  </button>
                 </div>
               </div>
-            );
-          case 'schedule':
-            return (
-              <div className="animate-in space-y-12 pb-24 text-center">
-                <div className="flex flex-col items-center pt-8">
-                  <CoupleLogo className="w-32 h-32 mb-8" />
-                  <h2 className="text-5xl font-serif text-[#333333] tracking-tight">The Itinerary</h2>
-                  <div className="flex items-center gap-3 mt-4">
-                    <div className="h-px w-10 bg-gradient-to-r from-transparent to-[#9E7E44]/30" />
-                    <Icons.Heart className="text-[#9E7E44]/40" size={14} />
-                    <div className="h-px w-10 bg-gradient-to-l from-transparent to-[#9E7E44]/30" />
+            )}
+
+            {activeTab === 'schedule' && (
+              <div className="animate-in space-y-16">
+                <div className="flex flex-col items-center">
+                  <div className="flex gap-4 mb-2">
+                    <Icons.Peacock className="w-12 h-12 text-peacock opacity-20" />
+                    <Icons.Elephant className="w-12 h-12 text-gold opacity-20" />
                   </div>
+                  <h2 className="font-traditional text-3xl md:text-4xl text-kumkum tracking-[0.4em] uppercase border-b-2 border-gold pb-4">The Sacred Itinerary</h2>
                 </div>
 
-                <div className="grid grid-cols-1 gap-8">
-                  {events.map((event) => (
-                    <div key={event.id} className="group relative bg-white/60 backdrop-blur-xl p-10 rounded-[3rem] border border-white/50 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-700 overflow-hidden">
-                      <div className="absolute -right-16 -top-16 text-[#9E7E44]/5 group-hover:text-[#9E7E44]/10 transition-colors">
-                        {React.cloneElement(event.icon, { size: 150 })}
-                      </div>
-                      <div className="relative flex flex-col md:flex-row gap-10 items-center md:items-start text-center md:text-left z-10">
-                        <div className="w-20 h-20 bg-gradient-to-br from-[#F8F5F2] to-white rounded-[2rem] flex items-center justify-center border border-[#9E7E44]/10 text-[#9E7E44] shadow-inner">
-                          {React.cloneElement(event.icon, { size: 32 })}
+                <div className="grid gap-10">
+                  {eventList.map(e => (
+                    <div key={e.id} className={`group p-8 md:p-10 rounded-[2.5rem] md:rounded-[3rem] border-2 text-left transition-all hover:scale-[1.03] ${e.featured ? 'border-kumkum bg-white shadow-[0_30px_60px_-15px_rgba(179,0,0,0.15)]' : 'border-gold/30 bg-white/90 backdrop-blur-sm shadow-xl'}`}>
+                      <div className="flex flex-col md:flex-row justify-between items-center gap-6 md:gap-8">
+                        <div className="flex items-center gap-6 md:gap-8 w-full md:w-auto">
+                          <div className={`p-4 md:p-6 rounded-2xl md:rounded-3xl shadow-sm transition-transform group-hover:rotate-6 ${e.featured ? 'bg-kumkum text-white' : 'bg-gold/10 text-gold'}`}>
+                            {e.icon}
+                          </div>
+                          <div>
+                            <p className="text-[10px] font-bold text-gold uppercase tracking-[0.3em]">{e.date}</p>
+                            <h3 className={`text-2xl md:text-3xl font-serif mt-1 ${e.featured ? 'text-kumkum' : 'text-gray-800'}`}>{e.title}</h3>
+                            {e.note && <p className="text-[10px] text-peacock font-bold uppercase mt-1 tracking-[0.3em]">{e.note}</p>}
+                          </div>
                         </div>
-                        <div className="flex-1 space-y-6">
-                          <div className="space-y-1">
-                            <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-[#9E7E44]">{event.theme}</span>
-                            <h3 className="text-3xl font-serif text-[#333333]">{event.title}</h3>
-                            <p className="text-slate-400 font-serif italic text-lg">{event.subtitle}</p>
-                          </div>
-
-                          <div className="flex flex-wrap justify-center md:justify-start gap-6 text-slate-500 text-sm font-medium">
-                            <div className="flex items-center gap-2">
-                              <Icons.Calendar size={16} className="text-[#9E7E44]" />
-                              <span className="tracking-wide">{event.date}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Icons.Clock size={16} className="text-[#9E7E44]" />
-                              <span className="tracking-wide">{event.time}</span>
-                            </div>
-                            <div className="flex items-start gap-2 max-w-xs">
-                              <Icons.MapPin size={16} className="text-[#9E7E44] flex-shrink-0 mt-0.5" />
-                              <span className="leading-relaxed">{event.venue}</span>
-                            </div>
-                          </div>
-
-                          {event.mapUrl && event.mapUrl !== '#' && (
-                            <a href={event.mapUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.4em] text-slate-400 hover:text-[#9E7E44] transition-all group/btn">
-                              View On Map <Icons.ExternalLink size={12} className="group-hover/btn:scale-110 transition-transform" />
-                            </a>
-                          )}
+                        <div className="md:text-right bg-silk/80 p-5 md:p-6 rounded-3xl w-full md:w-64 shadow-inner">
+                          <p className="flex items-center md:justify-end gap-3 text-sm md:text-base text-gray-500 font-semibold"><Icons.Clock size={16} className="text-gold" /> {e.time}</p>
+                          <p className="flex items-center md:justify-end gap-3 text-sm md:text-base text-gray-700 mt-2"><Icons.MapPin size={16} className="text-gold" /> {e.venue}</p>
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
-            );
-          case 'rsvp':
-            if (isSubmitted) {
-              return (
-                <div className="animate-in max-w-md mx-auto bg-white/95 backdrop-blur-md p-16 rounded-[4rem] border border-[#9E7E44]/20 shadow-2xl text-center space-y-8">
-                  <div className="w-20 h-20 bg-gradient-to-br from-[#F8F5F2] to-white text-[#9E7E44] rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl">
-                    <Icons.Check size={40} />
-                  </div>
-                  <h2 className="text-4xl font-serif text-[#333333]">With Gratitude</h2>
-                  <p className="text-slate-500 font-serif italic text-lg leading-relaxed">Your presence is the greatest gift. We have registered your response and await your arrival in Chennai.</p>
-                  <button onClick={() => { setIsSubmitted(false); setActiveTab('home'); }} className="text-[10px] uppercase tracking-[0.5em] font-bold text-[#9E7E44] border-b border-[#9E7E44]/10 hover:border-[#9E7E44] pb-1 transition-all">Return Home</button>
-                </div>
-              );
-            }
-            return (
-              <div className="animate-in max-w-2xl mx-auto bg-white/70 backdrop-blur-3xl p-10 md:p-16 rounded-[4rem] border border-white/80 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] space-y-12">
-                <div className="text-center space-y-3">
-                  <div className="inline-flex items-center gap-3 mb-1">
-                    <div className="h-px w-8 bg-[#9E7E44]/20" />
-                    <Icons.Flower2 size={20} className="text-[#9E7E44]/40" />
-                    <div className="h-px w-8 bg-[#9E7E44]/20" />
-                  </div>
-                  <h2 className="text-5xl font-serif text-[#333333]">R.S.V.P</h2>
-                  <p className="text-[#9E7E44] font-serif italic text-lg">Kindly respond by June 15, 2026</p>
-                </div>
+            )}
 
-                {errorMessage && (
-                  <div className="bg-red-50 text-red-500 p-5 rounded-2xl flex items-center gap-4 text-sm font-medium border border-red-100 animate-pulse">
-                    <Icons.AlertCircle size={18} /> {errorMessage}
+            {activeTab === 'rsvp' && (
+              <div className="animate-in max-w-2xl mx-auto">
+                {isSubmitted ? (
+                  <div className="bg-white p-12 md:p-20 rounded-[3rem] md:rounded-[5rem] shadow-2xl text-center space-y-8 border-4 border-double border-gold/40">
+                    <div className="w-24 h-24 md:w-32 md:h-32 bg-silk text-peacock rounded-full flex items-center justify-center mx-auto shadow-2xl border-2 border-gold/20">
+                      <Icons.Check size={48} />
+                    </div>
+                    <h2 className="text-4xl md:text-5xl font-serif text-kumkum">Namaste & Gratitude</h2>
+                    <p className="text-gray-700 font-serif italic text-xl md:text-2xl leading-relaxed px-4">Your response has been received. Your presence will make our union truly auspicious and joyous.</p>
+                    <button onClick={() => setIsSubmitted(false)} className="text-gold font-bold uppercase tracking-widest text-xs border-b border-gold pb-1">Submit another response</button>
                   </div>
+                ) : (
+                  <form onSubmit={handleRsvp} className="bg-white/95 backdrop-blur-2xl p-8 md:p-16 rounded-[3rem] md:rounded-[4rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] border-t-[12px] border-kumkum space-y-10 md:space-y-12 text-left relative overflow-hidden">
+                    <Icons.Elephant className="absolute -right-20 -bottom-20 w-64 h-64 opacity-[0.04] rotate-12 pointer-events-none" />
+                    <Icons.Peacock className="absolute -left-16 -top-16 w-48 h-48 opacity-[0.04] rotate-45 pointer-events-none" />
+
+                    <div className="text-center space-y-2">
+                      <h2 className="text-5xl md:text-6xl font-serif text-kumkum">R.S.V.P</h2>
+                      <p className="font-traditional text-gold text-xs tracking-[0.5em] uppercase font-bold italic">Grace our celebration</p>
+                    </div>
+
+                    <div className="space-y-8 md:space-y-10">
+                      <div className="relative">
+                        <label className="text-[10px] uppercase tracking-[0.4em] font-bold text-gold mb-3 block ml-4">Guest Full Name</label>
+                        <input required className="w-full p-5 md:p-6 bg-silk/40 rounded-[2rem] md:rounded-[2.5rem] border-2 border-transparent focus:border-gold/50 focus:bg-white outline-none transition-all text-lg md:text-xl font-serif shadow-inner" value={rsvpData.name} onChange={e => setRsvpData({ ...rsvpData, name: e.target.value })} placeholder="How shall we address you?" />
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                        <div>
+                          <label className="text-[10px] uppercase tracking-[0.4em] font-bold text-gold mb-3 block ml-4">Total Attending</label>
+                          <select className="w-full p-5 md:p-6 bg-silk/40 rounded-[2rem] md:rounded-[2.5rem] border-none outline-none font-bold text-gray-700 shadow-inner appearance-none text-center" value={rsvpData.guests} onChange={e => setRsvpData({ ...rsvpData, guests: e.target.value })}>
+                            {[1, 2, 3, 4, 5, 6, 7, 8].map(n => <option key={n} value={n}>{n} {n === 1 ? 'Guest' : 'Guests'}</option>)}
+                          </select>
+                        </div>
+                        <div>
+                          <label className="text-[10px] uppercase tracking-[0.4em] font-bold text-gold mb-3 block ml-4">Contact Detail</label>
+                          <input required className="w-full p-5 md:p-6 bg-silk/40 rounded-[2rem] md:rounded-[2.5rem] border-none outline-none shadow-inner" placeholder="Phone or Email" value={rsvpData.phone} onChange={e => setRsvpData({ ...rsvpData, phone: e.target.value })} />
+                        </div>
+                      </div>
+
+                      <div className="space-y-5">
+                        <label className="text-[10px] uppercase tracking-[0.4em] font-bold text-gold block ml-4">Ceremonies Joining</label>
+                        <div className="grid grid-cols-1 gap-4">
+                          {eventList.map(e => (
+                            <label key={e.id} className={`flex items-center justify-between p-5 md:p-6 rounded-[1.5rem] md:rounded-[2rem] cursor-pointer transition-all border-2 ${rsvpData.events[e.id] ? 'bg-gold/5 border-gold shadow-md' : 'bg-gray-50/50 border-transparent opacity-60'}`}>
+                              <div className="flex items-center gap-4">
+                                <span className="opacity-40">{e.icon}</span>
+                                <span className="text-sm md:text-base font-bold text-gray-800">{e.title}</span>
+                              </div>
+                              <input type="checkbox" checked={rsvpData.events[e.id]} onChange={() => setRsvpData({ ...rsvpData, events: { ...rsvpData.events, [e.id]: !rsvpData.events[e.id] } })} className="w-6 h-6 md:w-7 md:h-7 rounded-full accent-kumkum" />
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <button type="submit" disabled={isSubmitting} className="w-full py-6 md:py-7 bg-kumkum text-white rounded-[2rem] md:rounded-[2.5rem] font-bold tracking-[0.4em] md:tracking-[0.5em] uppercase text-[10px] md:text-xs hover:bg-red-900 transition-all shadow-[0_20px_40px_-10px_rgba(179,0,0,0.3)] transform active:scale-[0.97] mt-4 flex justify-center items-center">
+                      {isSubmitting ? <Icons.Loader size={24} /> : 'Send Blessings & RSVP'}
+                    </button>
+                  </form>
                 )}
-
-                <form className="space-y-10" onSubmit={handleSubmitRsvp}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="space-y-2 text-left">
-                      <label className="text-[9px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-6">Full Name</label>
-                      <input type="text" required value={rsvpData.name} onChange={(e) => setRsvpData({ ...rsvpData, name: e.target.value })} className="w-full p-6 bg-[#F8F5F2]/50 rounded-[2rem] border border-transparent outline-none focus:bg-white focus:border-[#9E7E44]/20 focus:ring-8 focus:ring-[#9E7E44]/5 transition-all font-serif text-lg" placeholder="Guest Name" />
-                    </div>
-                    <div className="space-y-2 text-left">
-                      <label className="text-[9px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-6">Contact Number</label>
-                      <input type="tel" required value={rsvpData.phone} onChange={(e) => setRsvpData({ ...rsvpData, phone: e.target.value })} className="w-full p-6 bg-[#F8F5F2]/50 rounded-[2rem] border border-transparent outline-none focus:bg-white focus:border-[#9E7E44]/20 focus:ring-8 focus:ring-[#9E7E44]/5 transition-all font-serif text-lg" placeholder="Mobile Number" />
-                    </div>
-                  </div>
-
-                  <div className="space-y-3 text-left">
-                    <label className="text-[9px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-6">Guest Count</label>
-                    <div className="flex items-center justify-between p-5 bg-[#F8F5F2]/50 rounded-[2rem]">
-                      <div className="flex items-center gap-4 ml-6 text-slate-500">
-                        <Icons.Users size={20} className="text-[#9E7E44]" />
-                        <span className="text-sm font-medium">Total attending</span>
-                      </div>
-                      <div className="flex items-center gap-6 mr-4">
-                        <button type="button" onClick={() => adjustGuests(-1)} className="w-10 h-10 rounded-xl bg-white border border-[#9E7E44]/10 flex items-center justify-center text-[#9E7E44] hover:bg-[#333333] hover:text-white transition-all shadow-sm"><Icons.Minus size={16} /></button>
-                        <span className="text-2xl font-serif text-[#333333] w-6 text-center">{rsvpData.guests}</span>
-                        <button type="button" onClick={() => adjustGuests(1)} className="w-10 h-10 rounded-xl bg-white border border-[#9E7E44]/10 flex items-center justify-center text-[#9E7E44] hover:bg-[#333333] hover:text-white transition-all shadow-sm"><Icons.Plus size={16} /></button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-5 text-left">
-                    <label className="text-[9px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-6">Ceremonies Joining</label>
-                    <div className="grid grid-cols-1 gap-3">
-                      {events.map((event) => (
-                        <button key={event.id} type="button" onClick={() => setRsvpData({ ...rsvpData, events: { ...rsvpData.events, [event.id]: !rsvpData.events[event.id] } })} className={`w-full flex items-center justify-between p-5 rounded-[2rem] border-2 transition-all duration-700 ${rsvpData.events[event.id] ? 'bg-white border-[#9E7E44]/30 shadow-xl' : 'bg-transparent border-transparent opacity-40 hover:opacity-70'}`}>
-                          <div className="flex items-center gap-4 text-left">
-                            <div className={`p-3 rounded-[1.2rem] ${rsvpData.events[event.id] ? 'bg-[#F8F5F2] text-[#9E7E44]' : 'bg-slate-100 text-slate-400'}`}>
-                              {React.cloneElement(event.icon, { size: 20 })}
-                            </div>
-                            <div>
-                              <p className="font-bold text-[10px] tracking-[0.2em] uppercase text-[#333333]">{event.title}</p>
-                              <p className="text-[9px] text-slate-400 mt-0.5">{event.date}</p>
-                            </div>
-                          </div>
-                          <div className={`w-7 h-7 rounded-full border-2 flex items-center justify-center transition-colors ${rsvpData.events[event.id] ? 'bg-[#9E7E44] border-[#9E7E44] text-white' : 'border-slate-200'}`}>
-                            {rsvpData.events[event.id] && <Icons.Check size={14} strokeWidth={3} />}
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="space-y-3 text-left">
-                    <label className="text-[9px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-6">Share a Blessing or Message</label>
-                    <textarea value={rsvpData.message} onChange={(e) => setRsvpData({ ...rsvpData, message: e.target.value })} className="w-full p-6 bg-[#F8F5F2]/50 rounded-[2.5rem] border border-transparent outline-none focus:bg-white focus:border-[#9E7E44]/20 focus:ring-8 focus:ring-[#9E7E44]/5 transition-all font-serif text-lg h-36 resize-none" placeholder="We'd love to hear from you..." />
-                  </div>
-
-                  <button type="submit" disabled={isSubmitting} className="group relative w-full py-6 bg-[#333333] text-white rounded-[2.5rem] font-bold text-[11px] uppercase tracking-[0.5em] hover:bg-[#9E7E44] transition-all duration-700 shadow-xl flex items-center justify-center gap-4 disabled:opacity-50 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                    {isSubmitting ? <Icons.Loader2 className="animate-spin" size={20} /> : "Send RSVP"}
-                  </button>
-                </form>
               </div>
-            );
-          default: return null;
-        }
-      };
+            )}
+          </main>
 
-      return (
-        <div className="min-h-screen bg-[#F8F5F2] pb-64 selection:bg-[#9E7E44]/20 font-sans overflow-x-hidden">
-          {/* Decorative Floating Petals */}
-          <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-            <FloatingPetal left={10} delay={0} duration={15} />
-            <FloatingPetal left={30} delay={5} duration={18} />
-            <FloatingPetal left={50} delay={2} duration={20} />
-            <FloatingPetal left={70} delay={8} duration={14} />
-            <FloatingPetal left={90} delay={4} duration={22} />
+          {/* South Indian Animal Elements (Fixed Footer Decorations) */}
+          <div className="fixed bottom-36 left-0 right-0 pointer-events-none flex justify-between px-10 md:px-16 opacity-[0.06] z-0">
+            <Icons.Elephant className="w-32 h-32 md:w-40 md:h-40 transform -scale-x-100" />
+            <Icons.Elephant className="w-32 h-32 md:w-40 md:h-40" />
           </div>
 
-          <div className="fixed inset-0 pointer-events-none overflow-hidden z-10">
-            <div className="absolute top-0 right-0 w-[80vw] h-[80vw] bg-gradient-to-bl from-[#9E7E44]/10 to-transparent rounded-full blur-[150px] opacity-40" />
-            <div className="absolute bottom-0 left-0 w-[80vw] h-[80vw] bg-gradient-to-tr from-[#9E7E44]/10 to-transparent rounded-full blur-[150px] opacity-40" />
-          </div>
-
-          <div className="relative max-w-5xl mx-auto px-6 pt-16 md:pt-24 z-20">
-            <nav className="fixed bottom-10 left-1/2 -translate-x-1/2 glass-nav p-2 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.15)] z-[110] flex items-center gap-1">
-              {['home', 'schedule', 'rsvp'].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => { setActiveTab(tab); setShowAdminPanel(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className={`px-8 md:px-12 py-3 rounded-full text-[9px] font-bold uppercase tracking-[0.4em] transition-all duration-700 ${activeTab === tab ? 'bg-[#333333] text-white shadow-xl scale-105' : 'text-slate-400 hover:text-[#333333] hover:bg-white/50'}`}
-                >
-                  {tab === 'schedule' ? 'Details' : tab}
-                </button>
-              ))}
-            </nav>
-
-            <main className="min-h-[70vh]">
-              {renderContent()}
-            </main>
-
-            <footer className="mt-40 text-center space-y-10 pb-20">
-              <div className="flex justify-center items-center gap-6 opacity-20">
-                <div className="h-[0.5px] w-20 bg-gradient-to-r from-transparent to-[#333333]" />
-                <Icons.Heart size={16} className="fill-[#333333]" />
-                <div className="h-[0.5px] w-20 bg-gradient-to-l from-transparent to-[#333333]" />
-              </div>
-              <div className="space-y-3">
-                <p className="font-serif italic text-slate-400 text-2xl">With love, forever after.</p>
-                <p className="text-[10px] tracking-[0.5em] uppercase text-slate-300 font-bold">Rishi & Marilyn • 2026</p>
-              </div>
-              <button
-                onClick={() => { setShowAdminPanel(!showAdminPanel); if (!showAdminPanel) setActiveTab('admin'); }}
-                className="text-[8px] text-slate-200 hover:text-[#9E7E44] transition-all uppercase tracking-[0.4em] font-bold flex items-center gap-2 mx-auto px-3 py-2 hover:bg-white/30 rounded-full"
-              >
-                <Icons.ShieldCheck size={12} /> Host Portal
+          <nav className="fixed bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 glass-nav p-2 rounded-full shadow-[0_25px_60px_rgba(0,0,0,0.25)] z-[100] flex gap-2 md:gap-3 max-w-[90vw] overflow-x-auto no-scrollbar">
+            {[
+              { id: 'home', label: 'Home' },
+              { id: 'schedule', label: 'Itinerary' },
+              { id: 'rsvp', label: 'RSVP' }
+            ].map(t => (
+              <button key={t.id} onClick={() => { setActiveTab(t.id); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className={`px-8 md:px-14 py-3 md:py-4 rounded-full text-[10px] md:text-[11px] font-bold uppercase tracking-[0.3em] md:tracking-[0.4em] transition-all duration-700 whitespace-nowrap ${activeTab === t.id ? 'bg-kumkum text-white shadow-lg scale-105' : 'text-gold hover:bg-gold/10'}`}>
+                {t.label}
               </button>
-            </footer>
-          </div>
+            ))}
+          </nav>
+
+          <footer className="mt-28 py-20 text-center opacity-50 relative z-10 px-6">
+            <div className="flex justify-center gap-6 md:gap-10 mb-6">
+              <div className="h-px w-16 md:w-20 bg-gold mt-5" />
+              <Icons.Ganesh className="w-10 h-10 text-kumkum" />
+              <div className="h-px w-16 md:w-20 bg-gold mt-5" />
+            </div>
+            <p className="font-traditional text-[10px] md:text-xs tracking-[0.5em] text-gold uppercase font-bold">Rishi & Marilyn • Two Souls, One Journey</p>
+            <p className="font-serif italic text-gray-500 mt-4 text-sm">Chennai, 2026</p>
+          </footer>
         </div>
       );
     };
