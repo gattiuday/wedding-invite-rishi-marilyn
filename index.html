@@ -93,9 +93,7 @@
   <script type="text/babel">
     // --- 1. ICONS (Inline SVGs) ---
     const Icon = ({ path, className, strokeWidth = 2, size = 24, fill = "none" }) => (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width={size} height={size}
+      <sv        xmlns="http://www.w3.org/2000/svht={size}
         viewBox="0 0 24 24"
         fill={fill}
         stroke="currentColor"
@@ -110,24 +108,24 @@
 
     const Icons = {
       Music: (props) => <Icon {...props} path={<><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></>} />,
-      Flower2: (props) => <Icon {...props} path={<><path d="M12 5a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3-3v18m0-13a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3 8a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3" /></>} />,
-      GlassWater: (props) => <Icon {...props} path={<><path d="M15.2 22a3 3 0 0 0-2.2-5" /><path d="M9 22a3 3 0 0 1 2.2-5" /><path d="M2 7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-6.1a2 2 0 0 0-1.8.9l-2.7 5.4a2 2 0 0 1-1.8.9H5a2 2 0 0 1-2-2z" /></>} />,
-      Calendar: (props) => <Icon {...props} path={<><rect width="18" height="18" x="3" y="4" rx="2" ry="2" /><line x1="16" x2="16" y1="2" y2="6" /><line x1="8" x2="8" y1="2" y2="6" /><line x1="3" x2="21" y1="10" y2="10" /></>} />,
+      Flower2: (props) =>  <Icon {...props} path={<><path d="M12 5a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3-3v18m0-13a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3 8a3 3 0 1 1 3 3m-3-3a3 3 0  1 0-3 3" /></>} />,
+      GlassWater: (props) => <Icon {...props} path={<><path d="M15.2 22a3 3 0 0 0-2.2-5" /><path d="M9 22a3 3 0 0 1 2.2-5" /><p          a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-6.1a2 2 0 0 0-1.8.9l-2.7 5.4a2 2 0 0 1-1.8.9H5a2 2 0 0 1-2-2z" /></>} />,
+      Calendar: (props) => <Icon {...props} path={<><r ect width="18" height="18" x="3" y="4" rx="2" ry="2" /><line x1="16" x2="16" y1="2" y2="6" /><line x1="8" x2="8" y1="2" y2="6" /><line x1="3"           "10" y2="10" /></>} />,
       Clock: (props) => <Icon {...props} path={<><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></>} />,
-      MapPin: (props) => <Icon {...props} path={<><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></>} />,
-      ExternalLink: (props) => <Icon {...props} path={<><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></>} />,
-      Sparkles: (props) => <Icon {...props} path={<><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L12 3Z" /></>} />,
-      ChevronRight: (props) => <Icon {...props} path={<path d="m9 18 6-6-6-6" />} />,
-      ShieldCheck: (props) => <Icon {...props} path={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" /><path d="m9 12 2 2 4-4" /></>} />,
-      Phone: (props) => <Icon {...props} path={<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />} />,
-      Users: (props) => <Icon {...props} path={<><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></>} />,
-      Plus: (props) => <Icon {...props} path={<><path d="M5 12h14" /><path d="M12 5v14" /></>} />,
+      MapPin: (props) => <Icon {...props} path={<><path d= "M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><ci        12" cy="10" r="3" /></>} />,
+      ExternalLink: (props) =>          props} path={<><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></>} />,
+      Sparkles: (props) => <Icon {...props} path={<><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1  1.2        12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L12 3Z        />,
+      ChevronRight: (props) => <Icon {...props} path={<path d="m9 18          >} />,
+      ShieldCheck: (props) => <Icon {...props}  pat        h d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" /><path d="m9 12 2 2 4-4" /></>} />,
+      Phone: (props) => <Icon {...props} path={<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79  0 0 1-8.63-3.07 19.5 19.5 0 0 1 -6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a 2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0  2.81.7A2 2 0 0 1 22 16.92z" />} />,
+      Users: (props) => <Icon {...props} path={<><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d= "M22 21v-2a4 4 0 0 0-3-3.87" /><path  d="M16 3.13a4 4 0 0 1 0 7.75" /></> } />,
+      Plus: (props) => <Icon {.. .props} path={<><path d="M5 12h14" /><path d="M12 5v14" /></>} />,
       Minus: (props) => <Icon {...props} path={<path d="M5 12h14" />} />,
-      Check: (props) => <Icon {...props} path={<path d="M20 6 9 17l-5-5" />} />,
-      Loader2: (props) => <Icon {...props} path={<path d="M21 12a9 9 0 1 1-6.219-8.56" />} className={props.className + " animate-spin"} />,
+      Check:  (props) => <Icon {...props} path={<path d="M20 6 9 17l-5-5" />} />,
+      Loader2: (props) => <Icon {...props} path={<path d="M21 12a9 9 0 1 1-6.219-8.56" />} className={props.classN ame + " animate-spin"} />,
       AlertCircle: (props) => <Icon {...props} path={<><circle cx="12" cy="12" r="10" /><line x1="12" x2="12" y1="8" y2="12" /><line x1="12" x2="12.01" y1="16" y2="16" /></>} />,
       Heart: (props) => <Icon {...props} path={<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />} />,
-      Quote: (props) => <Icon {...props} path={<><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" /><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" /></>} />
+      Quote: (pops) => <Icon {...props} path={<><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" /><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" /></>} />
     };
 
     // --- 2. CONFIG & GLOBALS ---
@@ -147,15 +145,15 @@
     };
 
     // Use window.__firebase_config if injected, otherwise fallback
-    const finalConfig = typeof window.__firebase_config !== 'undefined'
-      ? JSON.parse(window.__firebase_config)
+    const finalConfig = typeof window.__fireb ase_config !== 'undefined'
+      ? JSON.par            irebase_config)
       : firebaseConfig;
 
-    firebase.initializeApp(finalConfig);
+    fir            izeApp(finalConfig);
     const auth = firebase.auth();
-    const db = firebase.firestore();
+    const db =             store();
     // Initialize Analytics if supported
-    if (firebase.analytics && typeof firebase.analytics.isSupported === 'function') {
+    if (fire            s && typeof firebase.analytics.isSupported === 'function') {
       firebase.analytics.isSupported().then((isSupported) => {
         if (isSupported) firebase.analytics();
       });
@@ -170,7 +168,7 @@
     // Floating Petal Component
     const FloatingPetal = ({ delay, left, duration }) => (
       <div
-        className="absolute pointer-events-none text-[#9E7E44]/20 animate-petal-fall"
+        className="absolute pointer-          text-[#9E7E44]/20 an          fall"
         style={{
           left: `${left}%`,
           animationDelay: `${delay}s`,
@@ -197,8 +195,7 @@
       const [rsvpData, setRsvpData] = useState({
         name: '',
         phone: '',
-        guests: 1,
-        events: { welcome: true, haldi_21: true, haldi: true, wedding: true, reception: true },
+        gue      events: { welcome: true, haldi_21: true, haldi: true, wedding: true, reception: true },
         message: ''
       });
 
@@ -206,118 +203,84 @@
       useEffect(() => {
         const initAuth = async () => {
           try {
-            if (typeof window.__initial_auth_token !== 'undefined' && window.__initial_auth_token) {
-              await auth.signInWithCustomToken(window.__initial_auth_token);
+            if (typ            initial_auth_token !== 'undefined' && window.__initial_auth_token) {
+                       .signInWithCustomToken(window.__initial_auth_token);
             } else {
               await auth.signInAnonymously();
             }
           } catch (e) {
-            console.warn("Auth failed (likely due to placeholder config). Utilizing mock user for display.", e);
-            // Fallback for UI testing
-            setUser({ uid: 'guest-mock', isAnonymous: true });
-          } finally {
+            consoh failed (likely due to placeholder conf              mock user for display.", e);
+            // Fallback for                   'guest-mock', isAnonym                      } finally {
             setLoading(false);
-          }
-        };
-        initAuth();
-        const unsubscribe = auth.onAuthStateChanged(setUser);
-        return () => unsubscribe();
+                            initAuth();
+        const unsubscribe = auth.onAuthStateC                      return () => unsubscribe();
       }, []);
 
       // 2. Data Sync
       useEffect(() => {
-        if (!user || !showAdminPanel || adminPassword !== 'rishi2026') return;
+        if (!user                l || adm                shi2026') return;
 
-        try {
-          const rsvpsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('rsvps');
+                      const rsvpsRef = db.collection('artifa                  ction('public').doc('data').collection('rsvps');
           const unsubscribe = rsvpsRef.onSnapshot(
-            (snapshot) => {
-              const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-              data.sort((a, b) => (b.submittedAt?.seconds || 0) - (a.submittedAt?.seconds || 0));
-              setAllRsvps(data);
+            (sn                       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                            > (b.submittedAt?.seconds || 0) - (a.submittedAt?.seconds                    AllRsvps(data);
             },
-            (error) => console.error("Firestore sync error:", error)
+            (error)                     e sync error:", error)
           );
-          return () => unsubscribe();
-        } catch (err) {
-          console.error("Firestore error (likely perm or config):", err);
-        }
-      }, [user, showAdminPanel, adminPassword]);
+          return () => unsubscrib                     {
+          console.error("Firestore error (likely perm or config):", e                  , [user                  nPassword]);
 
       // 3. Countdown logic
       useEffect(() => {
-        const targetDate = new Date('August 22, 2026 16:00:00').getTime();
-        const timer = setInterval(() => {
+        const targetDat                st 22, 2                Time();
+        co                erval(() => {
           const now = new Date().getTime();
-          const distance = targetDate - now;
-          if (distance < 0) {
-            setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-          } else {
+          const distance = targe                   if (distance < 0) {
+            setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds:                    {
             setTimeLeft({
               days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-              hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+              hours                   % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
               minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-              seconds: Math.floor((distance % (1000 * 60)) / 1000),
+                        floor((distance % (1000 * 60)) / 1000),
             });
           }
-        }, 1000);
-        return () => clearInterval(timer);
-      }, []);
-
-      const events = [
+                        ret                erval(timer);
+                    onst events = [
         {
           id: 'welcome',
-          title: 'Welcome & Bachelor Party (By Invite Only)',
-          subtitle: 'The Beginning of Celebration',
-          date: 'August 20, 2026',
+          title: '🍸 Welcome & Bachelor Party (                        subtitle: 'The Beginning of  Celebrati                    st 20, 2026',
           time: '7:00 PM',
-          venue: 'Noci Adante, Chennai',
-          mapUrl: 'https://www.google.com/maps/search/?api=1&query=Noci+Adante+Chennai',
-          icon: <Icons.GlassWater strokeWidth={1.5} />,
+          ve                               mapUrl: 'https://www.google.com/maps/search/?api=1&q                             icon: <Icons.GlassWater strokeWidth={1.5} />,
           theme: 'Dress to impress'
-        },
-        {
-          id: 'haldi_21',
-          title: 'Patti and Athai Nalungu',
-          subtitle: 'Traditional Ceremony',
-          date: 'August 21, 2026',
+        },                    haldi_2                  ✨ Pa                ngu',
+                  'Traditional Ceremony',
+                ugust 21, 2026',
           time: '6:00 PM - 10:00 PM',
           venue: 'Venue Not Decided',
-          mapUrl: '#',
-          icon: <Icons.Sparkles strokeWidth={1.5} />,
-          theme: 'Yellow & Bright'
-        },
-        {
+                             icon: <Icons.Sparkles strokeWidth={1.5} />,
+          theme: 'Yellow & Brig                   {
           id: 'haldi',
-          title: 'Haldi & Mehndi',
-          subtitle: 'The Saffron Celebration',
+          title: '🌻 Haldi & Mehndi'                  'The Saffron Celebration',
           date: 'August 22, 2026',
           time: '4:00 PM',
-          venue: 'Blue House, ECR, Chennai',
-          mapUrl: 'https://www.google.com/maps/search/?api=1&query=Blue+House+Chennai',
-          icon: <Icons.Music strokeWidth={1.5} />,
-          theme: 'Traditional Silk'
-        },
+          venue: 'Blue House, ECR                    map              ww.google.com/maps/search/?api=1&query=Blue+House+Chennai',
+                    .Music strokeWidth={1.5} />,
+          theme:                        },
         {
           id: 'wedding',
-          title: 'Wedding Ceremony',
+                  ding Ceremony',
           subtitle: 'The Auspicious Vows',
-          date: 'August 23, 2026',
-          time: '9:30 AM',
+          dat                          time: '9:30 AM',
           venue: 'The Leela Palace, Chennai',
-          mapUrl: 'https://www.google.com/maps/search/?api=1&query=The+Leela+Palace+Chennai',
-          icon: <Icons.Flower2 strokeWidth={1.5} />,
-          theme: 'Royal Heritage'
-        },
-        {
-          id: 'reception',
-          title: 'Sangeet & Cocktail',
+          mapUrl: 'https://w                  h/?api=1&query=The+Leela+Palace+Chennai',
+                        r2 strok                       theme: 'Royal Heritage                           id: 'reception',
+                     & Cocktail',
           subtitle: 'Dance & Celebration',
           date: 'August 24, 2026',
           time: '6:30 PM',
           venue: 'Pullman, Chennai',
           mapUrl: 'https://www.google.com/maps/search/?api=1&query=Pullman+Hotel+Chennai',
-          icon: <Icons.GlassWater strokeWidth={1.5} />,
+                               idth={1.5} />,
           theme: 'Starlit Evening'
         }
       ];
@@ -325,143 +288,100 @@
       const handleSubmitRsvp = async (e) => {
         e.preventDefault();
 
-        // Mock Mode Check
-        const isMockMode = finalConfig.apiKey.includes('PLACEHOLDER');
+        //s                      cludes('PLACEHOLDER');
 
-        if (!user && !isMockMode) {
-          setErrorMessage("Establishing secure connection...");
+        if (!user && !isMockMode)                        ishing secure connection...");
           return;
         }
 
         setIsSubmitting(true);
-        setErrorMessage(null);
-
-        try {
+                            try {
           if (isMockMode) {
             // Simulate network delay for Mock Mode
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            console.log("Mock RSVP Submitted:", rsvpData);
+                        lve =>                        bmitted:", rsvpData);
             setIsSubmitted(true);
-          } else {
-            // Real Firestore Submission with Timeout
-            const rsvpsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('rsvps');
+    a                      out
+            const rsvpsRef = db.collection('artifacts').                        'data').collection('rsvps');
 
-            const submitPromise = rsvpsRef.add({
-              ...rsvpData,
+            const submitPromise =                         Data,
               submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
-              uid: user ? user.uid : 'anonymous'
+                              ymous'
             });
 
             // 10s Timeout
-            const timeoutPromise = new Promise((_, reject) =>
-              setTimeout(() => reject(new Error("Request timed out. Please check your internet or Firebase config.")), 10000)
-            );
+            const timeoutP                                    setTimeout(() => reject(new Error("Request timed out. Please check your internet or Firebase config.")), 10000)
+             );
 
-            await Promise.race([submitPromise, timeoutPromise]);
+                                 timeoutPromise]);
             setIsSubmitted(true);
           }
         } catch (err) {
-          console.error("RSVP error:", err);
-          if (err.code === 'permission-denied') {
-            setErrorMessage("Access Denied: Please update Firestore Rules to 'Test Mode' in Console.");
-          } else {
-            setErrorMessage(err.message || "Unable to save RSVP. Please check connection.");
-          }
-        } finally {
-          setIsSubmitting(false);
-        }
-      };
+          console.error("RSVP error:" , err);
+          if                        {
+                           enied:                     s to 'T                  
+                                        (err.message || "Unable to save RSVP. Please check connection.                      } finally {
+          setIsSubmitting(false)                
 
-      const adjustGuests = (amount) => setRsvpData(prev => ({ ...prev, guests: Math.max(1, prev.guests + amount) }));
+      const adj                  setRsvpData(prev => ({ ...prev, guests: Math.max(1, prev.guests + amount) }));
 
-      const CoupleLogo = ({ className }) => (
-        <div className={`relative flex items-center justify-center ${className}`}>
-          <svg viewBox="0 0 100 100" className="absolute w-full h-full text-[#9E7E44] opacity-20 animate-[spin_60s_linear_infinite]">
-            <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="0.2" strokeDasharray="1 3" />
-            <path fill="none" stroke="currentColor" strokeWidth="0.3" d="M50 2 L52 48 L98 50 L52 52 L50 98 L48 52 L2 50 L48 48 Z" />
+      const CoupleLogo                        <div className={`relative flex items-center justify-center ${                     viewBox="0 0 100 100" className="absolute w-full h-full text-[#9                    pin_60s_linear_infinite]">
+            <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="0.2" str                          <path fill="none" stroke="currentColor" strokeWidth="0.3" d="M50 2 L52 48 L98 50 L52 52 L50 98 L48 52 L2 50 L48 48 Z" />
           </svg>
-          <div className="relative z-10 flex flex-col items-center justify-center bg-white/70 backdrop-blur-xl rounded-full w-[85%] h-[85%] border-2 border-[#9E7E44]/20 shadow-2xl">
-            <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent rounded-full" />
-            <span className="font-serif text-[#9E7E44] text-3xl md:text-4xl tracking-tighter leading-none select-none drop-shadow-sm">
-              R<span className="text-xl mx-[-3px] opacity-60 italic">&</span>M
-            </span>
-            <div className="h-[0.5px] w-12 bg-gradient-to-r from-transparent via-[#9E7E44]/40 to-transparent my-2" />
-            <span className="text-[8px] uppercase tracking-[0.5em] text-[#9E7E44]/60 font-bold">AUGUST 2026</span>
-          </div>
+          <div className="relative z-10 flex flex-col items-center                  /70 bac                d-full                  2 border-[#9E7E44]/20 shadow-2xl">
+            <div className="absolute inset-0 bg-g                    to-transparent rounded-full" />
+            <span className="font-serif text-[#9E7E44]                    ng-tighter leading-none select-none                       <span className="text-xl mx-[-3px] opacity-60 italic">&</span>M
+                       div className="h-[0.5px] w-12 bg-gradient-to-r from-transparent via-[#9E7E44]/40 to                          <s                    percase tracking-[0.5em] text-[#9E7E44]/60 font-bol                      </div>
         </div>
-      );
-
-      if (loading) {
-        return (
-          <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8F5F2] text-[#9E7E44]">
-            <Icons.Loader2 className="animate-spin mb-4" size={40} />
-            <p className="text-[10px] uppercase tracking-[0.4em] font-bold">Unfolding the Invitation</p>
-          </div>
-        );
-      }
-
-      const renderContent = () => {
-        if (activeTab === 'admin') {
-          if (adminPassword !== 'rishi2026') {
-            return (
-              <div className="animate-in max-w-sm mx-auto bg-white/60 backdrop-blur-md p-10 rounded-[2.5rem] border border-[#9E7E44]/20 shadow-2xl space-y-6">
-                <div className="text-center">
+                              urn (
+          <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8F5F2] te                        ader2 className="animate-spin mb-4" size={40} />
+            <p className="text-[10px] uppercase tracking-[0.4em] font-bold">Unfolding the Invitation</>                           const renderContent = () => {
+        if (activeT ab === 'admin') {
+          if (a dminPassword !== 'rishi2026') {
+                           iv class                      o bg-white/60 backdrop-blur-md p-10 round                        20 shadow-2xl space-y-6">
+                            r">
                   <Icons.ShieldCheck className="mx-auto text-[#9E7E44] mb-3" size={32} />
-                  <h2 className="text-xl font-serif text-[#333333] tracking-wide uppercase">Host Access</h2>
+                                 erif text-[#333333] tracking-wide uppercase">Host Access</h2>
                 </div>
                 <input
-                  type="password" autoFocus
-                  className="w-full p-4 bg-white/80 rounded-2xl border border-[#9E7E44]/10 outline-none text-center text-xl tracking-widest placeholder:text-slate-300"
-                  placeholder="••••"
-                  onChange={(e) => setAdminPassword(e.target.value)}
-                />
-                <p className="text-[10px] text-center text-slate-400 uppercase tracking-widest">Authorized hosts only</p>
-              </div>
+                                          className="w-full p-4 bg-white/80 rounded-2xl bo rder border-[#9E7E44]/10 outline-none text-ce ner t                            e-30 0" 
+                     placeholder="••••"
+                  onChange={                          
+                                 me="tex                        uppercase tracking-widest">A                          /div>
             );
           }
 
           const eventStats = allRsvps.reduce((acc, curr) => {
-            const guestCount = Number(curr.guests) || 0;
+                            .guests) || 0;
             if (curr.events?.welcome) acc.welcome += guestCount;
-            if (curr.events?.haldi_21) acc.haldi_21 += guestCount;
-            if (curr.events?.haldi) acc.haldi += guestCount;
-            if (curr.events?.wedding) acc.wedding += guestCount;
-            if (curr.events?.reception) acc.reception += guestCount;
-            acc.total += guestCount;
-            return acc;
-          }, { welcome: 0, haldi_21: 0, haldi: 0, wedding: 0, reception: 0, total: 0 });
+            if (curr.events?.haldi_21) acc.hal                            s?.haldi) acc.haldi += guestCount;
+            if ( curr.events?.wedding) acc.wedding  += guestCount;
+            if (cur                        = guest                      guestCou                            }, { welcome: 0, haldi_21:                         0, total: 0 });
 
           return (
-            <div className="animate-in space-y-8 pb-24 text-left">
-              <div className="bg-white/90 p-8 md:p-10 rounded-[3rem] border border-[#9E7E44]/10 shadow-xl space-y-8">
-                <h3 className="font-serif text-3xl text-[#333333]">RSVP Dashboard</h3>
+            <div className="animate-in space-y-8 pb-24 text-left">                        ite/90 p-8 md:p-10 rounded-[3                          l space-y-8">
+                                 l text-[#333333]">RSVP Dashboard</h3>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/5 text-center">
-                    <p className="text-[9px] uppercase tracking-widest text-[#9E7E44] font-bold">Total Guests</p>
-                    <p className="text-4xl font-serif text-[#333333] mt-2">{eventStats.total}</p>
+                  <div className="bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/5                               text-[9px] uppercase tracking-widest text-[#9E7E44] font-bold">Total Guests</p>
+                    <p className="text-4xl fo                              </p>
                   </div>
-                  <div className="bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/5 text-center">
-                    <p className="text-[9px] uppercase tracking-widest text-[#9E7E44] font-bold">Total Groups</p>
-                    <p className="text-4xl font-serif text-[#333333] mt-2">{allRsvps.length}</p>
-                  </div>
-                  <div className="col-span-2 bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/10 flex flex-col justify-center">
-                    <p className="text-[9px] uppercase tracking-widest text-[#9E7E44] font-bold text-center mb-4">Arrivals per Event</p>
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center text-xs">
-                        <span className="text-slate-400 uppercase tracking-tighter font-bold">Welcome (20th)</span>
+                  <div className="bg-[#F8F5F2] p-6 rou nded-3xl border border -[#9E7E44]/5 text-center">
+                    <p  c lassName="text-[9px] uppercase tracking-w                            </p>
+                              ont-                        .length                                                    n-2 bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/10 flex flex-col justify-center">
+                    <p className="text-[9px] uppercase tracking-widest text-[#9E7E44] font-bold text-center mb-4">Arrivals                         iv className="space-y-2">
+                      <div                       items-cent                                              late-40                -ti              >Welcome (20th)</span>
                         <span className="font-serif text-[#333333] text-lg">{eventStats.welcome}</span>
                       </div>
-                      <div className="flex justify-between items-center text-xs">
-                        <span className="text-slate-400 uppercase tracking-tighter font-bold">Nalungu (21st)</span>
-                        <span className="font-serif text-[#333333] text-lg">{eventStats.haldi_21}</span>
+                      <div className="flex justify            -center text-xs">
+                        <              xt-slate-400 uppercase tracking-tighter font-bold">Nalungu (21st)</span >
+                           <spa                 -[#333333] text-lg">{eventStats.haldi_21}</span>
+                      </div>
+                      <div class Nam e="flex justify-between items-center text-xs">
+                                      t-slat              acking-tig            ">Haldi</span>
+              <span className="font-serif text-[#333333] text-lg">{eventStats.haldi}</span>
                       </div>
                       <div className="flex justify-between items-center text-xs">
-                        <span className="text-slate-400 uppercase tracking-tighter font-bold">Haldi</span>
-                        <span className="font-serif text-[#333333] text-lg">{eventStats.haldi}</span>
-                      </div>
-                      <div className="flex justify-between items-center text-xs">
-                        <span className="text-slate-400 uppercase tracking-tighter font-bold">Wedding</span>
+                   n className="text-slate-400 uppercase tracking-tighter font-bold">Wedding</span>
                         <span className="font-serif text-[#333333] text-lg">{eventStats.wedding}</span>
                       </div>
                       <div className="flex justify-between items-center text-xs">
@@ -529,7 +449,7 @@
                   </div>
 
                   <div className="space-y-3">
-                    <span className="text-[10px] uppercase tracking-[0.6em] text-[#9E7E44] font-bold block mb-4">The Celebration of a Lifetime</span>
+                    <span className="text-[10px] uppercase tracking-[0.6em] text-[#9E7E44] font-bold block mb-4">✨ The Celebration of a Lifetime ✨</span>
                     <h1 className="text-6xl md:text-[8rem] font-serif text-[#333333] leading-[0.9] tracking-tighter">
                       Rishi <br />
                       <span className="italic text-[#9E7E44] font-normal text-4xl md:text-7xl">&</span> <br />
@@ -575,7 +495,7 @@
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
                     <span className="relative text-[10px] font-bold tracking-[0.5em] uppercase flex items-center gap-3">
-                      View Details <Icons.ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                      View Details 💫 <Icons.ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                     </span>
                   </button>
                 </div>
@@ -586,7 +506,7 @@
               <div className="animate-in space-y-12 pb-24 text-center">
                 <div className="flex flex-col items-center pt-8">
                   <CoupleLogo className="w-32 h-32 mb-8" />
-                  <h2 className="text-5xl font-serif text-[#333333] tracking-tight">The Itinerary</h2>
+                  <h2 className="text-5xl font-serif text-[#333333] tracking-tight">📅 The Itinerary</h2>
                   <div className="flex items-center gap-3 mt-4">
                     <div className="h-px w-10 bg-gradient-to-r from-transparent to-[#9E7E44]/30" />
                     <Icons.Heart className="text-[#9E7E44]/40" size={14} />
@@ -645,9 +565,9 @@
                   <div className="w-20 h-20 bg-gradient-to-br from-[#F8F5F2] to-white text-[#9E7E44] rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl">
                     <Icons.Check size={40} />
                   </div>
-                  <h2 className="text-4xl font-serif text-[#333333]">With Gratitude</h2>
+                  <h2 className="text-4xl font-serif text-[#333333]">🙏 With Gratitude</h2>
                   <p className="text-slate-500 font-serif italic text-lg leading-relaxed">Your presence is the greatest gift. We have registered your response and await your arrival in Chennai.</p>
-                  <button onClick={() => { setIsSubmitted(false); setActiveTab('home'); }} className="text-[10px] uppercase tracking-[0.5em] font-bold text-[#9E7E44] border-b border-[#9E7E44]/10 hover:border-[#9E7E44] pb-1 transition-all">Return Home</button>
+                  <button onClick={() => { setIsSubmitted(false); setActiveTab('home'); }} className="text-[10px] uppercase tracking-[0.5em] font-bold text-[#9E7E44] border-b border-[#9E7E44]/10 hover:border-[#9E7E44] pb-1 transition-all">🏠 Return Home</button>
                 </div>
               );
             }
@@ -659,7 +579,7 @@
                     <Icons.Flower2 size={20} className="text-[#9E7E44]/40" />
                     <div className="h-px w-8 bg-[#9E7E44]/20" />
                   </div>
-                  <h2 className="text-5xl font-serif text-[#333333]">R.S.V.P</h2>
+                  <h2 className="text-5xl font-serif text-[#333333]">💌 R.S.V.P</h2>
                   <p className="text-[#9E7E44] font-serif italic text-lg">Kindly respond by June 15, 2026</p>
                 </div>
 
@@ -725,7 +645,7 @@
 
                   <button type="submit" disabled={isSubmitting} className="group relative w-full py-6 bg-[#333333] text-white rounded-[2.5rem] font-bold text-[11px] uppercase tracking-[0.5em] hover:bg-[#9E7E44] transition-all duration-700 shadow-xl flex items-center justify-center gap-4 disabled:opacity-50 overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                    {isSubmitting ? <Icons.Loader2 className="animate-spin" size={20} /> : "Send RSVP"}
+                    {isSubmitting ? <Icons.Loader2 className="animate-spin" size={20} /> : "Send RSVP 🕊️"}
                   </button>
                 </form>
               </div>
