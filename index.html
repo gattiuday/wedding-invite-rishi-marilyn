@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rishi & Marilyn • The Wedding</title>
+  <title>Rishi & Marilyn • The Courtship</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -13,25 +13,36 @@
       theme: {
         extend: {
           colors: {
-            bg: '#F8F5F2',
-            accent: '#9E7E44',
-            textPrimary: '#333333',
-            textSecondary: '#666666',
+            bg: '#FFF8E7', // Cream/Ivory
+            deepRed: '#8B0000', // Maroon
+            gold: '#D4AF37', // Gold
+            goldLight: '#F4C430',
+            textPrimary: '#4A0404', // Dark Red/Brown
+            textSecondary: '#8B4513', // Saddle Brown
           },
           fontFamily: {
             sans: ['Inter', 'sans-serif'],
             serif: ['Playfair Display', 'serif'],
+            script: ['Great Vibes', 'cursive'],
+            royal: ['Cinzel', 'serif'],
           },
           animation: {
             'spin-slow': 'spin 60s linear infinite',
-            'petal-fall': 'petalFall linear infinite',
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'sway': 'sway 3s ease-in-out infinite',
+          },
+          backgroundImage: {
+            'mandala-pattern': "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4AF37' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
           },
           keyframes: {
-            petalFall: {
-              '0%': { transform: 'translate(0, -100px) rotate(0deg)', opacity: '0' },
-              '10%': { opacity: '0.4' },
-              '90%': { opacity: '0.4' },
-              '100%': { transform: 'translate(100px, 100vh) rotate(360deg)', opacity: '0' },
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
+            sway: {
+              '0%, 100%': { transform: 'rotate(-5deg)' },
+              '50%': { transform: 'rotate(5deg)' },
             }
           }
         }
@@ -53,46 +64,70 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
 
     body {
       font-family: 'Inter', sans-serif;
-      -webkit-font-smoothing: antialiased;
-      background-color: #F8F5F2;
+      background-color: #FFF8E7;
+      color: #4A0404;
     }
 
-    /* Custom Animations */
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #FFF8E7;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #D4AF37;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #8B0000;
+    }
+
+    .glass-panel {
+      background: rgba(255, 253, 240, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      box-shadow: 0 8px 32px 0 rgba(74, 4, 4, 0.1);
+    }
+
+    .ornate-border {
+      border: 2px solid #D4AF37;
+      outline: 4px double #D4AF37;
+      outline-offset: 4px;
+    }
+
+    .animate-in {
+      animation: revealIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
     @keyframes revealIn {
       from {
         opacity: 0;
-        transform: translateY(30px) scale(0.98);
+        transform: translateY(20px);
       }
 
       to {
         opacity: 1;
-        transform: translateY(0) scale(1);
+        transform: translateY(0);
       }
-    }
-
-    .animate-in {
-      animation: revealIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    .glass-nav {
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border: 1px solid rgba(255, 255, 255, 0.8);
     }
   </style>
 </head>
 
-<body class="bg-[#F8F5F2] text-[#333333] overflow-x-hidden selection:bg-[#9E7E44]/20">
+<body class="bg-bg text-textPrimary overflow-x-hidden selection:bg-gold/30 selection:text-deepRed">
   <div id="root"></div>
 
   <script type="text/babel">
-    // --- 1. ICONS (Inline SVGs) ---
-    const Icon = ({ path, className, strokeWidth = 2, size = 24, fill = "none" }) => (
+    // --- 1. ICONS (Lucide React) ---
+    const Icon = ({ path, className, strokeWidth = 1.5, size = 24, fill = "none" }) => (
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width={size} height={size}
@@ -110,7 +145,7 @@
 
     const Icons = {
       Music: (props) => <Icon {...props} path={<><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></>} />,
-      Flower2: (props) => <Icon {...props} path={<><path d="M12 5a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3-3v18m0-13a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3 8a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3" /></>} />,
+      Flower2: (props) => <Icon {...props} path={<><path d="M12 5a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3-3v18m0-13a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3 8a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3 8a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3" /></>} />,
       GlassWater: (props) => <Icon {...props} path={<><path d="M15.2 22a3 3 0 0 0-2.2-5" /><path d="M9 22a3 3 0 0 1 2.2-5" /><path d="M2 7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-6.1a2 2 0 0 0-1.8.9l-2.7 5.4a2 2 0 0 1-1.8.9H5a2 2 0 0 1-2-2z" /></>} />,
       Calendar: (props) => <Icon {...props} path={<><rect width="18" height="18" x="3" y="4" rx="2" ry="2" /><line x1="16" x2="16" y1="2" y2="6" /><line x1="8" x2="8" y1="2" y2="6" /><line x1="3" x2="21" y1="10" y2="10" /></>} />,
       Clock: (props) => <Icon {...props} path={<><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></>} />,
@@ -119,7 +154,6 @@
       Sparkles: (props) => <Icon {...props} path={<><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L12 3Z" /></>} />,
       ChevronRight: (props) => <Icon {...props} path={<path d="m9 18 6-6-6-6" />} />,
       ShieldCheck: (props) => <Icon {...props} path={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" /><path d="m9 12 2 2 4-4" /></>} />,
-      Phone: (props) => <Icon {...props} path={<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />} />,
       Users: (props) => <Icon {...props} path={<><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></>} />,
       Plus: (props) => <Icon {...props} path={<><path d="M5 12h14" /><path d="M12 5v14" /></>} />,
       Minus: (props) => <Icon {...props} path={<path d="M5 12h14" />} />,
@@ -133,9 +167,6 @@
     // --- 2. CONFIG & GLOBALS ---
     const { useState, useEffect } = React;
 
-    // Firebase Configuration (Compat Mode)
-    // PLACEHOLDER CONFIG: Replace with your actual details from console.firebase.google.com
-    // PLACEHOLDER CONFIG: Replace with your actual details from console.firebase.google.com
     const firebaseConfig = {
       apiKey: "AIzaSyAmqq8gwFTvpFH3rVfL43xurnbU7tWh0h4",
       authDomain: "kumaranwedding-b59d6.firebaseapp.com",
@@ -146,7 +177,6 @@
       measurementId: "G-XKS7R1C63C"
     };
 
-    // Use window.__firebase_config if injected, otherwise fallback
     const finalConfig = typeof window.__firebase_config !== 'undefined'
       ? JSON.parse(window.__firebase_config)
       : firebaseConfig;
@@ -154,7 +184,6 @@
     firebase.initializeApp(finalConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
-    // Initialize Analytics if supported
     if (firebase.analytics && typeof firebase.analytics.isSupported === 'function') {
       firebase.analytics.isSupported().then((isSupported) => {
         if (isSupported) firebase.analytics();
@@ -167,21 +196,76 @@
 
     // --- 3. COMPONENTS ---
 
-    // Floating Petal Component
-    const FloatingPetal = ({ delay, left, duration }) => (
-      <div
-        className="absolute pointer-events-none text-[#9E7E44]/20 animate-petal-fall"
-        style={{
-          left: `${left}%`,
-          animationDelay: `${delay}s`,
-          animationDuration: `${duration}s`
-        }}
-      >
-        <Icons.Flower2 size={Math.random() * 20 + 10} strokeWidth={1} />
+    const MandalaBg = () => (
+      <div className="fixed inset-0 pointer-events-none z-0 opacity-[0.03] bg-mandala-pattern bg-[length:60px_60px]"></div>
+    );
+
+    // Decorative Components
+    const HangingBell = ({ className, delay = "0s" }) => (
+      <div className={`absolute top-0 pointer-events-none ${className}`} style={{ animationDelay: delay }}>
+        <div className="flex flex-col items-center origin-top animate-sway">
+          {/* Chain */}
+          <div className="w-0.5 h-16 md:h-24 bg-gradient-to-b from-gold to-deepRed/50"></div>
+          {/* Bell */}
+          <div className="relative text-gold drop-shadow-md">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" className="transform -translate-y-1">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm0 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+            </svg>
+          </div>
+          {/* Floral tip */}
+          <div className="w-1.5 h-1.5 rounded-full bg-deepRed mt-1"></div>
+        </div>
       </div>
     );
 
-    // Main App Component
+    const Peacock = ({ className, flip = false }) => (
+      <div className={`absolute pointer-events-none z-0 opacity-10 md:opacity-15 text-deepRed ${className}`}>
+        <svg width="200" height="200" viewBox="0 0 100 100" fill="currentColor" className={flip ? 'transform scale-x-[-1]' : ''}>
+          <path d="M50 80 C40 80 30 70 30 50 C30 30 40 20 50 20 C60 20 70 30 70 50 C70 70 60 80 50 80 Z M50 25 C55 25 58 20 55 15" fill="none" stroke="currentColor" strokeWidth="1" />
+          <path d="M50 20 L50 5 L45 10 M50 5 L55 10" stroke="currentColor" strokeWidth="1" fill="none" />
+          <circle cx="50" cy="50" r="15" fill="none" stroke="currentColor" strokeWidth="0.5" />
+          <path d="M10 90 Q 50 100 90 90" stroke="currentColor" strokeWidth="2" fill="none" />
+        </svg>
+      </div>
+    );
+
+    const Diya = ({ className }) => (
+      <div className={`absolute bottom-0 pointer-events-none ${className}`}>
+        <div className="relative flex flex-col items-center">
+          {/* Flame */}
+          <div className="w-3 h-3 md:w-4 md:h-4 bg-orange-500 rounded-full blur-[2px] animate-pulse mb-1"></div>
+          {/* Lamp */}
+          <svg width="40" height="24" viewBox="0 0 40 24" className="text-gold drop-shadow-sm">
+            <path d="M2 12 Q 20 24 38 12 L 38 8 Q 20 18 2 8 Z" fill="currentColor" />
+            <path d="M2 8 Q 20 18 38 8" fill="none" stroke="#B8860B" strokeWidth="1" />
+          </svg>
+        </div>
+      </div>
+    );
+
+    const DecorationCorner = ({ position }) => {
+      const rotation =
+        position === 'top-left' ? 'rotate-0' :
+          position === 'top-right' ? 'rotate-90' :
+            position === 'bottom-right' ? 'rotate-180' :
+              'rotate-270';
+
+      const posClass =
+        position === 'top-left' ? 'top-0 left-0' :
+          position === 'top-right' ? 'top-0 right-0' :
+            position === 'bottom-right' ? 'bottom-0 right-0' :
+              'bottom-0 left-0';
+
+      return (
+        <div className={`fixed ${posClass} w-32 h-32 md:w-48 md:h-48 z-10 pointer-events-none opacity-40 text-gold transform ${rotation}`}>
+          <svg viewBox="0 0 100 100" fill="currentColor" className="w-full h-full">
+            <path d="M0 0 L100 0 C100 0 90 10 90 20 C90 60 60 90 20 90 C10 90 0 100 0 100 Z" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            <image href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238B0000' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5z'/%3E%3Cpath d='M12 2v3'/%3E%3Cpath d='M12 19v3'/%3E%3Cpath d='M19 12h3'/%3E%3Cpath d='M2 12h3'/%3E%3C/svg%3E" x="5" y="5" width="20" height="20" opacity="0.5" />
+          </svg>
+        </div>
+      );
+    };
+
     const App = () => {
       const [activeTab, setActiveTab] = useState('home');
       const [user, setUser] = useState(null);
@@ -195,14 +279,11 @@
       const [errorMessage, setErrorMessage] = useState(null);
 
       const [rsvpData, setRsvpData] = useState({
-        name: '',
-        phone: '',
-        guests: 1,
+        name: '', phone: '', guests: 1,
         events: { welcome: true, haldi_21: true, haldi: true, wedding: true, reception: true },
         message: ''
       });
 
-      // 1. Authentication
       useEffect(() => {
         const initAuth = async () => {
           try {
@@ -212,190 +293,82 @@
               await auth.signInAnonymously();
             }
           } catch (e) {
-            console.warn("Auth failed (likely due to placeholder config). Utilizing mock user for display.", e);
-            // Fallback for UI testing
+            console.warn("Auth failed, mock mode.");
             setUser({ uid: 'guest-mock', isAnonymous: true });
-          } finally {
-            setLoading(false);
-          }
+          } finally { setLoading(false); }
         };
         initAuth();
-        const unsubscribe = auth.onAuthStateChanged(setUser);
-        return () => unsubscribe();
+        return auth.onAuthStateChanged(setUser);
       }, []);
 
-      // 2. Data Sync
       useEffect(() => {
         if (!user || !showAdminPanel || adminPassword !== 'rishi2026') return;
-
         try {
           const rsvpsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('rsvps');
-          const unsubscribe = rsvpsRef.onSnapshot(
+          return rsvpsRef.onSnapshot(
             (snapshot) => {
               const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
               data.sort((a, b) => (b.submittedAt?.seconds || 0) - (a.submittedAt?.seconds || 0));
               setAllRsvps(data);
             },
-            (error) => console.error("Firestore sync error:", error)
+            (error) => console.error("Sync error:", error)
           );
-          return () => unsubscribe();
-        } catch (err) {
-          console.error("Firestore error (likely perm or config):", err);
-        }
+        } catch (err) { console.error("Firestore error:", err); }
       }, [user, showAdminPanel, adminPassword]);
 
-      // 3. Countdown logic
       useEffect(() => {
         const targetDate = new Date('August 22, 2026 16:00:00').getTime();
         const timer = setInterval(() => {
           const now = new Date().getTime();
           const distance = targetDate - now;
-          if (distance < 0) {
-            setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-          } else {
-            setTimeLeft({
-              days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-              hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-              minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-              seconds: Math.floor((distance % (1000 * 60)) / 1000),
-            });
-          }
+          if (distance < 0) setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+          else setTimeLeft({
+            days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+            hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+            minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+            seconds: Math.floor((distance % (1000 * 60)) / 1000),
+          });
         }, 1000);
         return () => clearInterval(timer);
       }, []);
 
       const events = [
-        {
-          id: 'welcome',
-          title: 'Welcome & Bachelor Party (By Invite Only)',
-          subtitle: 'The Beginning of Celebration',
-          date: 'August 20, 2026',
-          time: '7:00 PM',
-          venue: 'Noci Adante, Chennai',
-          mapUrl: 'https://www.google.com/maps/search/?api=1&query=Noci+Adante+Chennai',
-          icon: <Icons.GlassWater strokeWidth={1.5} />,
-          theme: 'Dress to impress'
-        },
-        {
-          id: 'haldi_21',
-          title: 'Patti and Athai Nalungu',
-          subtitle: 'Traditional Ceremony',
-          date: 'August 21, 2026',
-          time: '6:00 PM - 10:00 PM',
-          venue: 'Venue Not Decided',
-          mapUrl: '#',
-          icon: <Icons.Sparkles strokeWidth={1.5} />,
-          theme: 'Yellow & Bright'
-        },
-        {
-          id: 'haldi',
-          title: 'Haldi & Mehndi',
-          subtitle: 'The Saffron Celebration',
-          date: 'August 22, 2026',
-          time: '4:00 PM',
-          venue: 'Blue House, ECR, Chennai',
-          mapUrl: 'https://www.google.com/maps/search/?api=1&query=Blue+House+Chennai',
-          icon: <Icons.Music strokeWidth={1.5} />,
-          theme: 'Traditional Silk'
-        },
-        {
-          id: 'wedding',
-          title: 'Wedding Ceremony',
-          subtitle: 'The Auspicious Vows',
-          date: 'August 23, 2026',
-          time: '9:30 AM',
-          venue: 'The Leela Palace, Chennai',
-          mapUrl: 'https://www.google.com/maps/search/?api=1&query=The+Leela+Palace+Chennai',
-          icon: <Icons.Flower2 strokeWidth={1.5} />,
-          theme: 'Royal Heritage'
-        },
-        {
-          id: 'reception',
-          title: 'Sangeet & Cocktail',
-          subtitle: 'Dance & Celebration',
-          date: 'August 24, 2026',
-          time: '6:30 PM',
-          venue: 'Pullman, Chennai',
-          mapUrl: 'https://www.google.com/maps/search/?api=1&query=Pullman+Hotel+Chennai',
-          icon: <Icons.GlassWater strokeWidth={1.5} />,
-          theme: 'Starlit Evening'
-        }
+        { id: 'welcome', title: 'Welcome & Bachelor Party (By Invite Only)', subtitle: 'The Beginning of Celebration', date: 'August 20, 2026', time: '7:00 PM', venue: 'Noci Adante, Chennai', mapUrl: 'https://maps.google.com/?q=Noci+Adante', icon: <Icons.GlassWater strokeWidth={1.5} />, theme: 'DRESS TO IMPRESS' },
+        { id: 'haldi_21', title: 'Patti and Athai Nalungu', subtitle: 'Traditional Ceremony', date: 'August 21, 2026', time: '6:00 PM - 10:00 PM', venue: 'Venue Not Decided', mapUrl: '#', icon: <Icons.Sparkles strokeWidth={1.5} />, theme: 'YELLOW & BRIGHT' },
+        { id: 'haldi', title: 'Haldi & Mehndi', subtitle: 'The Saffron Celebration', date: 'August 22, 2026', time: '4:00 PM', venue: 'Blue House, ECR, Chennai', mapUrl: 'https://maps.google.com/?q=Blue+House+ECR', icon: <Icons.Music strokeWidth={1.5} />, theme: 'TRADITIONAL SILK' },
+        { id: 'wedding', title: 'Wedding Ceremony', subtitle: 'The Auspicious Vows', date: 'August 23, 2026', time: '9:30 AM', venue: 'The Leela Palace, Chennai', mapUrl: 'https://maps.google.com/?q=The+Leela+Palace+Chennai', icon: <Icons.Flower2 strokeWidth={1.5} />, theme: 'ROYAL HERITAGE' },
+        { id: 'reception', title: 'Sangeet & Cocktail', subtitle: 'Dance & Celebration', date: 'August 24, 2026', time: '6:30 PM', venue: 'Pullman, Chennai', mapUrl: 'https://maps.google.com/?q=Pullman+Chennai', icon: <Icons.GlassWater strokeWidth={1.5} />, theme: 'STARLIT EVENING' }
       ];
 
       const handleSubmitRsvp = async (e) => {
         e.preventDefault();
-
-        // Mock Mode Check
         const isMockMode = finalConfig.apiKey.includes('PLACEHOLDER');
-
-        if (!user && !isMockMode) {
-          setErrorMessage("Establishing secure connection...");
-          return;
-        }
-
+        if (!user && !isMockMode) { setErrorMessage("Connecting..."); return; }
         setIsSubmitting(true);
         setErrorMessage(null);
-
         try {
           if (isMockMode) {
-            // Simulate network delay for Mock Mode
             await new Promise(resolve => setTimeout(resolve, 1500));
-            console.log("Mock RSVP Submitted:", rsvpData);
+            console.log("Mock RSVP:", rsvpData);
             setIsSubmitted(true);
           } else {
-            // Real Firestore Submission with Timeout
             const rsvpsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('rsvps');
-
-            const submitPromise = rsvpsRef.add({
-              ...rsvpData,
-              submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
-              uid: user ? user.uid : 'anonymous'
-            });
-
-            // 10s Timeout
-            const timeoutPromise = new Promise((_, reject) =>
-              setTimeout(() => reject(new Error("Request timed out. Please check your internet or Firebase config.")), 10000)
-            );
-
-            await Promise.race([submitPromise, timeoutPromise]);
+            await rsvpsRef.add({ ...rsvpData, submittedAt: firebase.firestore.FieldValue.serverTimestamp(), uid: user ? user.uid : 'anonymous' });
             setIsSubmitted(true);
           }
         } catch (err) {
-          console.error("RSVP error:", err);
-          if (err.code === 'permission-denied') {
-            setErrorMessage("Access Denied: Please update Firestore Rules to 'Test Mode' in Console.");
-          } else {
-            setErrorMessage(err.message || "Unable to save RSVP. Please check connection.");
-          }
-        } finally {
-          setIsSubmitting(false);
-        }
+          console.error("RSVP User Error:", err);
+          setErrorMessage(err.message || "Failed to save RSVP.");
+        } finally { setIsSubmitting(false); }
       };
 
-      const adjustGuests = (amount) => setRsvpData(prev => ({ ...prev, guests: Math.max(1, prev.guests + amount) }));
-
-      const CoupleLogo = ({ className }) => (
-        <div className={`relative flex items-center justify-center ${className}`}>
-          <svg viewBox="0 0 100 100" className="absolute w-full h-full text-[#9E7E44] opacity-20 animate-[spin_60s_linear_infinite]">
-            <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="0.2" strokeDasharray="1 3" />
-            <path fill="none" stroke="currentColor" strokeWidth="0.3" d="M50 2 L52 48 L98 50 L52 52 L50 98 L48 52 L2 50 L48 48 Z" />
-          </svg>
-          <div className="relative z-10 flex flex-col items-center justify-center bg-white/70 backdrop-blur-xl rounded-full w-[85%] h-[85%] border-2 border-[#9E7E44]/20 shadow-2xl">
-            <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent rounded-full" />
-            <span className="font-serif text-[#9E7E44] text-3xl md:text-4xl tracking-tighter leading-none select-none drop-shadow-sm">
-              R<span className="text-xl mx-[-3px] opacity-60 italic">&</span>M
-            </span>
-            <div className="h-[0.5px] w-12 bg-gradient-to-r from-transparent via-[#9E7E44]/40 to-transparent my-2" />
-            <span className="text-[8px] uppercase tracking-[0.5em] text-[#9E7E44]/60 font-bold">AUGUST 2026</span>
-          </div>
-        </div>
-      );
+      const adjustGuests = (d) => setRsvpData(p => ({ ...p, guests: Math.max(1, p.guests + d) }));
 
       if (loading) {
         return (
-          <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8F5F2] text-[#9E7E44]">
-            <Icons.Loader2 className="animate-spin mb-4" size={40} />
-            <p className="text-[10px] uppercase tracking-[0.4em] font-bold">Unfolding the Invitation</p>
+          <div className="min-h-screen flex flex-col items-center justify-center bg-bg text-deepRed">
+            <div className="animate-spin-slow text-gold mb-6"><Icons.Flower2 size={60} /></div>
+            <p className="font-royal uppercase tracking-[0.3em] text-xs">Loading Celebration</p>
           </div>
         );
       }
@@ -404,114 +377,46 @@
         if (activeTab === 'admin') {
           if (adminPassword !== 'rishi2026') {
             return (
-              <div className="animate-in max-w-sm mx-auto bg-white/60 backdrop-blur-md p-10 rounded-[2.5rem] border border-[#9E7E44]/20 shadow-2xl space-y-6">
-                <div className="text-center">
-                  <Icons.ShieldCheck className="mx-auto text-[#9E7E44] mb-3" size={32} />
-                  <h2 className="text-xl font-serif text-[#333333] tracking-wide uppercase">Host Access</h2>
+              <div className="glass-panel p-10 rounded-xl max-w-sm mx-auto animate-in border border-deepRed/20">
+                <div className="text-center mb-6">
+                  <Icons.ShieldCheck className="mx-auto text-deepRed mb-2" size={32} />
+                  <h2 className="font-royal text-xl text-deepRed">Host Access</h2>
                 </div>
-                <input
-                  type="password" autoFocus
-                  className="w-full p-4 bg-white/80 rounded-2xl border border-[#9E7E44]/10 outline-none text-center text-xl tracking-widest placeholder:text-slate-300"
-                  placeholder="••••"
-                  onChange={(e) => setAdminPassword(e.target.value)}
-                />
-                <p className="text-[10px] text-center text-slate-400 uppercase tracking-widest">Authorized hosts only</p>
+                <input type="password" autoFocus className="w-full bg-white/50 border-b-2 border-deepRed/30 p-3 text-center text-xl font-serif focus:outline-none focus:border-deepRed transition-colors" placeholder="••••" onChange={(e) => setAdminPassword(e.target.value)} />
               </div>
             );
           }
-
-          const eventStats = allRsvps.reduce((acc, curr) => {
-            const guestCount = Number(curr.guests) || 0;
-            if (curr.events?.welcome) acc.welcome += guestCount;
-            if (curr.events?.haldi_21) acc.haldi_21 += guestCount;
-            if (curr.events?.haldi) acc.haldi += guestCount;
-            if (curr.events?.wedding) acc.wedding += guestCount;
-            if (curr.events?.reception) acc.reception += guestCount;
-            acc.total += guestCount;
-            return acc;
+          const eventStats = allRsvps.reduce((acc, c) => {
+            const g = Number(c.guests) || 0;
+            if (c.events?.welcome) acc.welcome += g;
+            if (c.events?.haldi_21) acc.haldi_21 += g;
+            if (c.events?.haldi) acc.haldi += g;
+            if (c.events?.wedding) acc.wedding += g;
+            if (c.events?.reception) acc.reception += g;
+            acc.total += g; return acc;
           }, { welcome: 0, haldi_21: 0, haldi: 0, wedding: 0, reception: 0, total: 0 });
 
           return (
-            <div className="animate-in space-y-8 pb-24 text-left">
-              <div className="bg-white/90 p-8 md:p-10 rounded-[3rem] border border-[#9E7E44]/10 shadow-xl space-y-8">
-                <h3 className="font-serif text-3xl text-[#333333]">RSVP Dashboard</h3>
-
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/5 text-center">
-                    <p className="text-[9px] uppercase tracking-widest text-[#9E7E44] font-bold">Total Guests</p>
-                    <p className="text-4xl font-serif text-[#333333] mt-2">{eventStats.total}</p>
-                  </div>
-                  <div className="bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/5 text-center">
-                    <p className="text-[9px] uppercase tracking-widest text-[#9E7E44] font-bold">Total Groups</p>
-                    <p className="text-4xl font-serif text-[#333333] mt-2">{allRsvps.length}</p>
-                  </div>
-                  <div className="col-span-2 bg-[#F8F5F2] p-6 rounded-3xl border border-[#9E7E44]/10 flex flex-col justify-center">
-                    <p className="text-[9px] uppercase tracking-widest text-[#9E7E44] font-bold text-center mb-4">Arrivals per Event</p>
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center text-xs">
-                        <span className="text-slate-400 uppercase tracking-tighter font-bold">Welcome (20th)</span>
-                        <span className="font-serif text-[#333333] text-lg">{eventStats.welcome}</span>
-                      </div>
-                      <div className="flex justify-between items-center text-xs">
-                        <span className="text-slate-400 uppercase tracking-tighter font-bold">Nalungu (21st)</span>
-                        <span className="font-serif text-[#333333] text-lg">{eventStats.haldi_21}</span>
-                      </div>
-                      <div className="flex justify-between items-center text-xs">
-                        <span className="text-slate-400 uppercase tracking-tighter font-bold">Haldi</span>
-                        <span className="font-serif text-[#333333] text-lg">{eventStats.haldi}</span>
-                      </div>
-                      <div className="flex justify-between items-center text-xs">
-                        <span className="text-slate-400 uppercase tracking-tighter font-bold">Wedding</span>
-                        <span className="font-serif text-[#333333] text-lg">{eventStats.wedding}</span>
-                      </div>
-                      <div className="flex justify-between items-center text-xs">
-                        <span className="text-slate-400 uppercase tracking-tighter font-bold">Reception</span>
-                        <span className="font-serif text-[#333333] text-lg">{eventStats.reception}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            <div className="glass-panel p-8 rounded-2xl animate-in text-left">
+              <h3 className="font-royal text-2xl text-deepRed mb-6 border-b border-deepRed/10 pb-4">RSVP Dashboard</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div className="bg-white/60 p-4 rounded-lg border border-deepRed/10 text-center"><p className="text-[10px] uppercase text-deepRed font-bold">Total Guests</p><p className="font-serif text-3xl text-deepRed">{eventStats.total}</p></div>
+                <div className="bg-white/60 p-4 rounded-lg border border-deepRed/10 text-center"><p className="text-[10px] uppercase text-deepRed font-bold">Responses</p><p className="font-serif text-3xl text-deepRed">{allRsvps.length}</p></div>
               </div>
-
               <div className="space-y-4">
-                <h4 className="text-[10px] uppercase tracking-[0.4em] font-bold text-slate-400 ml-6">Guest List</h4>
-                {allRsvps.length === 0 ? (
-                  <p className="text-center text-slate-400 font-serif italic py-12 bg-white/40 rounded-[2rem]">Empty guest list</p>
-                ) : (
-                  allRsvps.map(r => (
-                    <div key={r.id} className="group bg-white/80 rounded-[2rem] p-8 border border-white shadow-sm transition-all hover:shadow-md relative overflow-hidden">
-                      <div className="flex justify-between items-start mb-4">
-                        <div className="flex-1">
-                          <h4 className="font-bold text-xl text-[#333333]">{r.name}</h4>
-                          <div className="flex items-center gap-3 mt-1">
-                            <span className="text-[10px] bg-[#9E7E44]/10 text-[#9E7E44] px-3 py-1 rounded-full font-bold uppercase tracking-widest">
-                              {r.guests} {r.guests === 1 ? 'Guest' : 'Guests'}
-                            </span>
-                            <span className="text-xs text-slate-400 font-medium">{r.phone}</span>
-                          </div>
-                        </div>
-
-                        <div className="text-[9px] text-slate-300 uppercase font-bold">
-                          {r.submittedAt?.toDate ? r.submittedAt.toDate().toLocaleDateString() : 'New'}
-                        </div>
-                      </div>
-
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {Object.entries(r.events || {}).filter(([_, v]) => v).map(([k]) => (
-                          <span key={k} className="text-[9px] uppercase tracking-[0.2em] bg-slate-100 text-slate-500 px-3 py-1 rounded-lg border border-slate-200/50">
-                            {k}
-                          </span>
-                        ))}
-                      </div>
-
-                      {r.message && (
-                        <div className="bg-[#F8F5F2]/50 p-4 rounded-2xl border-l-4 border-[#9E7E44]/20">
-                          <p className="text-sm text-slate-500 font-serif italic">"{r.message}"</p>
-                        </div>
-                      )}
+                {allRsvps.map(r => (
+                  <div key={r.id} className="bg-white/80 p-6 rounded-xl border border-gold/20 shadow-sm">
+                    <div className="flex justify-between items-start">
+                      <div><h4 className="font-royal text-deepRed text-lg">{r.name}</h4><p className="text-xs text-textSecondary uppercase tracking-widest">{r.guests} guests • {r.phone}</p></div>
+                      <span className="text-[10px] font-bold text-gold bg-deepRed/5 px-2 py-1 rounded">
+                        {r.submittedAt?.toDate ? r.submittedAt.toDate().toLocaleDateString() : 'Just now'}
+                      </span>
                     </div>
-                  ))
-                )}
+                    <div className="mt-2 flex flex-wrap gap-2">{Object.keys(r.events || {}).filter(k => r.events[k]).map(k => <span key={k} className="text-[9px] bg-gold/10 text-deepRed px-2 py-0.5 rounded uppercase">{events.find(e => e.id === k)?.title.split(' ')[0] || k}</span>)}</div>
+                    {r.message && <div className="mt-3 p-3 bg-bg rounded border-l-2 border-gold text-sm italic text-textSecondary">"{r.message}"</div>}
+                  </div>
+                ))}
+                {allRsvps.length === 0 && <p className="text-center text-textSecondary italic">Waiting for responses...</p>}
               </div>
             </div>
           );
@@ -520,116 +425,86 @@
         switch (activeTab) {
           case 'home':
             return (
-              <div className="animate-in text-center space-y-12 py-10">
-                <div className="space-y-6">
-                  <div className="flex justify-center items-center gap-6 mb-4">
-                    <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-[#9E7E44]/30" />
-                    <Icons.Sparkles className="text-[#9E7E44] opacity-40 animate-pulse" size={20} />
-                    <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-[#9E7E44]/30" />
-                  </div>
+              <div className="animate-in text-center space-y-12 py-10 relative">
+                {/* Decorative Top - Hanging Bells */}
+                <HangingBell className="left-10 md:left-24 delay-75" />
+                <HangingBell className="right-10 md:right-24 delay-150" />
+                <HangingBell className="left-1/4 hidden md:block delay-300" />
+                <HangingBell className="right-1/4 hidden md:block delay-500" />
 
-                  <div className="space-y-3">
-                    <span className="text-[10px] uppercase tracking-[0.6em] text-[#9E7E44] font-bold block mb-4">The Celebration of a Lifetime</span>
-                    <h1 className="text-6xl md:text-[8rem] font-serif text-[#333333] leading-[0.9] tracking-tighter">
-                      Rishi <br />
-                      <span className="italic text-[#9E7E44] font-normal text-4xl md:text-7xl">&</span> <br />
-                      Marilyn
-                    </h1>
-                  </div>
+                <div className="space-y-4 relative z-10 pt-20">
+                  <p className="text-gold font-royal text-md md:text-xl tracking-[0.2em] uppercase font-bold">THE CELEBRATION OF A LIFETIME</p>
+                  <h1 className="font-script text-7xl md:text-9xl text-deepRed drop-shadow-sm p-4 leading-[1.3]">
+                    Rishi <span className="text-gold text-5xl md:text-7xl">&</span> Marilyn
+                  </h1>
+                  <p className="font-royal text-textSecondary text-xs md:text-sm tracking-[0.2em] uppercase">
+                    August 20, 2026 - August 24, 2026 <br />
+                    <span className="text-deepRed font-bold mt-2 block">CHENNAI • TAMIL NADU</span>
+                  </p>
+                </div>
 
-                  <div className="max-w-lg mx-auto pt-8 px-6 relative">
-                    <Icons.Quote className="absolute -top-2 left-0 text-[#9E7E44]/10" size={50} />
-                    <p className="text-slate-500 font-serif italic text-lg md:text-xl leading-relaxed">
-                      "As the sun sets over the ocean, we begin our new horizon. Two souls, two cultures, one beautiful journey."
-                    </p>
-                  </div>
-
-                  <div className="pt-8 flex flex-col items-center gap-3">
-                    <p className="text-[#9E7E44] font-serif italic text-2xl tracking-widest font-medium">August 20, 2026- August 24, 2026</p>
-                    <div className="flex items-center gap-3">
-                      <div className="h-px w-6 bg-[#9E7E44]/20" />
-                      <p className="text-[10px] uppercase tracking-[0.5em] text-slate-400 font-bold">Chennai • Tamil Nadu</p>
-                      <div className="h-px w-6 bg-[#9E7E44]/20" />
-                    </div>
+                {/* Countdown */}
+                <div className="glass-panel inline-block px-10 py-8 rounded-full border-2 border-double border-gold/40 shadow-xl relative mt-8">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-bg px-2 text-deepRed"><Icons.Flower2 size={20} /></div>
+                  <div className="flex gap-8 md:gap-14 text-deepRed">
+                    {Object.entries(timeLeft).map(([k, v]) => (
+                      <div key={k} className="flex flex-col items-center">
+                        <span className="font-serif text-4xl md:text-5xl">{String(v).padStart(2, '0')}</span>
+                        <span className="text-[9px] uppercase tracking-widest text-gold font-bold mt-1">{k}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                <div className="relative inline-block">
-                  <div className="absolute -inset-4 bg-gradient-to-r from-[#9E7E44]/10 to-transparent blur-2xl rounded-full" />
-                  <div className="relative bg-white/60 backdrop-blur-xl border border-white p-8 rounded-[3.5rem] shadow-2xl">
-                    <div className="flex justify-center gap-8 md:gap-12">
-                      {Object.entries(timeLeft).map(([unit, value]) => (
-                        <div key={unit} className="flex flex-col items-center">
-                          <span className="text-3xl md:text-5xl font-serif text-[#333333]">{String(value).padStart(2, '0')}</span>
-                          <span className="text-[8px] uppercase tracking-[0.3em] text-[#9E7E44] font-bold mt-2">{unit}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-10">
-                  <button
-                    onClick={() => setActiveTab('schedule')}
-                    className="group relative px-14 py-5 overflow-hidden rounded-full transition-all duration-700 shadow-2xl active:scale-95 bg-[#333333] text-white hover:bg-[#9E7E44]"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                    <span className="relative text-[10px] font-bold tracking-[0.5em] uppercase flex items-center gap-3">
-                      View Details <Icons.ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                    </span>
+                <div className="pt-12 max-w-lg mx-auto relative z-10">
+                  <p className="font-serif italic text-xl md:text-2xl text-textSecondary mb-8 leading-relaxed">
+                    "As the sun sets over the ocean, we begin our new horizon. Two souls, two cultures, one beautiful journey."
+                  </p>
+                  <button onClick={() => setActiveTab('schedule')} className="group relative px-12 py-4 bg-deepRed text-bg rounded-md font-royal uppercase tracking-[0.25em] text-xs font-bold overflow-hidden border border-deepRed hover:bg-bg hover:text-deepRed transition-all duration-500 shadow-lg hover:shadow-gold/20">
+                    <span className="relative z-10 flex items-center gap-2">View Events <Icons.ChevronRight size={14} /></span>
                   </button>
                 </div>
               </div>
             );
           case 'schedule':
             return (
-              <div className="animate-in space-y-12 pb-24 text-center">
-                <div className="flex flex-col items-center pt-8">
-                  <CoupleLogo className="w-32 h-32 mb-8" />
-                  <h2 className="text-5xl font-serif text-[#333333] tracking-tight">The Itinerary</h2>
-                  <div className="flex items-center gap-3 mt-4">
-                    <div className="h-px w-10 bg-gradient-to-r from-transparent to-[#9E7E44]/30" />
-                    <Icons.Heart className="text-[#9E7E44]/40" size={14} />
-                    <div className="h-px w-10 bg-gradient-to-l from-transparent to-[#9E7E44]/30" />
-                  </div>
+              <div className="animate-in pb-24 space-y-12">
+                <div className="text-center pt-8 mb-12">
+                  <p className="text-[10px] uppercase tracking-[0.4em] text-deepRed font-bold mb-2">August 2026</p>
+                  <h2 className="font-script text-6xl text-deepRed mb-2">The Itinerary</h2>
+                  <div className="flex justify-center gap-2 text-gold"><Icons.Sparkles size={16} /><Icons.Sparkles size={16} /></div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-8">
-                  {events.map((event) => (
-                    <div key={event.id} className="group relative bg-white/60 backdrop-blur-xl p-10 rounded-[3rem] border border-white/50 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-700 overflow-hidden">
-                      <div className="absolute -right-16 -top-16 text-[#9E7E44]/5 group-hover:text-[#9E7E44]/10 transition-colors">
-                        {React.cloneElement(event.icon, { size: 150 })}
+                <div className="grid gap-8 max-w-2xl mx-auto">
+                  {events.map((e, i) => (
+                    <div key={e.id} className="group relative bg-white border-l-4 border-deepRed p-8 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-500 overflow-hidden">
+                      <div className="absolute -right-6 -bottom-6 text-gold/10 pointer-events-none transform -rotate-12 transition-transform group-hover:rotate-0">
+                        {React.cloneElement(e.icon, { size: 140 })}
                       </div>
-                      <div className="relative flex flex-col md:flex-row gap-10 items-center md:items-start text-center md:text-left z-10">
-                        <div className="w-20 h-20 bg-gradient-to-br from-[#F8F5F2] to-white rounded-[2rem] flex items-center justify-center border border-[#9E7E44]/10 text-[#9E7E44] shadow-inner">
-                          {React.cloneElement(event.icon, { size: 32 })}
+
+                      <div className="flex flex-col md:flex-row gap-6 relative z-10 items-center md:items-start text-center md:text-left">
+                        <div className="flex flex-col items-center shrink-0">
+                          <div className="w-16 h-16 rounded-full border-2 border-gold/30 flex items-center justify-center text-deepRed bg-bg shadow-inner">
+                            <span className="font-royal text-xl font-bold">{i + 1}</span>
+                          </div>
+                          <div className="h-full w-px bg-gold/20 my-2 md:hidden"></div>
                         </div>
-                        <div className="flex-1 space-y-6">
-                          <div className="space-y-1">
-                            <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-[#9E7E44]">{event.theme}</span>
-                            <h3 className="text-3xl font-serif text-[#333333]">{event.title}</h3>
-                            <p className="text-slate-400 font-serif italic text-lg">{event.subtitle}</p>
+
+                        <div className="flex-1 space-y-2">
+                          <span className="text-[9px] uppercase tracking-[0.2em] font-bold text-gold block mb-1">{e.theme}</span>
+                          <h3 className="font-royal text-2xl text-deepRed">{e.title}</h3>
+                          <p className="font-serif italic text-textSecondary text-lg">{e.subtitle}</p>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 pt-4 text-sm text-textSecondary font-medium">
+                            <div className="flex items-center gap-2 justify-center md:justify-start"><Icons.Calendar size={14} className="text-gold" /> {e.date}</div>
+                            <div className="flex items-center gap-2 justify-center md:justify-start"><Icons.Clock size={14} className="text-gold" /> {e.time}</div>
+                            <div className="flex items-center gap-2 justify-center md:justify-start col-span-1 md:col-span-2 mt-1"><Icons.MapPin size={14} className="text-gold" /> {e.venue}</div>
                           </div>
 
-                          <div className="flex flex-wrap justify-center md:justify-start gap-6 text-slate-500 text-sm font-medium">
-                            <div className="flex items-center gap-2">
-                              <Icons.Calendar size={16} className="text-[#9E7E44]" />
-                              <span className="tracking-wide">{event.date}</span>
+                          {e.mapUrl !== '#' && (
+                            <div className="pt-4">
+                              <a href={e.mapUrl} target="_blank" className="text-[10px] uppercase font-bold tracking-[0.2em] text-deepRed border-b border-deepRed/20 hover:border-deepRed pb-0.5 transition-colors">View On Map</a>
                             </div>
-                            <div className="flex items-center gap-2">
-                              <Icons.Clock size={16} className="text-[#9E7E44]" />
-                              <span className="tracking-wide">{event.time}</span>
-                            </div>
-                            <div className="flex items-start gap-2 max-w-xs">
-                              <Icons.MapPin size={16} className="text-[#9E7E44] flex-shrink-0 mt-0.5" />
-                              <span className="leading-relaxed">{event.venue}</span>
-                            </div>
-                          </div>
-
-                          {event.mapUrl && event.mapUrl !== '#' && (
-                            <a href={event.mapUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.4em] text-slate-400 hover:text-[#9E7E44] transition-all group/btn">
-                              View On Map <Icons.ExternalLink size={12} className="group-hover/btn:scale-110 transition-transform" />
-                            </a>
                           )}
                         </div>
                       </div>
@@ -641,91 +516,66 @@
           case 'rsvp':
             if (isSubmitted) {
               return (
-                <div className="animate-in max-w-md mx-auto bg-white/95 backdrop-blur-md p-16 rounded-[4rem] border border-[#9E7E44]/20 shadow-2xl text-center space-y-8">
-                  <div className="w-20 h-20 bg-gradient-to-br from-[#F8F5F2] to-white text-[#9E7E44] rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl">
-                    <Icons.Check size={40} />
-                  </div>
-                  <h2 className="text-4xl font-serif text-[#333333]">With Gratitude</h2>
-                  <p className="text-slate-500 font-serif italic text-lg leading-relaxed">Your presence is the greatest gift. We have registered your response and await your arrival in Chennai.</p>
-                  <button onClick={() => { setIsSubmitted(false); setActiveTab('home'); }} className="text-[10px] uppercase tracking-[0.5em] font-bold text-[#9E7E44] border-b border-[#9E7E44]/10 hover:border-[#9E7E44] pb-1 transition-all">Return Home</button>
+                <div className="animate-in max-w-lg mx-auto glass-panel p-12 text-center rounded-2xl border-2 border-deepRed/10 mt-10">
+                  <div className="w-16 h-16 mx-auto bg-deepRed text-bg rounded-full flex items-center justify-center mb-6 shadow-lg"><Icons.Check size={32} /></div>
+                  <h2 className="font-royal text-3xl text-deepRed mb-4">Dhanyavad</h2>
+                  <p className="font-serif text-textSecondary mb-8 text-lg">We are honored by your response and look forward to celebrating with you.</p>
+                  <button onClick={() => { setIsSubmitted(false); setActiveTab('home') }} className="text-xs font-bold uppercase tracking-widest text-deepRed hover:text-gold transition-colors">Back to Home</button>
                 </div>
               );
             }
             return (
-              <div className="animate-in max-w-2xl mx-auto bg-white/70 backdrop-blur-3xl p-10 md:p-16 rounded-[4rem] border border-white/80 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] space-y-12">
-                <div className="text-center space-y-3">
-                  <div className="inline-flex items-center gap-3 mb-1">
-                    <div className="h-px w-8 bg-[#9E7E44]/20" />
-                    <Icons.Flower2 size={20} className="text-[#9E7E44]/40" />
-                    <div className="h-px w-8 bg-[#9E7E44]/20" />
-                  </div>
-                  <h2 className="text-5xl font-serif text-[#333333]">R.S.V.P</h2>
-                  <p className="text-[#9E7E44] font-serif italic text-lg">Kindly respond by June 15, 2026</p>
+              <div className="animate-in max-w-3xl mx-auto glass-panel p-8 md:p-14 rounded-2xl md:rounded-[3rem] shadow-2xl border-t-4 border-t-deepRed relative mt-6">
+                <div className="text-center mb-10 space-y-2">
+                  <h2 className="font-script text-6xl text-deepRed">R.S.V.P</h2>
+                  <p className="font-royal text-gold text-xs tracking-[0.3em] uppercase">Please respond by June 15th</p>
                 </div>
 
-                {errorMessage && (
-                  <div className="bg-red-50 text-red-500 p-5 rounded-2xl flex items-center gap-4 text-sm font-medium border border-red-100 animate-pulse">
-                    <Icons.AlertCircle size={18} /> {errorMessage}
-                  </div>
-                )}
+                {errorMessage && <div className="bg-red-50 text-deepRed p-4 rounded border border-red-200 mb-6 text-center text-sm">{errorMessage}</div>}
 
-                <form className="space-y-10" onSubmit={handleSubmitRsvp}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="space-y-2 text-left">
-                      <label className="text-[9px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-6">Full Name</label>
-                      <input type="text" required value={rsvpData.name} onChange={(e) => setRsvpData({ ...rsvpData, name: e.target.value })} className="w-full p-6 bg-[#F8F5F2]/50 rounded-[2rem] border border-transparent outline-none focus:bg-white focus:border-[#9E7E44]/20 focus:ring-8 focus:ring-[#9E7E44]/5 transition-all font-serif text-lg" placeholder="Guest Name" />
+                <form onSubmit={handleSubmitRsvp} className="space-y-8">
+                  <div className="grid md:grid-cols-2 gap-8">
+                    <div className="space-y-1">
+                      <label className="text-[10px] uppercase tracking-widest text-deepRed font-bold">Your Name</label>
+                      <input type="text" required value={rsvpData.name} onChange={e => setRsvpData({ ...rsvpData, name: e.target.value })} className="w-full bg-transparent border-b border-deepRed/20 py-3 text-lg font-serif focus:outline-none focus:border-deepRed transition-colors placeholder:text-deepRed/20" placeholder="Enter full name" />
                     </div>
-                    <div className="space-y-2 text-left">
-                      <label className="text-[9px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-6">Contact Number</label>
-                      <input type="tel" required value={rsvpData.phone} onChange={(e) => setRsvpData({ ...rsvpData, phone: e.target.value })} className="w-full p-6 bg-[#F8F5F2]/50 rounded-[2rem] border border-transparent outline-none focus:bg-white focus:border-[#9E7E44]/20 focus:ring-8 focus:ring-[#9E7E44]/5 transition-all font-serif text-lg" placeholder="Mobile Number" />
+                    <div className="space-y-1">
+                      <label className="text-[10px] uppercase tracking-widest text-deepRed font-bold">Phone</label>
+                      <input type="tel" required value={rsvpData.phone} onChange={e => setRsvpData({ ...rsvpData, phone: e.target.value })} className="w-full bg-transparent border-b border-deepRed/20 py-3 text-lg font-serif focus:outline-none focus:border-deepRed transition-colors placeholder:text-deepRed/20" placeholder="Contact number" />
                     </div>
                   </div>
 
-                  <div className="space-y-3 text-left">
-                    <label className="text-[9px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-6">Guest Count</label>
-                    <div className="flex items-center justify-between p-5 bg-[#F8F5F2]/50 rounded-[2rem]">
-                      <div className="flex items-center gap-4 ml-6 text-slate-500">
-                        <Icons.Users size={20} className="text-[#9E7E44]" />
-                        <span className="text-sm font-medium">Total attending</span>
-                      </div>
-                      <div className="flex items-center gap-6 mr-4">
-                        <button type="button" onClick={() => adjustGuests(-1)} className="w-10 h-10 rounded-xl bg-white border border-[#9E7E44]/10 flex items-center justify-center text-[#9E7E44] hover:bg-[#333333] hover:text-white transition-all shadow-sm"><Icons.Minus size={16} /></button>
-                        <span className="text-2xl font-serif text-[#333333] w-6 text-center">{rsvpData.guests}</span>
-                        <button type="button" onClick={() => adjustGuests(1)} className="w-10 h-10 rounded-xl bg-white border border-[#9E7E44]/10 flex items-center justify-center text-[#9E7E44] hover:bg-[#333333] hover:text-white transition-all shadow-sm"><Icons.Plus size={16} /></button>
-                      </div>
+                  <div className="space-y-4">
+                    <label className="text-[10px] uppercase tracking-widest text-deepRed font-bold">Number of Guests</label>
+                    <div className="flex items-center gap-6">
+                      <button type="button" onClick={() => adjustGuests(-1)} className="w-10 h-10 rounded-full border border-deepRed/20 text-deepRed hover:bg-deepRed hover:text-bg transition-colors flex items-center justify-center"><Icons.Minus size={16} /></button>
+                      <span className="font-serif text-3xl text-deepRed w-12 text-center">{rsvpData.guests}</span>
+                      <button type="button" onClick={() => adjustGuests(1)} className="w-10 h-10 rounded-full border border-deepRed/20 text-deepRed hover:bg-deepRed hover:text-bg transition-colors flex items-center justify-center"><Icons.Plus size={16} /></button>
                     </div>
                   </div>
 
-                  <div className="space-y-5 text-left">
-                    <label className="text-[9px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-6">Ceremonies Joining</label>
-                    <div className="grid grid-cols-1 gap-3">
-                      {events.map((event) => (
-                        <button key={event.id} type="button" onClick={() => setRsvpData({ ...rsvpData, events: { ...rsvpData.events, [event.id]: !rsvpData.events[event.id] } })} className={`w-full flex items-center justify-between p-5 rounded-[2rem] border-2 transition-all duration-700 ${rsvpData.events[event.id] ? 'bg-white border-[#9E7E44]/30 shadow-xl' : 'bg-transparent border-transparent opacity-40 hover:opacity-70'}`}>
-                          <div className="flex items-center gap-4 text-left">
-                            <div className={`p-3 rounded-[1.2rem] ${rsvpData.events[event.id] ? 'bg-[#F8F5F2] text-[#9E7E44]' : 'bg-slate-100 text-slate-400'}`}>
-                              {React.cloneElement(event.icon, { size: 20 })}
-                            </div>
-                            <div>
-                              <p className="font-bold text-[10px] tracking-[0.2em] uppercase text-[#333333]">{event.title}</p>
-                              <p className="text-[9px] text-slate-400 mt-0.5">{event.date}</p>
-                            </div>
+                  <div className="space-y-4">
+                    <label className="text-[10px] uppercase tracking-widest text-deepRed font-bold">Events Attending</label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {events.map(e => (
+                        <div key={e.id} onClick={() => setRsvpData({ ...rsvpData, events: { ...rsvpData.events, [e.id]: !rsvpData.events[e.id] } })} className={`cursor-pointer p-4 border rounded cursor-pointer flex items-center justify-between transition-all ${rsvpData.events[e.id] ? 'bg-deepRed/5 border-deepRed shadow-sm' : 'border-deepRed/10 hover:border-deepRed/30'}`}>
+                          <div className="flex items-center gap-3">
+                            <div className={`p-2 rounded-full ${rsvpData.events[e.id] ? 'text-deepRed' : 'text-gray-400'}`}>{React.cloneElement(e.icon, { size: 18 })}</div>
+                            <div><p className="font-royal text-xs font-bold text-deepRed">{e.title}</p></div>
                           </div>
-                          <div className={`w-7 h-7 rounded-full border-2 flex items-center justify-center transition-colors ${rsvpData.events[event.id] ? 'bg-[#9E7E44] border-[#9E7E44] text-white' : 'border-slate-200'}`}>
-                            {rsvpData.events[event.id] && <Icons.Check size={14} strokeWidth={3} />}
-                          </div>
-                        </button>
+                          {rsvpData.events[e.id] && <div className="text-gold"><Icons.Check size={16} /></div>}
+                        </div>
                       ))}
                     </div>
                   </div>
 
-                  <div className="space-y-3 text-left">
-                    <label className="text-[9px] uppercase tracking-[0.4em] font-bold text-[#9E7E44] ml-6">Share a Blessing or Message</label>
-                    <textarea value={rsvpData.message} onChange={(e) => setRsvpData({ ...rsvpData, message: e.target.value })} className="w-full p-6 bg-[#F8F5F2]/50 rounded-[2.5rem] border border-transparent outline-none focus:bg-white focus:border-[#9E7E44]/20 focus:ring-8 focus:ring-[#9E7E44]/5 transition-all font-serif text-lg h-36 resize-none" placeholder="We'd love to hear from you..." />
+                  <div className="space-y-1">
+                    <label className="text-[10px] uppercase tracking-widest text-deepRed font-bold">Blessings / Message</label>
+                    <textarea value={rsvpData.message} onChange={e => setRsvpData({ ...rsvpData, message: e.target.value })} className="w-full bg-transparent border-b border-deepRed/20 py-3 text-lg font-serif focus:outline-none focus:border-deepRed transition-colors placeholder:text-deepRed/20 h-24 resize-none" placeholder="Write a message for the couple..." />
                   </div>
 
-                  <button type="submit" disabled={isSubmitting} className="group relative w-full py-6 bg-[#333333] text-white rounded-[2.5rem] font-bold text-[11px] uppercase tracking-[0.5em] hover:bg-[#9E7E44] transition-all duration-700 shadow-xl flex items-center justify-center gap-4 disabled:opacity-50 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                    {isSubmitting ? <Icons.Loader2 className="animate-spin" size={20} /> : "Send RSVP"}
+                  <button type="submit" disabled={isSubmitting} className="w-full py-4 bg-deepRed text-bg font-royal uppercase tracking-[0.2em] font-bold text-xs rounded shadow-lg hover:shadow-gold/20 hover:-translate-y-0.5 transition-all disabled:opacity-50">
+                    {isSubmitting ? 'Sending...' : 'Confirm Presence'}
                   </button>
                 </form>
               </div>
@@ -735,54 +585,42 @@
       };
 
       return (
-        <div className="min-h-screen bg-[#F8F5F2] pb-64 selection:bg-[#9E7E44]/20 font-sans overflow-x-hidden">
-          {/* Decorative Floating Petals */}
-          <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-            <FloatingPetal left={10} delay={0} duration={15} />
-            <FloatingPetal left={30} delay={5} duration={18} />
-            <FloatingPetal left={50} delay={2} duration={20} />
-            <FloatingPetal left={70} delay={8} duration={14} />
-            <FloatingPetal left={90} delay={4} duration={22} />
-          </div>
+        <div className="min-h-screen relative font-sans overflow-hidden">
+          <MandalaBg />
+          <DecorationCorner position="top-left" />
+          <DecorationCorner position="top-right" />
+          <DecorationCorner position="bottom-left" />
+          <DecorationCorner position="bottom-right" />
 
-          <div className="fixed inset-0 pointer-events-none overflow-hidden z-10">
-            <div className="absolute top-0 right-0 w-[80vw] h-[80vw] bg-gradient-to-bl from-[#9E7E44]/10 to-transparent rounded-full blur-[150px] opacity-40" />
-            <div className="absolute bottom-0 left-0 w-[80vw] h-[80vw] bg-gradient-to-tr from-[#9E7E44]/10 to-transparent rounded-full blur-[150px] opacity-40" />
-          </div>
+          {/* Peacocks */}
+          <Peacock className="bottom-0 -left-10 w-64 h-64 md:w-96 md:h-96" />
+          <Peacock className="bottom-0 -right-10 w-64 h-64 md:w-96 md:h-96" flip={true} />
 
-          <div className="relative max-w-5xl mx-auto px-6 pt-16 md:pt-24 z-20">
-            <nav className="fixed bottom-10 left-1/2 -translate-x-1/2 glass-nav p-2 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.15)] z-[110] flex items-center gap-1">
-              {['home', 'schedule', 'rsvp'].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => { setActiveTab(tab); setShowAdminPanel(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className={`px-8 md:px-12 py-3 rounded-full text-[9px] font-bold uppercase tracking-[0.4em] transition-all duration-700 ${activeTab === tab ? 'bg-[#333333] text-white shadow-xl scale-105' : 'text-slate-400 hover:text-[#333333] hover:bg-white/50'}`}
-                >
-                  {tab === 'schedule' ? 'Details' : tab}
-                </button>
-              ))}
+          {/* Diyas */}
+          <Diya className="bottom-8 left-8 md:bottom-12 md:left-20 z-10" />
+          <Diya className="bottom-8 right-8 md:bottom-12 md:right-20 z-10" />
+
+          <div className="relative z-20 max-w-4xl mx-auto px-6 pt-10 pb-32">
+            <nav className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50">
+              <div className="glass-panel p-2 rounded-full flex shadow-[0_20px_50px_rgba(74,4,4,0.2)]">
+                {['home', 'schedule', 'rsvp'].map(t => (
+                  <button key={t} onClick={() => { setActiveTab(t); setShowAdminPanel(false); window.scrollTo(0, 0) }} className={`px-6 md:px-10 py-3 rounded-full text-[10px] md:text-xs font-royal uppercase tracking-widest transition-all ${activeTab === t ? 'bg-deepRed text-bg shadow-lg transform scale-105' : 'text-deepRed hover:text-gold hover:bg-white/50'}`}>
+                    {t}
+                  </button>
+                ))}
+              </div>
             </nav>
 
-            <main className="min-h-[70vh]">
-              {renderContent()}
-            </main>
+            <main>{renderContent()}</main>
 
-            <footer className="mt-40 text-center space-y-10 pb-20">
-              <div className="flex justify-center items-center gap-6 opacity-20">
-                <div className="h-[0.5px] w-20 bg-gradient-to-r from-transparent to-[#333333]" />
-                <Icons.Heart size={16} className="fill-[#333333]" />
-                <div className="h-[0.5px] w-20 bg-gradient-to-l from-transparent to-[#333333]" />
+            <footer className="text-center mt-20 opacity-60 relative z-10">
+              <div className="flex items-center justify-center gap-4 mb-4">
+                <span className="h-px w-8 bg-deepRed"></span>
+                <Icons.Heart size={12} className="text-deepRed fill-deepRed" />
+                <span className="h-px w-8 bg-deepRed"></span>
               </div>
-              <div className="space-y-3">
-                <p className="font-serif italic text-slate-400 text-2xl">With love, forever after.</p>
-                <p className="text-[10px] tracking-[0.5em] uppercase text-slate-300 font-bold">Rishi & Marilyn • 2026</p>
-              </div>
-              <button
-                onClick={() => { setShowAdminPanel(!showAdminPanel); if (!showAdminPanel) setActiveTab('admin'); }}
-                className="text-[8px] text-slate-200 hover:text-[#9E7E44] transition-all uppercase tracking-[0.4em] font-bold flex items-center gap-2 mx-auto px-3 py-2 hover:bg-white/30 rounded-full"
-              >
-                <Icons.ShieldCheck size={12} /> Host Portal
-              </button>
+              <p className="font-royal text-[10px] tracking-[0.3em] uppercase text-deepRed">Rishi & Marilyn • 2026</p>
+              <button onClick={() => { setShowAdminPanel(!showAdminPanel); if (!showAdminPanel) setActiveTab('admin'); }} className="mt-4 text-[9px] text-textSecondary uppercase tracking-widest hover:text-deepRed">Host Portal</button>
             </footer>
           </div>
         </div>
