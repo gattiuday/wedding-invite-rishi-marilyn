@@ -307,6 +307,9 @@
                 } else if (event.data === window.YT.PlayerState.PAUSED) {
                   setIsPlaying(false);
                 }
+              },
+              'onError': (event) => {
+                console.error("YouTube Player Error:", event.data);
               }
             }
           });
