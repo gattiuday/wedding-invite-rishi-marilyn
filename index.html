@@ -272,62 +272,43 @@
 
     const MusicPlayer = () => {
       const [isPlaying, setIsPlaying] = useState(false);
-      const [player, setPlayer] = useState(null);
-      const [isReady, setIsReady] = useState(false);
+      const audioRef = React.useRef(null);
 
       useEffect(() => {
-        const tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        const firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        window.onYouTubeIframeAPIReady = () => {
-          const newPlayer = new window.YT.Player('youtube-player', {
-            height: '0',
-            width: '0',
-            videoId: '-2w18bd-ZQ4',
-            playerVars: {
-              'autoplay': 1,
-              'controls': 0,
-              'loop': 1,
-              'playlist': '-2w18bd-ZQ4', // Required for loop to work
-              'playsinline': 1
-            },
-            events: {
-              'onReady': (event) => {
-                setPlayer(event.target);
-                setIsReady(true);
-                event.target.setVolume(50);
-                event.target.playVideo();
-                setIsPlaying(true);
-              },
-              'onStateChange': (event) => {
-                if (event.data === window.YT.PlayerState.PLAYING) {
-                  setIsPlaying(true);
-                } else if (event.data === window.YT.PlayerState.PAUSED) {
-                  setIsPlaying(false);
-                }
-              },
-              'onError': (event) => {
-                console.error("YouTube Player Error:", event.data);
-              }
-            }
-          });
-        };
+        if (audioRef.current) {
+          audioRef.current.volume = 0.5;
+          // Attempt autoplay
+          const playPromise = audioRef.current.play();
+          if (playPromise !== undefined) {
+            playPromise.then(() => {
+              setIsPlaying(true);
+            }).catch(error => {
+              console.log("Autoplay blocked:", error);
+              setIsPlaying(false);
+            });
+          }
+        }
       }, []);
 
       const togglePlay = () => {
-        if (!player || !isReady) return;
+        if (!audioRef.current) return;
         if (isPlaying) {
-          player.pauseVideo();
+          audioRef.current.pause();
+          setIsPlaying(false);
         } else {
-          player.playVideo();
+          audioRef.current.play();
+          setIsPlaying(true);
         }
       };
 
       return (
         <>
-          <div id="youtube-player" style={{ display: 'none' }}></div>
+          <audio
+            ref={audioRef}
+            src="background-music.mp3"
+            loop
+            preload="auto"
+          />
           <button
             onClick={togglePlay}
             className={`fixed bottom-6 left-6 z-50 p-3 rounded-full shadow-lg border-2 border-gold transition-all duration-500 ${isPlaying ? 'bg-deepRed text-gold animate-pulse-slow' : 'bg-bg text-deepRed opacity-70 hover:opacity-100'}`}
