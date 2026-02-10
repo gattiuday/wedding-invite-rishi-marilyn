@@ -275,18 +275,36 @@
       const audioRef = React.useRef(null);
 
       useEffect(() => {
-        if (audioRef.current) {
-          audioRef.current.volume = 0.5;
-          // Attempt autoplay
-          const playPromise = audioRef.current.play();
-          if (playPromise !== undefined) {
-            playPromise.then(() => {
+        const audio = audioRef.current;
+        if (audio) {
+          audio.volume = 0.5;
+
+          const handleAutoPlay = async () => {
+            try {
+              await audio.play();
               setIsPlaying(true);
-            }).catch(error => {
-              console.log("Autoplay blocked:", error);
+            } catch (err) {
+              console.log("Autoplay blocked, waiting for interaction", err);
               setIsPlaying(false);
-            });
-          }
+
+              // Fallback: Play on first interaction
+              const enableAudio = () => {
+                audio.play().then(() => {
+                  setIsPlaying(true);
+                  // Clean up listeners
+                  document.removeEventListener('click', enableAudio);
+                  document.removeEventListener('touchstart', enableAudio);
+                  document.removeEventListener('keydown', enableAudio);
+                }).catch(e => console.error("Still blocked", e));
+              };
+
+              document.addEventListener('click', enableAudio);
+              document.addEventListener('touchstart', enableAudio);
+              document.addEventListener('keydown', enableAudio);
+            }
+          };
+
+          handleAutoPlay();
         }
       }, []);
 
