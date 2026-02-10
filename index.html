@@ -327,7 +327,7 @@
 
       return (
         <>
-          <div id="youtube-player" className="hidden"></div>
+          <div id="youtube-player" style={{ display: 'none' }}></div>
           <button
             onClick={togglePlay}
             className={`fixed bottom-6 left-6 z-50 p-3 rounded-full shadow-lg border-2 border-gold transition-all duration-500 ${isPlaying ? 'bg-deepRed text-gold animate-pulse-slow' : 'bg-bg text-deepRed opacity-70 hover:opacity-100'}`}
