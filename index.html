@@ -352,8 +352,6 @@
       const [activeTab, setActiveTab] = useState('home');
       const [user, setUser] = useState(null);
       const [loading, setLoading] = useState(true);
-      const [showSplash, setShowSplash] = useState(true);
-      const [startMusic, setStartMusic] = useState(false);
       const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       const [showAdminPanel, setShowAdminPanel] = useState(false);
       const [adminPassword, setAdminPassword] = useState('');
@@ -691,7 +689,7 @@
       return (
         <div className="min-h-screen relative font-sans overflow-hidden">
           <MandalaBg />
-          <MusicPlayer shouldPlay={startMusic} />
+          <MusicPlayer />
           <DecorationCorner position="top-left" />
           <DecorationCorner position="top-right" />
           <DecorationCorner position="bottom-left" />
