@@ -455,26 +455,6 @@
         );
       }
 
-      if (showSplash) {
-        return (
-          <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-bg text-deepRed animate-in cursor-pointer" onClick={() => { setShowSplash(false); setStartMusic(true); }}>
-            <div className="scale-125 mb-8 text-gold animate-pulse-slow"><Icons.Flower2 size={80} /></div>
-            <h1 className="font-script text-6xl md:text-8xl mb-4 text-center px-4">Rishi & Marilyn</h1>
-            <p className="font-royal uppercase tracking-[0.3em] text-sm md:text-base mb-12 text-gold">The Wedding Celebration</p>
-
-            <button
-              className="group relative px-8 py-3 bg-transparent overflow-hidden rounded-full transition-all hover:bg-deepRed hover:text-gold border border-deepRed"
-            >
-              <div className="absolute inset-0 w-3 bg-gold transition-all duration-[250ms] ease-out group-hover:w-full opacity-10"></div>
-              <span className="relative flex items-center gap-3 font-royal uppercase tracking-widest text-xs font-bold">
-                Enter Invitation <Icons.ArrowRight size={14} />
-              </span>
-            </button>
-            <p className="absolute bottom-10 text-[10px] uppercase tracking-widest text-textSecondary opacity-50">Click anywhere to begin</p>
-          </div>
-        );
-      }
-
       const renderContent = () => {
         if (activeTab === 'admin') {
           if (adminPassword !== 'rishi2026') {
