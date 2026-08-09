@@ -396,7 +396,7 @@
 
       const [rsvpData, setRsvpData] = useState({
         name: '', phone: '', guests: 1,
-        events: { welcome: true, haldi_21: true, haldi: true, wedding: true, reception: true },
+        events: { pandakkal: false, welcome: true, haldi_21: true, haldi: true, wedding: true, reception: true },
         message: ''
       });
 
@@ -457,6 +457,17 @@
       }, []);
 
       const events = [
+        { 
+          id: 'pandakkal', 
+          title: 'Pandakkal', 
+          subtitle: 'Traditional pre-wedding event', 
+          date: 'August 19, 2026', 
+          time: '10:00 AM', 
+          venue: '18 Play Ground Street, Kilpauk Garden Colony, Chennai - 600010', 
+          mapUrl: 'https://maps.google.com/?q=18+Play+Ground+Street,+Kilpauk+Garden+Colony,+Chennai+-+600010', 
+          icon: <Icons.Flower2 strokeWidth={1.5} />, 
+          theme: 'BY INVITE ONLY' 
+        },
         { id: 'welcome', title: 'Welcome Party', subtitle: 'The Beginning of Celebration', date: 'August 20, 2026', time: '6:00 PM', venue: 'Fortel, Gandhi Irwin Road, Egmore, Chennai', mapUrl: 'https://www.google.com/maps/place/Fortel/@13.0747063,80.2426562,7526m/data=!3m1!1e3!4m9!3m8!1s0x3a5267232656b699:0xa2e317ea598f5e51!5m2!4m1!1i2!8m2!3d13.0780918!4d80.2638816!16s%2Fg%2F1xgz96k1?entry=ttu&g_ep=EgoyMDI2MDcyOS4wIKXMDSoASAFQAw%3D%3D', icon: <Icons.GlassWater strokeWidth={1.5} />, theme: 'DRESS TO IMPRESS' },
         { id: 'haldi_21', title: 'Patti and Athai Nalungu', subtitle: 'Traditional Ceremony', date: 'August 21, 2026', time: '6:00 PM', venue: 'Grand Chennai by GRT Hotels, T. Nagar, Chennai', mapUrl: 'https://maps.google.com/?q=Grand+Chennai+by+GRT+Hotels+T+Nagar+Chennai', icon: <Icons.Sparkles strokeWidth={1.5} />, theme: 'SILK & SPLENDOR' },
         { id: 'haldi', title: 'Haldi & Mehndi', subtitle: 'The Saffron Celebration', date: 'August 22, 2026', time: '4:00 PM', venue: 'Blue House, ECR, Chennai', mapUrl: 'https://maps.google.com/?q=Blue+House+ECR+Chennai', icon: <Icons.Music strokeWidth={1.5} />, theme: 'YELLOW & BRIGHT' },
@@ -518,13 +529,14 @@
           }
           const eventStats = allRsvps.reduce((acc, c) => {
             const g = Number(c.guests) || 0;
+            if (c.events?.pandakkal) acc.pandakkal += g;
             if (c.events?.welcome) acc.welcome += g;
             if (c.events?.haldi_21) acc.haldi_21 += g;
             if (c.events?.haldi) acc.haldi += g;
             if (c.events?.wedding) acc.wedding += g;
             if (c.events?.reception) acc.reception += g;
             acc.total += g; return acc;
-          }, { welcome: 0, haldi_21: 0, haldi: 0, wedding: 0, reception: 0, total: 0 });
+          }, { pandakkal: 0, welcome: 0, haldi_21: 0, haldi: 0, wedding: 0, reception: 0, total: 0 });
 
           return (
             <div className="glass-panel p-8 rounded-2xl animate-in text-left">
